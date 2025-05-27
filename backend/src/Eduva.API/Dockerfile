@@ -16,12 +16,12 @@ COPY ["src/Eduva.API/Eduva.API.csproj", "src/Eduva.API/"]
 RUN dotnet restore "./src/Eduva.API/Eduva.API.csproj"
 COPY . .
 WORKDIR "/src/src/Eduva.API"
-RUN dotnet build "./Eduva.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet build "./Eduva.API.csproj" -c "$BUILD_CONFIGURATION" -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./Eduva.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./Eduva.API.csproj" -c "$BUILD_CONFIGURATION" -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
