@@ -19,4 +19,9 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Eduva.Application\Eduva.Application.csproj" />
+    <ProjectReference Include="..\Eduva.Infrastructure\Eduva.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>

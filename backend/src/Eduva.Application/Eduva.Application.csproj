@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Eduva.Domain\Eduva.Domain.csproj" />
+    <ProjectReference Include="..\Eduva.Shared\Eduva.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
