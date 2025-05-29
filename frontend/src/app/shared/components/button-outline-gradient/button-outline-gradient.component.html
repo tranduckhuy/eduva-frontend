@@ -1,0 +1,10 @@
+<button
+  class="btn"
+  tooltipPosition="top"
+  [autoHide]="false"
+  [pTooltip]="tooltipText()">
+  <span
+    class="flex h-[38px] w-[38px] items-center justify-center rounded-[50%] bg-[#fbfdff] transition-colors duration-300 hover:bg-[#e1effe]">
+    <img class="object-contain" [src]="imgSrc()" [alt]="tooltipText()" />
+  </span>
+</button>

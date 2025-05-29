@@ -1,0 +1,122 @@
+<div
+  class="video-player relative box-border block overflow-hidden pt-[56.25%] text-sm text-white"
+  [class.paused]="isPaused()">
+  <vg-player
+    (onPlayerReady)="onPlayerReady($event)"
+    class="absolute left-0 top-0 h-full w-full">
+    <video
+      #media
+      [vgMedia]="$any(media)"
+      id="singleVideo"
+      src="./videoplayback.mp4"
+      crossorigin></video>
+  </vg-player>
+
+  <div class="overlay" (click)="togglePlayPause()"></div>
+
+  @if (!hasStarted()) {
+    <div class="poster">
+      <picture class="poster">
+        <img
+          src="https://files.fullstack.edu.vn/f8-prod/streamable-videos/766/4/6560267cb57a8.jpg"
+          alt=""
+          class="h-full w-full object-contain" />
+      </picture>
+    </div>
+  }
+
+  @if (showUiControls()) {
+    <!-- ? Progress Bar -->
+    <div class="progress-bar">
+      <span class="current-time">{{ formatTime(currentTime()) }}</span>
+      <div
+        class="progress-holder"
+        (mousedown)="startSeekDrag($event)"
+        (click)="seekTo($event)"
+        #progressBar>
+        <div class="load-progress" [style.width.%]="bufferedProgress()"></div>
+        <div class="play-progress" [style.width.%]="playedProgress()"></div>
+      </div>
+      <span class="duration-time">{{ formatTime(duration()) }}</span>
+    </div>
+
+    <!-- ? Controls Bar -->
+    <div class="controls-bar">
+      <div class="flex items-center">
+        <!-- ? Rewind -->
+        <button class="control-btn" (click)="rewind()">
+          <fa-icon [icon]="'rotate-left'"></fa-icon>
+        </button>
+        <!-- ? Play -->
+        <button
+          class="control-btn"
+          style="font-size: 22px"
+          (click)="togglePlayPause()">
+          <fa-icon [icon]="isPaused() ? 'play' : 'pause'"></fa-icon>
+        </button>
+        <!-- ? Forward -->
+        <button class="control-btn" (click)="forward()">
+          <fa-icon [icon]="'rotate-right'"></fa-icon>
+        </button>
+        <!-- ? Volume -->
+        <div class="flex items-center gap-1">
+          <button class="control-btn">
+            <fa-icon
+              [icon]="
+                volumeLevel() === 0
+                  ? 'volume-xmark'
+                  : volumeLevel() <= 0.5
+                    ? 'volume-low'
+                    : 'volume-high'
+              "></fa-icon>
+          </button>
+          <!-- ? Volume Control -->
+          <div class="volume-control">
+            <div
+              class="volume-panel"
+              (mousedown)="startVolumeDrag($event)"
+              #volumeBar>
+              <div
+                class="volume-level"
+                [style.width.%]="volumeLevel() * 100"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center">
+        <!-- ? Quality -->
+        <div class="control-btn quality-btn">
+          <span>
+            1080p
+            <span class="hd-icon">HD</span>
+          </span>
+        </div>
+        <!-- ? Subtitle -->
+        <button class="control-btn ml-6">
+          <fa-icon [icon]="'closed-captioning'"></fa-icon>
+        </button>
+        <!-- ? Settings -->
+        <button class="control-btn">
+          <fa-icon [icon]="'gear'"></fa-icon>
+        </button>
+        <!-- ? Expand -->
+        <button class="control-btn" (click)="toggleFullscreen()">
+          <fa-icon [icon]="'expand'"></fa-icon>
+        </button>
+      </div>
+    </div>
+  }
+
+  @if (!hasStarted()) {
+    <button class="btn play-btn" (click)="playVideo()">
+      <fa-icon
+        [icon]="'play'"
+        class="relative left-[3px] text-[45px] text-white"></fa-icon>
+    </button>
+  }
+
+  @if (isLoading()) {
+    <div class="loading-spinner animate-spin"></div>
+  }
+</div>
