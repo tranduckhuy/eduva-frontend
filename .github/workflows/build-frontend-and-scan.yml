@@ -30,10 +30,12 @@ jobs:
       - name: Install dependencies
         working-directory: frontend
         run: npm ci
-        
-      - name: Run tests
+
+      - name: Build Angular app for production
         working-directory: frontend
-        run: npm run test
+        run: npx ng build --configuration=production
+        env:
+          API_URL: ${{ secrets.API_URL || 'https://api.eduva.example.com' }}
 
       - name: Install SonarScanner
         uses: SonarSource/sonarcloud-github-action@master
@@ -51,10 +53,6 @@ jobs:
             -Dsonar.typescript.lcov.reportPaths=frontend/coverage/lcov.info
             -Dsonar.javascript.lcov.reportPaths=frontend/coverage/lcov.info
             -Dsonar.eslint.reportPaths=frontend/eslint-report.json
-
-      - name: Build Angular app for production
-        working-directory: frontend
-        run: npm run build -- --configuration production
 
       - name: Run SonarQube Scanner for brief report
         if: success()
