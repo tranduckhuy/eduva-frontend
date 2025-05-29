@@ -43,3 +43,49 @@
   opacity: 1;
   width: 23%;
 }
+
+@media (min-width: 740px) and (max-width: 1023px) {
+  .lesson-sidebar {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 300px;
+    transform: translateX(101%);
+    -webkit-transform: translateX(101%);
+  }
+
+  .open .lesson-content {
+    width: 100%;
+  }
+
+  .open .lesson-sidebar {
+    width: 300px;
+    transform: translateX(0);
+    -webkit-transform: translateX(0);
+  }
+}
+
+@media (max-width: 739.98px) {
+  .video-info {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .lesson-sidebar {
+    position: fixed;
+    inset: 66px 0 0;
+    z-index: 1000;
+    transform: translateX(101%);
+    -webkit-transform: translateX(101%);
+  }
+
+  .open .lesson-content {
+    width: 100%;
+  }
+
+  .open .lesson-sidebar {
+    width: 100%;
+    transform: translateX(0);
+    -webkit-transform: translateX(0);
+  }
+}

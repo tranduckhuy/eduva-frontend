@@ -9,37 +9,41 @@
           alt="Học, Học Nữa, Học Mãi"
           class="h-[38px] w-[38px] min-w-[38px] rounded-lg object-contain" />
       </a>
-      <a href="/" class="text-[14px] font-bold md:hidden">
+      <a
+        href="/"
+        class="text-[14px] font-bold"
+        [class]="!isHidden() ? 'md:hidden' : ''">
         Học, Học Nữa, Học Mãi
       </a>
     </h1>
 
     <!-- ? Search Input -->
-    @if (!isSearchHidden()) {
+    @if (!isHidden()) {
       <div class="flex grow items-center justify-center md:flex-grow-[2]">
-      <div class="relative w-[420px] max-w-full sm:w-full">
-        <div
-          class="flex h-10 w-full items-center rounded-full border-2 border-[#e8e8e8] bg-white px-4 transition-colors duration-300 ease-in-out focus-within:border-[#444]">
-          <span class="pi pi-search text-md font-semibold text-greyText"></span>
-          <input
-            type="text"
-            class="search-input ml-2 h-full grow border-none bg-transparent text-sm text-black outline-none sm:hidden"
-            placeholder="Tìm kiếm môn học, video,..."
-            [(ngModel)]="searchInput" />
-          <input
-            type="text"
-            class="search-input ml-2 hidden h-full grow border-none bg-transparent text-sm text-black outline-none sm:block"
-            placeholder="Tìm kiếm..."
-            [(ngModel)]="searchInput" />
-          <span class="pi pi-times" (click)="searchInput = ''"></span>
-        </div>
+        <div class="relative w-[420px] max-w-full sm:w-full">
+          <div
+            class="flex h-10 w-full items-center rounded-full border-2 border-[#e8e8e8] bg-white px-4 transition-colors duration-300 ease-in-out focus-within:border-[#444]">
+            <span
+              class="pi pi-search text-md font-semibold text-greyText"></span>
+            <input
+              type="text"
+              class="search-input ml-2 h-full grow border-none bg-transparent text-sm text-black outline-none sm:hidden"
+              placeholder="Tìm kiếm môn học, video,..."
+              [(ngModel)]="searchInput" />
+            <input
+              type="text"
+              class="search-input ml-2 hidden h-full grow border-none bg-transparent text-sm text-black outline-none sm:block"
+              placeholder="Tìm kiếm..."
+              [(ngModel)]="searchInput" />
+            <span class="pi pi-times" (click)="searchInput = ''"></span>
+          </div>
 
-        @if (searchInput) {
-          <!-- ? Search Filter -->
-          <header-search-filter />
-        }
+          @if (searchInput) {
+            <!-- ? Search Filter -->
+            <header-search-filter />
+          }
+        </div>
       </div>
-    </div>
     }
 
     <!-- ? User Actions/Information -->

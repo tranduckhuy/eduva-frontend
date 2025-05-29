@@ -1,3 +1,14 @@
 .comment-modal-content {
   box-shadow: #00000026 0px 4px 12px;
 }
+
+@media (max-width: 739.98px) {
+  .comment-modal {
+    width: 780px;
+    min-width: 0;
+  }
+
+  .comment-modal-content {
+    padding: 18px;
+  }
+}

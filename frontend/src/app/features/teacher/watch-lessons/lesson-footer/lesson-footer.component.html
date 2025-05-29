@@ -1,6 +1,6 @@
 <footer class="lesson-footer grid h-[50px] grid-cols-3">
   <!-- ? Q&A Panel -->
-  <div class="flex items-center pl-3">
+  <div class="comment-panel flex items-center pl-3">
     <app-button-outline-gradient
       [tooltipText]="'Hỏi đáp & trợ giúp'"
       [imgSrc]="'./images/icons/question-mark.svg'"
@@ -18,7 +18,7 @@
       tooltipPosition="top"
       [autoHide]="false"
       pTooltip="Phím tắt: ctrl + enter">
-      <span>Bài Trước</span>
+      <span>Bài Tiếp Theo</span>
       <span class="pi pi-arrow-right"></span>
     </button>
   </div>
@@ -27,7 +27,9 @@
   <div
     class="flex h-full cursor-pointer select-none items-center justify-end pr-3"
     (click)="onToggleSidebarClick()">
-    <span class="mr-4 text-[#45494f]">60. Hoàn thành bài học</span>
+    <span class="current-lesson mr-4 text-[#45494f]">
+      60. Hoàn thành bài học
+    </span>
     <app-button-outline-gradient
       [imgSrc]="iconSrc"
       (click)="onToggleSidebarClick()" />

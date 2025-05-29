@@ -1,3 +1,7 @@
+.lesson-footer {
+  background-color: #f6f7f9;
+}
+
 .btn {
   position: relative;
   display: flex;
@@ -27,6 +31,13 @@
 }
 
 .btn.disabled {
+  color: #b1b1b1;
+  background: linear-gradient(
+      141.34deg,
+      rgba(94, 187, 255, 0.2) 0%,
+      rgba(161, 116, 255, 0.2) 91.11%
+    )
+    border-box border-box !important;
   cursor: default;
   pointer-events: none;
 }
@@ -57,5 +68,28 @@
     background: #f6f7f999;
     -webkit-backdrop-filter: blur(32px);
     backdrop-filter: blur(32px);
+  }
+}
+
+@media (max-width: 739.98px) {
+  .comment-panel {
+    position: absolute;
+    top: -60px;
+    right: 30px;
+  }
+
+  .current-lesson {
+    display: none;
+  }
+
+  .lesson-footer {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    padding: 4px 12px;
+  }
+
+  .btn {
+    padding: 0 8px;
   }
 }
