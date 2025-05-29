@@ -1,0 +1,47 @@
+<div class="flex items-center gap-[12px]">
+  <!-- <p-button label="Đăng Ký" variant="text" size="small" [rounded]="true" />
+  <p-button
+    label="Đăng Nhập"
+    size="small"
+    class="actions__btn"
+    [rounded]="true" /> -->
+
+  <div class="relative md:hidden">
+    <p-button
+      label="Môn học của tôi"
+      variant="text"
+      size="small"
+      [rounded]="true"
+      (click)="toggleMenu('subjects')" />
+    @if (submenuService.getActiveSubmenuMenu() === 'subjects') {
+      <header-subjects (clickOutside)="submenuService.close()" />
+    }
+  </div>
+  <div class="flex items-center gap-3">
+    <div class="relative sm:hidden">
+      <p-button
+        icon="fas fa-bell"
+        class="notify__btn"
+        [rounded]="true"
+        (click)="toggleMenu('notifications')" />
+      @if (submenuService.getActiveSubmenuMenu() === 'notifications') {
+        <header-notifications (clickOutside)="submenuService.close()" />
+      }
+    </div>
+    <div
+      class="avatar-wrapper relative flex h-[33px] w-[33px] cursor-pointer rounded-full p-[2px]"
+      (click)="toggleMenu('information')">
+      <img
+        src="https://files.fullstack.edu.vn/f8-prod/user_avatars/378826/661cf89e8d5a0.jpg"
+        alt="Quy Nguyen"
+        class="h-full w-full rounded-full object-cover" />
+      <img
+        src="./images/icons/user-info.svg"
+        alt="User Information Icon"
+        class="absolute right-[-6px] top-[-1px] z-[9999] h-[10px] w-[10px]" />
+      @if (submenuService.getActiveSubmenuMenu() === 'information') {
+        <header-user-information (clickOutside)="submenuService.close()" />
+      }
+    </div>
+  </div>
+</div>

@@ -1,0 +1,20 @@
+.footer-heading {
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+
+.footer-link {
+  display: inline-block;
+  height: 30px;
+  cursor: pointer;
+  transition: ease 0.2s;
+}
+
+.footer-link:hover {
+  color: #fff;
+  text-decoration: underline;
+}

@@ -7,7 +7,13 @@ export const teacherRoutes: Routes = [
       import('../../core/layout/main-layout/main-layout.component').then(
         mod => mod.MainLayoutComponent
       ),
-    children: [],
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./home/home.component').then(mod => mod.HomeComponent),
+      },
+    ],
   },
   {
     path: '',
