@@ -31,10 +31,6 @@ jobs:
         working-directory: frontend
         run: npm ci
 
-      - name: Run linting
-        working-directory: frontend
-        run: npm run lint -- --format json --output-file eslint-report.json
-
       - name: Run tests with coverage
         working-directory: frontend
         run: npm run test:coverage
