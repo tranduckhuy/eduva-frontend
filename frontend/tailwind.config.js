@@ -3,7 +3,10 @@ module.exports = {
   darkMode: 'dark',
   theme: {
     screens: {
-      xxl: '100%',
+      xxxxxl: { max: '1999.98px' },
+      xxxxl: { max: '1799.98px' },
+      xxxl: { max: '1599.98px' },
+      xxl: { max: '1499.98px' },
       xl: { max: '1399.98px' },
       lg: { max: '1199.98px' },
       md: { max: '991.98px' },
