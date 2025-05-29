@@ -1,0 +1,57 @@
+<div class="flex w-full flex-col">
+  <div class="relative">
+    <button class="carousel-button prev-button sm:hidden" (click)="prevSlide()">
+      <span class="pi pi-angle-left"></span>
+    </button>
+    <div class="h-[300px] overflow-hidden xl:h-[270px] md:h-[250px]">
+      <div
+        #carouselWrapper
+        class="flex h-full transition-transform duration-500 ease-in-out"
+        [style.transform]="transformStyle()">
+        @for (item of items(); track $index) {
+          <div
+            class="flex h-full shrink-0 grow basis-full items-center justify-between rounded-2xl"
+            [style]="item.style"
+            [attr.data-index]="$index">
+            <div class="w-full max-w-[640px] px-9 sm:px-5">
+              <h2 class="text-[32px] font-bold text-white sm:text-2xl">
+                {{ item.title }}
+                @if (item.isRecommend) {
+                  <img
+                    src="./images/icons/crown-recommend.svg"
+                    alt="Recommend"
+                    class="relative -top-1 inline-block h-6 w-6" />
+                }
+              </h2>
+              <p class="mt-2 text-white">{{ item.description }}</p>
+              <a
+                href="#!"
+                class="cta-btn duration-250 mt-6 inline-block rounded-full border-2 border-white px-[10px] py-1 font-bold uppercase text-white transition-colors ease-in-out hover:bg-white"
+                [ngStyle]="{ '--cta-color': item.ctaHoverColor }">
+                {{ item.buttonContent }}
+              </a>
+            </div>
+            <div class="md:hidden">
+              <img
+                [src]="item.imageUrl"
+                [alt]="item.title"
+                class="h-full object-cover" />
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+    <button class="carousel-button next-button sm:hidden" (click)="nextSlide()">
+      <span class="pi pi-angle-right"></span>
+    </button>
+  </div>
+  <div class="mt-4 flex gap-[10px] pl-8 sm:pl-0">
+    @for (item of items(); track $index) {
+      <span
+        class="track-item"
+        [class.active]="currentIndex() === $index"
+        (click)="goToSlide($index)">
+      </span>
+    }
+  </div>
+</div>

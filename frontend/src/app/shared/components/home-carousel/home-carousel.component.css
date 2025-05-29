@@ -1,0 +1,50 @@
+.carousel-button {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  width: 32px;
+  height: 32px;
+  color: #4b4b4b;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 3px 6px #00000029;
+  text-align: center;
+  line-height: 32px;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.carousel-button:hover {
+  color: #000;
+}
+
+.prev-button {
+  left: 0;
+  translate: -50% -50%;
+}
+
+.next-button {
+  right: 0;
+  translate: 50% -50%;
+}
+
+.track-item {
+  width: 32px;
+  height: 8px;
+  opacity: 1;
+  border-radius: 4px;
+  background-color: #dce0e3;
+  transition:
+    width 0.3s linear,
+    background-color 0.3s linear;
+  cursor: pointer;
+}
+
+.track-item.active {
+  width: 50px;
+  background-color: #9aa6af;
+}
+
+.cta-btn:hover {
+  color: var(--cta-color);
+}
