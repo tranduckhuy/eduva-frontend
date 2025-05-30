@@ -1,0 +1,17 @@
+.btn {
+  width: 40px;
+  height: 40px;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  outline: none;
+  background-color: transparent;
+  background:
+    linear-gradient(#fbfdff, #fbfdff) padding-box padding-box,
+    linear-gradient(#5ebbff 0%, #a174ff 40%) border-box border-box;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-image 0.3s ease-in-out,
+    background-color 0.3s ease-in-out,
+    border-color 0.3s ease-in-out;
+}

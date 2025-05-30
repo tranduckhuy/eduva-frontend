@@ -1,0 +1,96 @@
+<div>
+  <!-- ? Lesson Information -->
+  <div
+    class="sticky top-0 z-[1] flex cursor-pointer select-none items-center justify-between border-b border-b-[#e4eef0] bg-white px-4 pb-3 pt-2 text-lg font-medium tracking-[1.6] text-[#2e3441] transition-colors duration-300 ease-out hover:bg-[#f2f9ff]"
+    (click)="toggleExpand()">
+    <div>
+      <h3>1. Bắt đầu</h3>
+      <div class="text-xs font-normal text-[#808b9a]">
+        <span>3 / 3</span>
+        <span class="relative bottom-[1px]"> | </span>
+        <span>23:13</span>
+      </div>
+    </div>
+    <span
+      class="pi pi-angle-down font-light text-[#808b9a] transition-transform duration-200 ease-in-out"
+      [ngClass]="isExpanded() ? '-rotate-180' : 'rotate-0'"
+      style="font-size: 16px"></span>
+  </div>
+
+  <!-- ? Media List -->
+  <div
+    class="animate-fadeIn bg-white"
+    [ngClass]="{
+      'block opacity-100': isExpanded(),
+      'hidden opacity-0': !isExpanded(),
+    }">
+    <div
+      class="active relative flex cursor-pointer select-none items-center border-b border-b-[#e4eef0] px-[10px] py-2 text-sm font-normal tracking-[1.6] text-[#2e3441] transition-colors duration-300 ease-out hover:bg-[#f2f9ff]">
+      <!-- ? Media Icon -->
+      <div class="mr-[2px] flex w-6 items-center justify-center">
+        <fa-icon
+          [icon]="['far', 'file-lines']"
+          class="icon text-base text-[#808b9a]"
+          pTooltip="Tài liệu"
+          tooltipPosition="left"></fa-icon>
+      </div>
+      <!-- ? Media Information -->
+      <div class="ml-[6px]">
+        <h4>1.1 Chào mừng bạn!</h4>
+        <p class="text-xs font-normal text-[#808b9a]">4:00</p>
+      </div>
+      <!-- ? Completed Icon -->
+      <fa-icon
+        [icon]="'circle-check'"
+        class="ml-auto text-[#48bd79]"
+        pTooltip="Bài học đã hoàn thành"
+        tooltipPosition="left"></fa-icon>
+    </div>
+
+    <div
+      class="relative flex cursor-pointer select-none items-center border-b border-b-[#e4eef0] px-[10px] py-2 text-sm font-normal tracking-[1.6] text-[#2e3441] transition-colors duration-300 ease-out hover:bg-[#f2f9ff]">
+      <!-- ? Media Icon -->
+      <div class="mr-[2px] flex w-6 items-center justify-center">
+        <fa-icon
+          [icon]="['far', 'circle-play']"
+          class="icon text-base text-[#808b9a]"
+          pTooltip="Bài học video"
+          tooltipPosition="left"></fa-icon>
+      </div>
+      <!-- ? Media Information -->
+      <div class="ml-[6px]">
+        <h4>1.1 Chào mừng bạn!</h4>
+        <p class="text-xs font-normal text-[#808b9a]">4:00</p>
+      </div>
+      <!-- ? Completed Icon -->
+      <fa-icon
+        [icon]="'circle-check'"
+        class="ml-auto text-[#48bd79]"
+        pTooltip="Bài học đã hoàn thành"
+        tooltipPosition="left"></fa-icon>
+    </div>
+
+    <div
+      class="relative flex cursor-pointer select-none items-center border-b border-b-[#e4eef0] px-[10px] py-2 text-sm font-normal tracking-[1.6] text-[#2e3441] transition-colors duration-300 ease-out hover:bg-[#f2f9ff]">
+      <!-- ? Media Icon -->
+      <div class="mr-[2px] flex w-6 items-center justify-center">
+        <span
+          class="icon pi pi-volume-up text-[#808b9a]"
+          style="font-size: 16px"
+          pTooltip="Bài học audio"
+          tooltipPosition="left"></span>
+      </div>
+      <!-- ? Media Information -->
+      <div class="ml-[6px]">
+        <h4>1.1 Chào mừng bạn!</h4>
+        <p class="text-xs font-normal text-[#808b9a]">4:00</p>
+      </div>
+      <!-- ? Completed Icon -->
+      <fa-icon
+        [icon]="'circle-check'"
+        class="ml-auto text-[#48bd79]"
+        pTooltip="Bài học đã hoàn thành"
+        tooltipPosition="left"></fa-icon>
+    </div>
+  </div>
+</div>
