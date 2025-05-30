@@ -194,7 +194,6 @@
     opacity 0.3s;
   visibility: hidden;
   opacity: 0;
-  z-index: 5;
 }
 
 .control-btn {
