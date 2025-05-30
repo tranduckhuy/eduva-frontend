@@ -5,7 +5,6 @@ import {
   computed,
   ElementRef,
   OnDestroy,
-  OnInit,
   signal,
   ViewChild,
 } from '@angular/core';

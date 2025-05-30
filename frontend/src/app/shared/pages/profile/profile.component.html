@@ -65,12 +65,21 @@
                 </h1>
 
                 <div class="mt-[2px] text-lg opacity-70">
-                  <a href="https://fullstack.edu.vn/@huytrong" class=""
-                    >&#64;huytrong</a
-                  >
+                  <a href="https://fullstack.edu.vn/@huytrong" class="">
+                    &#64;huytrong
+                  </a>
                 </div>
 
                 <div class="mt-5 flex flex-col gap-4">
+                  <div class="flex items-center">
+                    <span
+                      class="mr-2 inline-flex w-5 shrink-0 items-center justify-center text-[#7c858b]">
+                      <i class="fa-solid fa-phone"></i>
+                    </span>
+                    <a href="tel:+0123999945" class="break-all text-[#0056d6]">
+                      0123999945
+                    </a>
+                  </div>
                   <div class="flex items-center">
                     <span
                       class="mr-2 inline-flex w-5 shrink-0 items-center justify-center text-[#7c858b]">
@@ -78,9 +87,9 @@
                     </span>
                     <a
                       href="mailto:someone@example.com"
-                      class="break-all text-[#0056d6]"
-                      >tronghuy0104&#64;gmail.com</a
-                    >
+                      class="break-all text-[#0056d6]">
+                      tronghuy0104&#64;gmail.com
+                    </a>
                   </div>
                   <div class="flex items-center">
                     <span
@@ -88,19 +97,10 @@
                       <i class="fa-brands fa-facebook relative mt-[1px]"></i>
                     </span>
                     <a
-                      href="someone@example.com"
-                      class="break-all text-[#0056d6]"
-                      >user.facebook.com</a
-                    >
-                  </div>
-                  <div class="flex items-center">
-                    <span
-                      class="mr-2 inline-flex w-5 shrink-0 items-center justify-center text-[#7c858b]">
-                      <i class="fa-solid fa-phone"></i>
-                    </span>
-                    <a href="tel:+0123999945" class="break-all text-[#0056d6]"
-                      >0123999945</a
-                    >
+                      href="https://facebook.com/example"
+                      class="break-all text-[#0056d6]">
+                      https://facebook.com/example
+                    </a>
                   </div>
                   <div class="flex">
                     <span class="mr-2 inline-flex w-5 shrink-0 text-[#7c858b]">
@@ -108,8 +108,8 @@
                     </span>
                     <span
                       [appTextExpander]="100"
-                      class="max-w-[500px] text-justify"
-                      >Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                      class="max-w-[500px] text-justify">
+                      Lorem ipsum dolor sit amet consectetur, adipisicing elit.
                       Ea temporibus asperiores suscipit dicta tempore quas fuga
                       sed, ipsa dolor modi eligendi assumenda aut dolore eum est
                       nisi, inventore quis! Facilis error, molestiae
@@ -135,8 +135,8 @@
                       rem quasi labore aperiam illo molestias sapiente ea
                       expedita hic atque fuga amet error, earum nesciunt animi
                       delectus similique. Repellendus quo consectetur porro
-                      officiis quisquam.</span
-                    >
+                      officiis quisquam.
+                    </span>
                   </div>
                 </div>
               </div>
@@ -149,16 +149,16 @@
                 <div class="flex w-full gap-6 border-b border-[#e0e0e0]">
                   <span
                     class="tab-active -mb-px flex cursor-pointer items-center gap-[10px] p-[10px] font-semibold opacity-70 transition-all duration-300 ease-in-out">
-                    <i class="fa-solid fa-book"></i>Khóa học đã đăng ký
-                    (9)</span
-                  >
+                    <i class="fa-solid fa-book"></i>
+                    Khóa học đã đăng ký (9)
+                  </span>
                 </div>
 
                 <div class="mt-6">
                   <div class="e-row e-g-4 e-g-xl-3 e-g-md-2">
                     @for (subject of subjects(); track $index) {
                       <div
-                        class="e-col-3 e-col-xxl-4 e-col-xl-6 e-col-lg-4 e-col-md-6">
+                        class="e-col-3 e-col-xxxl-4 e-col-xl-6 e-col-lg-4 e-col-md-6">
                         <subject-card [subject]="subject" />
                       </div>
                     }

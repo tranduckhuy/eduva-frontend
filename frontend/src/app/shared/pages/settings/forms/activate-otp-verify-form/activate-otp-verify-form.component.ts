@@ -1,12 +1,9 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  signal,
-} from '@angular/core';
-import { FormControlComponent } from '../../../../components/form-control/form-control.component';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+
 import { InputOtp } from 'primeng/inputotp';
+
+import { FormControlComponent } from '../../../../components/form-control/form-control.component';
 
 @Component({
   selector: 'app-activate-otp-verify-form',

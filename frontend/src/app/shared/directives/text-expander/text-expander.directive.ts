@@ -1,11 +1,4 @@
-import {
-  Directive,
-  ElementRef,
-  Input,
-  Renderer2,
-  HostListener,
-  OnInit,
-} from '@angular/core';
+import { Directive, ElementRef, Input, Renderer2, OnInit } from '@angular/core';
 
 @Directive({
   selector: '[appTextExpander]',
@@ -18,8 +11,8 @@ export class TextExpanderDirective implements OnInit {
   private seeMoreBtn!: HTMLElement;
 
   constructor(
-    private el: ElementRef,
-    private renderer: Renderer2
+    private readonly el: ElementRef,
+    private readonly renderer: Renderer2
   ) {}
 
   ngOnInit() {

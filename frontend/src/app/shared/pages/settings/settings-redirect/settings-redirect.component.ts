@@ -7,9 +7,9 @@ import { Router } from '@angular/router';
   template: '',
 })
 export class SettingsRedirectComponent implements OnInit, OnDestroy {
-  private resizeListener = () => this.handleRedirect();
+  private readonly resizeListener = () => this.handleRedirect();
 
-  constructor(private router: Router) {}
+  constructor(private readonly router: Router) {}
 
   ngOnInit() {
     this.handleRedirect();
