@@ -5,6 +5,8 @@ import { UpdateNameFormComponent } from '../forms/update-name-form/update-name-f
 import { UpdateUsernameFormComponent } from '../forms/update-username-form/update-username-form.component';
 import { UpdateBioFormComponent } from '../forms/update-bio-form/update-bio-form.component';
 import { UpdateAvatarFormComponent } from '../forms/update-avatar-form/update-avatar-form.component';
+import { UpdateEmailFormComponent } from '../forms/socials/update-email-form/update-email-form.component';
+import { UpdateFacebookFormComponent } from '../forms/socials/update-facebook-form/update-facebook-form.component';
 
 @Component({
   selector: 'app-personal',
@@ -16,6 +18,8 @@ import { UpdateAvatarFormComponent } from '../forms/update-avatar-form/update-av
     UpdateUsernameFormComponent,
     UpdateBioFormComponent,
     UpdateAvatarFormComponent,
+    UpdateEmailFormComponent,
+    UpdateFacebookFormComponent,
   ],
   templateUrl: './personal.component.html',
   styleUrl: './personal.component.css',

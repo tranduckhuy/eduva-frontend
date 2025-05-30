@@ -102,12 +102,14 @@
           (close)="closeDialog()"
           title="Địa chỉ email"
           desc="Địa chỉ email của bạn. Ví dụ: username@gmail.com.">
+          <app-update-email-form />
         </app-dialog>
       } @else if (openedDialog() === 'facebook') {
         <app-dialog
           (close)="closeDialog()"
           title="Trang cá nhân Facebook"
           desc="Địa chỉ Facebook sẽ được hiển thị trên trang cá nhân của bạn. Ví dụ: https://facebook.com/username.">
+          <app-update-facebook-form />
         </app-dialog>
       }
     </section>
