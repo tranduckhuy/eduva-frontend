@@ -1,0 +1,53 @@
+<main
+  class="after:background px-[14px] py-[84px] text-black before:absolute before:inset-0 before:-z-20 before:bg-white after:-z-10 md:fixed md:inset-0 md:overflow-y-auto md:px-5 md:py-0">
+  <!-- Mobile + Tablet -->
+  <div class="background hidden md:block"></div>
+
+  <div class="hidden md:block">
+    <a
+      routerLink="/settings"
+      class="z-10 -ml-5 inline-block py-5 pl-5 pr-[50px] text-xl">
+      <i class="fa-solid fa-chevron-left"></i>
+    </a>
+  </div>
+  <!--  -->
+  <h1 class="text-2xl font-semibold">Mật khẩu và bảo mật</h1>
+  <p class="my-[10px] text-[15px] opacity-90">
+    Quản lý mật khẩu và cài đặt bảo mật.
+  </p>
+  <div class="py-[18px]">
+    <section class="flex flex-col gap-4">
+      <div class="flex flex-col gap-2">
+        <h2 class="text-[17px] font-semibold">Đăng nhập & khôi phục</h2>
+        <p class="opacity-70">Quản lý mật khẩu và xác minh 2 bước.</p>
+      </div>
+      <div class="gap-1 overflow-hidden rounded-[10px] bg-white">
+        <app-profile-card
+          title="Đổi mật khẩu"
+          subtitle="Lần đổi gần nhất: 4 tháng trước"
+          (click)="openDialog('password')"
+          close>
+        </app-profile-card>
+        <app-profile-card
+          title="Xác minh 2 bước"
+          subtitle="Đang tắt"
+          (click)="openDialog('2fa')"
+          close>
+        </app-profile-card>
+      </div>
+
+      @if (openedDialog() === 'password') {
+        <app-dialog
+          (close)="closeDialog()"
+          title="Đổi mật khẩu"
+          desc="Mật khẩu của bạn phải có tối thiểu 8 ký tự, bao gồm cả chữ số, chữ cái và ký tự đặc biệt (!$@%...).">
+          <app-change-password-form (close)="closeDialog()" />
+        </app-dialog>
+      } @else if (openedDialog() === '2fa') {
+        <app-dialog (close)="closeDialog()">
+          <app-activate-otp-verify-form />
+        </app-dialog>
+      }
+    </section>
+  </div>
+</main>

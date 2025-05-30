@@ -8,6 +8,22 @@ export const sharedRoutes: Routes = [
         mod => mod.BlankLayoutComponent
       ),
     children: [
+      {
+        path: 'settings',
+        loadComponent: () =>
+          import('../pages/settings/settings.component').then(
+            mod => mod.SettingsComponent
+          ),
+        loadChildren: () =>
+          import('./settings/settings.routes').then(mod => mod.settingsRoutes),
+      },
+      {
+        path: 'profile',
+        loadComponent: () =>
+          import('../pages/profile/profile.component').then(
+            mod => mod.ProfileComponent
+          ),
+      },
       // {
       //   path: '**', // Not-Found
       // },
