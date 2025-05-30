@@ -1,0 +1,90 @@
+@if (!previewAvatar()) {
+  <header class="mt-[10px]">
+    <h2 class="text-2xl font-semibold">Ảnh đại diện</h2>
+    <p class="mt-2 text-[15px] opacity-90">
+      Ảnh đại diện giúp mọi người nhận biết bạn dễ dàng hơn qua các bài viết,
+      bình luận, tin nhắn...
+    </p>
+  </header>
+  <div class="max-h-[60vh] min-h-[122px] overflow-y-auto pb-[30px]">
+    <div class="mt-[10px] w-full overflow-hidden">
+      <input
+        hidden=""
+        id="avatar"
+        type="file"
+        accept="image/*"
+        (change)="onFileSelected($event)" />
+      <label
+        class="relative mx-auto my-[30px] block size-[180px] cursor-pointer bg-[#EBF4FE]"
+        for="avatar">
+        <div
+          class="duration-30 absolute z-[-100] size-[180px] rounded-full bg-transparent outline outline-1 outline-black/60 transition-all"></div>
+      </label>
+      <label
+        class="flex items-center gap-4 rounded-[10px] bg-white px-5 py-4 transition duration-150 hover:cursor-pointer hover:bg-[#f2f2f2]"
+        for="avatar">
+        <i class="fa-solid fa-plus"></i>Tải ảnh mới lên</label
+      >
+    </div>
+  </div>
+} @else {
+  <header class="mt-[10px]">
+    <h2 class="text-2xl font-semibold">Xem trước</h2>
+    <p class="mt-2 text-[15px] opacity-90">
+      Bạn có thể căn chỉnh vị trí ảnh để phù hợp với ảnh đại diện của bạn
+    </p>
+  </header>
+  <button
+    (click)="reset()"
+    class="absolute left-4 top-[10px] size-10 cursor-pointer rounded-full text-xl opacity-70 transition-colors duration-200 hover:bg-[#0000001a]">
+    <i class="fa-solid fa-angle-left"></i>
+  </button>
+  <div class="max-h-[60vh] min-h-[122px] overflow-y-auto pb-[30px]">
+    <div class="mt-[10px] w-full overflow-hidden">
+      <div class="mx-auto h-auto w-full">
+        <image-cropper
+          class="custom-cropper flex size-full items-center justify-center"
+          [imageChangedEvent]="imageChangedEvent()"
+          [maintainAspectRatio]="true"
+          [aspectRatio]="1 / 1"
+          [resizeToWidth]="512"
+          [roundCropper]="true"
+          (imageCropped)="imageCropped($event)"
+          (imageLoaded)="imageLoaded($event)"
+          (cropperReady)="cropperReady()"
+          [(transform)]="transform"
+          (transformChange)="transformChange($event)"
+          [onlyScaleDown]="true"
+          (loadImageFailed)="loadImageFailed()"></image-cropper>
+      </div>
+
+      <div class="flex items-center justify-center gap-1">
+        <button
+          (click)="zoomOut()"
+          class="mr-2 size-[34px] cursor-pointer rounded-full text-lg text-[#666] transition-colors duration-200 hover:bg-[#0000000d]">
+          <i class="fa-solid fa-minus"></i>
+        </button>
+        <div class="relative h-5 w-full max-w-[500px] flex-1 py-[30px]">
+          <p-slider
+            step="0.1"
+            max="10"
+            min="1"
+            [ngModel]="transform().scale"
+            (ngModelChange)="scaleChange($event)"
+            class="w-full" />
+        </div>
+        <button
+          (click)="zoomIn()"
+          class="ml-2 size-[34px] cursor-pointer rounded-full text-lg text-[#666] transition-colors duration-200 hover:bg-[#0000000d]">
+          <i class="fa-solid fa-plus"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <button
+      class="mt-5 block w-full cursor-pointer whitespace-nowrap rounded-full border-none bg-[#1dbfaf] bg-[linear-gradient(70.06deg,_#2cccff_-5%,_#22dfbf_106%)] px-5 py-3 text-base font-semibold text-white transition-opacity duration-[250] hover:opacity-80">
+      Lưu lại
+    </button>
+  </footer>
+}

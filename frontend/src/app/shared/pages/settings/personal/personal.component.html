@@ -69,7 +69,9 @@
           <app-update-bio-form />
         </app-dialog>
       } @else if (openedDialog() === 'avatar') {
-        <app-dialog (close)="closeDialog()" [width]="450"> </app-dialog>
+        <app-dialog (close)="closeDialog()" [width]="450">
+          <app-update-avatar-form />
+        </app-dialog>
       }
     </section>
 

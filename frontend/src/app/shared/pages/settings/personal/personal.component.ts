@@ -4,6 +4,7 @@ import { DialogComponent } from '../dialog/dialog.component';
 import { UpdateNameFormComponent } from '../forms/update-name-form/update-name-form.component';
 import { UpdateUsernameFormComponent } from '../forms/update-username-form/update-username-form.component';
 import { UpdateBioFormComponent } from '../forms/update-bio-form/update-bio-form.component';
+import { UpdateAvatarFormComponent } from '../forms/update-avatar-form/update-avatar-form.component';
 
 @Component({
   selector: 'app-personal',
@@ -14,6 +15,7 @@ import { UpdateBioFormComponent } from '../forms/update-bio-form/update-bio-form
     UpdateNameFormComponent,
     UpdateUsernameFormComponent,
     UpdateBioFormComponent,
+    UpdateAvatarFormComponent,
   ],
   templateUrl: './personal.component.html',
   styleUrl: './personal.component.css',
