@@ -6,10 +6,24 @@
     class="absolute left-0 top-0 h-full w-full">
     <video
       #media
-      [vgMedia]="$any(media)"
       id="singleVideo"
-      src="./videoplayback.mp4"
-      crossorigin></video>
+      [vgMedia]="$any(media)"
+      [preload]="preload()"
+      crossorigin>
+      <source src="./videoplayback.mp4" type="video/mp4" />
+      <!-- <source src="./videoplayback.webm" type="video/webm" /> -->
+      <!-- <track
+        label="Vietnamese"
+        kind="captions"
+        srclang="vi"
+        src="resources/myvideo-vi.vtt"
+        default />
+      <track
+        label="English"
+        kind="captions"
+        srclang="en"
+        src="resources/myvideo-en.vtt" /> -->
+    </video>
   </vg-player>
 
   <div class="overlay" (click)="togglePlayPause()"></div>
