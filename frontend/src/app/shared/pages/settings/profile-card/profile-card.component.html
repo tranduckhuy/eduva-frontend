@@ -1,6 +1,9 @@
 <div
-  class="profile-card relative h-[62px] overflow-hidden border-b border-[#dee3e9] px-4 transition-colors duration-100 hover:cursor-pointer hover:bg-[#0000000d]"
-  [class]="avatarUrl() && '!h-[104px]'">
+  class="profile-card relative h-[62px] overflow-hidden border-b border-[#dee3e9] px-4 transition-colors duration-100 hover:bg-[#0000000d]"
+  [ngClass]="{
+    'hover:cursor-pointer': !readonly(),
+    '!h-[104px]': avatarUrl(),
+  }">
   <div
     class="flex h-full flex-col justify-center gap-[1px]"
     [class]="avatarUrl() && '!gap-[10px]'">
@@ -17,9 +20,11 @@
       >
     }
   </div>
-  <button
-    class="absolute right-0 top-0 flex h-full cursor-pointer items-center gap-[6px] px-4 opacity-70 outline-none">
-    <i class="fa-solid fa-chevron-right"></i>
-  </button>
+  @if (!readonly()) {
+    <button
+      class="absolute right-0 top-0 flex h-full cursor-pointer items-center gap-[6px] px-4 opacity-70 outline-none">
+      <i class="fa-solid fa-chevron-right"></i>
+    </button>
+  }
 </div>
 <ng-content />
