@@ -41,6 +41,7 @@ export class VideoPlayerComponent {
   private vgApi = inject(VgApiService);
   private readonly iconLibrary = inject(FaIconLibrary);
 
+  // ? State Management
   preload = signal<string>('metadata');
   isPaused = signal<boolean>(true);
   hasStarted = signal<boolean>(false);
@@ -48,6 +49,7 @@ export class VideoPlayerComponent {
   currentTime = signal<number>(0);
   duration = signal<number>(0);
   volumeLevel = signal<number>(1);
+  lastVolumeLevel = signal<number>(1);
   playedProgress = signal<number>(0);
   bufferedProgress = signal<number>(0);
 
@@ -153,6 +155,16 @@ export class VideoPlayerComponent {
     const video = this.getVideoElement();
     video.volume = level;
     this.volumeLevel.set(level);
+  }
+
+  toggleMute() {
+    const current = this.volumeLevel();
+    if (current > 0) {
+      this.lastVolumeLevel.set(current);
+      this.updateVolume(0);
+    } else {
+      this.updateVolume(this.lastVolumeLevel() ?? 1);
+    }
   }
 
   startVolumeDrag(event: MouseEvent) {

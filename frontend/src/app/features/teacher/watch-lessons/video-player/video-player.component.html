@@ -74,7 +74,7 @@
         </button>
         <!-- ? Volume -->
         <div class="flex items-center gap-1">
-          <button class="control-btn">
+          <button class="control-btn" (click)="toggleMute()">
             <fa-icon
               [icon]="
                 volumeLevel() === 0
