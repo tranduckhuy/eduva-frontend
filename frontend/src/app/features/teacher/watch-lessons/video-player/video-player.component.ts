@@ -39,9 +39,9 @@ export class VideoPlayerComponent {
   @ViewChild('volumeBar') volumeBarRef!: ElementRef<HTMLDivElement>;
 
   private vgApi = inject(VgApiService);
-  private iconLibrary = inject(FaIconLibrary);
+  private readonly iconLibrary = inject(FaIconLibrary);
 
-  preload = signal<string>('auto');
+  preload = signal<string>('metadata');
   isPaused = signal<boolean>(true);
   hasStarted = signal<boolean>(false);
   isLoading = signal<boolean>(false);
