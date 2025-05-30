@@ -11,9 +11,11 @@
   </div>
   <!--  -->
   <h1 class="text-2xl font-semibold">Thông tin cá nhân</h1>
+
   <p class="my-[10px] font-[15px] opacity-90">
     Quản lý thông tin cá nhân của bạn.
   </p>
+
   <div class="py-[18px]">
     <section class="flex flex-col gap-4">
       <div class="flex flex-col gap-2">
@@ -22,16 +24,50 @@
           Quản lý tên hiển thị, tên người dùng, bio và avatar của bạn.
         </p>
       </div>
+
       <div class="gap-1 overflow-hidden rounded-[10px] bg-white">
-        <app-profile-card title="Họ và tên" subtitle="Trọng Huy" close>
+        <app-profile-card
+          title="Họ và tên"
+          subtitle="Trọng Huy"
+          (click)="openDialog('name')"
+          close>
         </app-profile-card>
-        <app-profile-card title="Tên người dùng" subtitle="huytrong">
+        <app-profile-card
+          title="Tên người dùng"
+          subtitle="huytrong"
+          (click)="openDialog('username')">
         </app-profile-card>
-        <app-profile-card title="Giới thiệu" subtitle="" />
+        <app-profile-card
+          title="Giới thiệu"
+          subtitle=""
+          (click)="openDialog('bio')" />
         <app-profile-card
           title="Ảnh đại diện"
-          avatarUrl="https://accounts.fullstack.edu.vn/assets/logo-lV2rGpF0.png" />
+          avatarUrl="https://accounts.fullstack.edu.vn/assets/logo-lV2rGpF0.png"
+          (click)="openDialog('avatar')" />
       </div>
+
+      @if (openedDialog() === 'name') {
+        <app-dialog
+          (close)="closeDialog()"
+          title="Cập nhật tên của bạn"
+          desc="Tên sẽ được hiển thị trên trang cá nhân, trong các bình luận và bài viết của bạn.">
+        </app-dialog>
+      } @else if (openedDialog() === 'username') {
+        <app-dialog
+          (close)="closeDialog()"
+          title="Chỉnh sửa tên người dùng"
+          desc="URL trang cá nhân F8 của bạn sẽ bị thay đổi, bạn cũng sẽ không sử dụng được tên người dùng cũ để đăng nhập vào hệ thống F8 nữa.">
+        </app-dialog>
+      } @else if (openedDialog() === 'bio') {
+        <app-dialog
+          (close)="closeDialog()"
+          title="Chỉnh sửa phần giới thiệu"
+          desc="Phần giới thiệu (tiểu sử) được hiển thị tại trang cá nhân của bạn, giúp mọi người hiểu rõ hơn về bạn.">
+        </app-dialog>
+      } @else if (openedDialog() === 'avatar') {
+        <app-dialog (close)="closeDialog()" [width]="450"> </app-dialog>
+      }
     </section>
 
     <section class="mt-10 flex flex-col gap-4">
@@ -43,11 +79,32 @@
       </div>
 
       <div class="gap-1 overflow-hidden rounded-[10px] bg-white">
-        <app-profile-card title="Email" subtitle="Chưa cập nhật" close>
+        <app-profile-card
+          title="Email"
+          subtitle="Chưa cập nhật"
+          (click)="openDialog('email')"
+          close>
         </app-profile-card>
-        <app-profile-card title="Facebook" subtitle="Chưa cập nhật">
+        <app-profile-card
+          title="Facebook"
+          subtitle="Chưa cập nhật"
+          (click)="openDialog('facebook')">
         </app-profile-card>
       </div>
+
+      @if (openedDialog() === 'email') {
+        <app-dialog
+          (close)="closeDialog()"
+          title="Địa chỉ email"
+          desc="Địa chỉ email của bạn. Ví dụ: username@gmail.com.">
+        </app-dialog>
+      } @else if (openedDialog() === 'facebook') {
+        <app-dialog
+          (close)="closeDialog()"
+          title="Trang cá nhân Facebook"
+          desc="Địa chỉ Facebook sẽ được hiển thị trên trang cá nhân của bạn. Ví dụ: https://facebook.com/username.">
+        </app-dialog>
+      }
     </section>
   </div>
 </main>
