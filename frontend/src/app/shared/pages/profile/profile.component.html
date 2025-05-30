@@ -1,0 +1,177 @@
+<app-header />
+
+<div class="flex min-h-screen overflow-y-auto">
+  <!-- sidebar -->
+  <div class="navbar-container shrink-0">
+    <div
+      class="z-8 navbar sticky left-0 top-[80px] flex w-[96px] shrink-0 flex-col items-center px-2 md:z-10">
+      <ul
+        class="flex flex-col gap-y-1 pl-0 sm:flex sm:w-full sm:flex-row sm:justify-evenly">
+        <li>
+          <a routerLink="/" class="active nav-link" [class.active]="true">
+            <fa-icon [icon]="'house'" class="nav-icon"></fa-icon>
+            <span class="nav-text">Trang chủ</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/create" class="nav-link">
+            <fa-icon [icon]="'square-plus'" class="nav-icon"></fa-icon>
+            <span class="nav-text">Tạo bài</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/create" class="nav-link">
+            <fa-icon [icon]="'file-circle-check'" class="nav-icon"></fa-icon>
+            <span class="nav-text">Duyệt bài</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/create" class="nav-link">
+            <fa-icon [icon]="'share-from-square'" class="nav-icon"></fa-icon>
+            <span class="nav-text">Bài chung</span>
+          </a>
+        </li>
+        <li>
+          <a routerLink="/comments" class="nav-link">
+            <fa-icon [icon]="'comments'" class="nav-icon"></fa-icon>
+            <span class="nav-text"> Hỏi đáp </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!--  -->
+
+  <div class="w-full">
+    <div class="e-container-fluid">
+      <div class="mb-[60px] px-11 pt-2">
+        <div class="mt-[30px]">
+          <div class="e-row">
+            <!-- User Information -->
+            <div class="e-col e-col-3 e-col-xl-4 e-col-lg-12">
+              <div class="leading-[1.4] lg:flex lg:flex-col lg:items-center">
+                <div class="flex w-full justify-center">
+                  <div class="rounded-full bg-transparent text-2xl">
+                    <img
+                      src="https://files.fullstack.edu.vn/f8-prod/user_avatars/378826/661cf89e8d5a0.jpg"
+                      alt="avatar"
+                      class="size-[216px] rounded-full object-cover" />
+                  </div>
+                </div>
+
+                <h1
+                  class="mt-[10px] flex flex-wrap items-center text-2xl font-bold">
+                  Trọng Huy
+                </h1>
+
+                <div class="mt-[2px] text-lg opacity-70">
+                  <a href="https://fullstack.edu.vn/@huytrong" class=""
+                    >&#64;huytrong</a
+                  >
+                </div>
+
+                <div class="mt-5 flex flex-col gap-4">
+                  <div class="flex items-center">
+                    <span
+                      class="mr-2 inline-flex w-5 shrink-0 items-center justify-center text-[#7c858b]">
+                      <i class="fa-solid fa-envelope"></i>
+                    </span>
+                    <a
+                      href="mailto:someone@example.com"
+                      class="break-all text-[#0056d6]"
+                      >tronghuy0104&#64;gmail.com</a
+                    >
+                  </div>
+                  <div class="flex items-center">
+                    <span
+                      class="mr-2 inline-flex w-5 shrink-0 items-center justify-center text-[#7c858b]">
+                      <i class="fa-brands fa-facebook relative mt-[1px]"></i>
+                    </span>
+                    <a
+                      href="someone@example.com"
+                      class="break-all text-[#0056d6]"
+                      >user.facebook.com</a
+                    >
+                  </div>
+                  <div class="flex items-center">
+                    <span
+                      class="mr-2 inline-flex w-5 shrink-0 items-center justify-center text-[#7c858b]">
+                      <i class="fa-solid fa-phone"></i>
+                    </span>
+                    <a href="tel:+0123999945" class="break-all text-[#0056d6]"
+                      >0123999945</a
+                    >
+                  </div>
+                  <div class="flex">
+                    <span class="mr-2 inline-flex w-5 shrink-0 text-[#7c858b]">
+                      <i class="fa-solid fa-user-pen relative top-1"></i>
+                    </span>
+                    <span
+                      [appTextExpander]="100"
+                      class="max-w-[500px] text-justify"
+                      >Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                      Ea temporibus asperiores suscipit dicta tempore quas fuga
+                      sed, ipsa dolor modi eligendi assumenda aut dolore eum est
+                      nisi, inventore quis! Facilis error, molestiae
+                      accusantium, vel sunt dicta ipsam saepe, eaque ea
+                      molestias eveniet velit! Cupiditate quam, alias labore
+                      perspiciatis cum illum in vero perferendis, atque error
+                      molestiae ut, veniam aliquam? Voluptate eos dolor beatae
+                      unde alias non sunt laboriosam, dolores, assumenda sequi
+                      soluta, labore veniam commodi facilis illo perspiciatis
+                      nam excepturi sit quam amet! Deserunt, quis. Veritatis
+                      odit nobis obcaecati? Provident, quas. Inventore enim
+                      facere tenetur. Porro amet reiciendis repellat alias nam
+                      molestias voluptatem error! Facilis autem modi molestiae
+                      aut necessitatibus voluptatum dolore provident quas, sint
+                      animi eius natus vero suscipit deleniti a minima, neque
+                      sed maiores blanditiis esse incidunt eveniet earum!
+                      Dolorum nesciunt, at quo ea commodi laboriosam recusandae
+                      id excepturi totam voluptatem debitis eos soluta sunt,
+                      architecto corrupti doloribus laborum eaque voluptate ut
+                      odit. Vero, nesciunt. Provident vel pariatur voluptatibus
+                      cupiditate blanditiis, maxime nisi. Suscipit voluptatibus
+                      quis voluptatem ad alias totam dignissimos magni molestiae
+                      rem quasi labore aperiam illo molestias sapiente ea
+                      expedita hic atque fuga amet error, earum nesciunt animi
+                      delectus similique. Repellendus quo consectetur porro
+                      officiis quisquam.</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--  -->
+
+            <!-- User Activities -->
+            <div class="e-col e-col-9 e-col-xl-8 e-col-lg-12">
+              <div class="w-full pl-[50px] lg:mt-[50px] lg:pl-0">
+                <div class="flex w-full gap-6 border-b border-[#e0e0e0]">
+                  <span
+                    class="tab-active -mb-px flex cursor-pointer items-center gap-[10px] p-[10px] font-semibold opacity-70 transition-all duration-300 ease-in-out">
+                    <i class="fa-solid fa-book"></i>Khóa học đã đăng ký
+                    (9)</span
+                  >
+                </div>
+
+                <div class="mt-6">
+                  <div class="e-row e-g-4 e-g-xl-3 e-g-md-2">
+                    @for (subject of subjects(); track $index) {
+                      <div
+                        class="e-col-3 e-col-xxl-4 e-col-xl-6 e-col-lg-4 e-col-md-6">
+                        <subject-card [subject]="subject" />
+                      </div>
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--  -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer />
