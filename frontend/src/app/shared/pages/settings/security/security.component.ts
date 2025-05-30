@@ -3,11 +3,13 @@ import { ProfileCardComponent } from '../profile-card/profile-card.component';
 import { DialogComponent } from '../dialog/dialog.component';
 import { ChangePasswordFormComponent } from '../forms/change-password-form/change-password-form.component';
 import { ActivateOtpVerifyFormComponent } from '../forms/activate-otp-verify-form/activate-otp-verify-form.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-security',
   standalone: true,
   imports: [
+    RouterLink,
     ProfileCardComponent,
     DialogComponent,
     ChangePasswordFormComponent,

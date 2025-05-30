@@ -7,11 +7,13 @@ import { UpdateBioFormComponent } from '../forms/update-bio-form/update-bio-form
 import { UpdateAvatarFormComponent } from '../forms/update-avatar-form/update-avatar-form.component';
 import { UpdateEmailFormComponent } from '../forms/socials/update-email-form/update-email-form.component';
 import { UpdateFacebookFormComponent } from '../forms/socials/update-facebook-form/update-facebook-form.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-personal',
   standalone: true,
   imports: [
+    RouterLink,
     ProfileCardComponent,
     DialogComponent,
     UpdateNameFormComponent,
