@@ -51,7 +51,7 @@ export class FormControlComponent implements ControlValueAccessor, OnInit {
   control = new FormControl('');
 
   toggleShowPassword(): void {
-    this.isShowPassword.set(!this.isShowPassword);
+    this.isShowPassword.set(!this.isShowPassword());
   }
 
   readonly inputType = computed(() => {
