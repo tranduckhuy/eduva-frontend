@@ -59,12 +59,14 @@
           (close)="closeDialog()"
           title="Chỉnh sửa tên người dùng"
           desc="URL trang cá nhân F8 của bạn sẽ bị thay đổi, bạn cũng sẽ không sử dụng được tên người dùng cũ để đăng nhập vào hệ thống F8 nữa.">
+          <app-update-username-form />
         </app-dialog>
       } @else if (openedDialog() === 'bio') {
         <app-dialog
           (close)="closeDialog()"
           title="Chỉnh sửa phần giới thiệu"
           desc="Phần giới thiệu (tiểu sử) được hiển thị tại trang cá nhân của bạn, giúp mọi người hiểu rõ hơn về bạn.">
+          <app-update-bio-form />
         </app-dialog>
       } @else if (openedDialog() === 'avatar') {
         <app-dialog (close)="closeDialog()" [width]="450"> </app-dialog>

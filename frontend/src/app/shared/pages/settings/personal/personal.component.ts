@@ -2,11 +2,19 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { ProfileCardComponent } from '../profile-card/profile-card.component';
 import { DialogComponent } from '../dialog/dialog.component';
 import { UpdateNameFormComponent } from '../forms/update-name-form/update-name-form.component';
+import { UpdateUsernameFormComponent } from '../forms/update-username-form/update-username-form.component';
+import { UpdateBioFormComponent } from '../forms/update-bio-form/update-bio-form.component';
 
 @Component({
   selector: 'app-personal',
   standalone: true,
-  imports: [ProfileCardComponent, DialogComponent, UpdateNameFormComponent],
+  imports: [
+    ProfileCardComponent,
+    DialogComponent,
+    UpdateNameFormComponent,
+    UpdateUsernameFormComponent,
+    UpdateBioFormComponent,
+  ],
   templateUrl: './personal.component.html',
   styleUrl: './personal.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
