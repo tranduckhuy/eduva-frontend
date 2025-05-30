@@ -1,0 +1,19 @@
+<div class="relative min-h-full min-w-full">
+  <div class="background absolute inset-0 z-[-1] h-full opacity-[0.08]"></div>
+  <button
+    (click)="goBack()"
+    class="text-[rgb(72 74 76)] fixed right-[34px] top-5 flex size-11 items-center justify-center rounded-full bg-[#0000001a] opacity-70 transition-colors duration-200 hover:cursor-pointer hover:bg-[#0003] sm:right-4 sm:top-7">
+    <i class="fa-solid fa-xmark" style="font-size: 24px; color: #000"></i>
+  </button>
+
+  <div class="e-container">
+    <div class="e-row h-full min-h-screen">
+      <div class="e-col e-col-3 e-col-xxxl-4 e-col-lg-12">
+        <app-sidebar />
+      </div>
+      <div class="e-col e-col-6 e-col-xxxxl-7 e-col-xxxl-8 e-col-lg-12">
+        <router-outlet />
+      </div>
+    </div>
+  </div>
+</div>
