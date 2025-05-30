@@ -1,0 +1,36 @@
+<div
+  class="chapter-modal fixed bottom-0 left-auto right-0 top-0 z-[1000] h-[100vh] w-[43%] min-w-[800px] max-w-full translate-x-[101%] transition-all duration-200 ease-linear"
+  [ngClass]="{
+    'visible translate-x-0 opacity-100': isOpen(),
+    'invisible translate-x-[101%] opacity-0': !isOpen(),
+  }">
+  <div
+    class="chapter-modal-content h-full cursor-default overflow-y-auto overflow-x-hidden bg-white p-8">
+    <span
+      class="pi pi-times absolute right-0 top-0 z-[999] cursor-pointer p-6 text-[#1d9ffb]"
+      style="font-size: 20px"
+      (click)="closeModal()"></span>
+    <div>
+      <!-- ? Title -->
+      <div
+        class="absolute left-0 top-0 z-[2] w-full bg-white px-8 pb-5 pt-[25px] text-center">
+        <h2 class="text-2xl font-bold tracking-[0.5px] text-[#4e586b]">
+          Danh sách chương
+        </h2>
+      </div>
+
+      <!-- ? Chapter List -->
+      <div class="mt-20">
+        <chapter-list />
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="fixed inset-[0] z-[999] bg-[#0006] transition-all duration-200 ease-linear"
+  [ngClass]="{
+    'visible opacity-100': isOpen(),
+    'invisible opacity-0': !isOpen(),
+  }"
+  (click)="closeModal()"></div>

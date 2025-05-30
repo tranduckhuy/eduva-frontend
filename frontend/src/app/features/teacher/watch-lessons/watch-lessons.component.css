@@ -1,0 +1,91 @@
+:host {
+  --video-max-width: min(
+    100vh * (16 / 9) - (50px + 50px) * (16 / 9) - 100px,
+    1600px
+  );
+}
+
+.wrap {
+  width: 85%;
+  max-width: var(--video-max-width);
+  margin: 0 auto;
+}
+
+.lesson-content,
+.lesson-sidebar {
+  flex-shrink: 0;
+  height: 100%;
+  will-change: width, opacity;
+  transition:
+    width 0.3s ease,
+    opacity 0.3s ease;
+  -webkit-transition:
+    width 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.lesson-content {
+  width: 100%;
+  overflow-y: auto;
+}
+
+.lesson-sidebar {
+  background-color: #fff;
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.open .lesson-content {
+  width: 77%;
+}
+
+.open .lesson-sidebar {
+  opacity: 1;
+  width: 23%;
+}
+
+@media (min-width: 740px) and (max-width: 1023px) {
+  .lesson-sidebar {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 300px;
+    transform: translateX(101%);
+    -webkit-transform: translateX(101%);
+  }
+
+  .open .lesson-content {
+    width: 100%;
+  }
+
+  .open .lesson-sidebar {
+    width: 300px;
+    transform: translateX(0);
+    -webkit-transform: translateX(0);
+  }
+}
+
+@media (max-width: 739.98px) {
+  .video-info {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .lesson-sidebar {
+    position: fixed;
+    inset: 66px 0 0;
+    z-index: 1000;
+    transform: translateX(101%);
+    -webkit-transform: translateX(101%);
+  }
+
+  .open .lesson-content {
+    width: 100%;
+  }
+
+  .open .lesson-sidebar {
+    width: 100%;
+    transform: translateX(0);
+    -webkit-transform: translateX(0);
+  }
+}

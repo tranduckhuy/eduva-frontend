@@ -31,11 +31,12 @@ export class UpdateAvatarFormComponent {
     translateV: 0,
   });
 
-  constructor(private sanitizer: DomSanitizer) {}
+  constructor(private readonly sanitizer: DomSanitizer) {}
 
   fileChangeEvent(event: Event): void {
     this.imageChangedEvent.set(event);
   }
+
   imageCropped(event: ImageCroppedEvent) {
     if (event.objectUrl) {
       this.croppedImage.set(
@@ -46,13 +47,16 @@ export class UpdateAvatarFormComponent {
     }
     // event.blob can be used to upload the cropped image
   }
-  imageLoaded(image: LoadedImage) {}
-  cropperReady() {
-    // cropper ready
-  }
-  loadImageFailed() {
-    // show message
-  }
+
+  // imageLoaded(image: LoadedImage) {}
+
+  // cropperReady() {
+  // cropper ready
+  // }
+
+  // loadImageFailed() {
+  // show message
+  // }
 
   zoomOut() {
     if (this.transform().scale! <= 1) return;

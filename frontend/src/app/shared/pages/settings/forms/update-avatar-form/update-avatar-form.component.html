@@ -42,6 +42,11 @@
   <div class="max-h-[60vh] min-h-[122px] overflow-y-auto pb-[30px]">
     <div class="mt-[10px] w-full overflow-hidden">
       <div class="mx-auto h-auto w-full">
+        <!-- 
+          (imageLoaded)="imageLoaded($event)"
+          (cropperReady)="cropperReady()"
+          (loadImageFailed)="loadImageFailed()"
+        -->
         <image-cropper
           class="custom-cropper flex size-full items-center justify-center"
           [imageChangedEvent]="imageChangedEvent()"
@@ -50,12 +55,9 @@
           [resizeToWidth]="512"
           [roundCropper]="true"
           (imageCropped)="imageCropped($event)"
-          (imageLoaded)="imageLoaded($event)"
-          (cropperReady)="cropperReady()"
           [(transform)]="transform"
           (transformChange)="transformChange($event)"
-          [onlyScaleDown]="true"
-          (loadImageFailed)="loadImageFailed()"></image-cropper>
+          [onlyScaleDown]="true"></image-cropper>
       </div>
 
       <div class="flex items-center justify-center gap-1">

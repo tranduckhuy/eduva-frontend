@@ -4,7 +4,7 @@ import { Injectable, signal } from '@angular/core';
   providedIn: 'root',
 })
 export class SubmenuService {
-  private activeSubmenu = signal<string | null>(null);
+  private readonly activeSubmenu = signal<string | null>(null);
 
   getActiveSubmenuMenu = this.activeSubmenu.asReadonly();
 

@@ -23,7 +23,7 @@ export class HeaderComponent {
 
   searchInput = '';
 
-  isSearchHidden = computed(() => {
+  isHidden = computed(() => {
     const url = this.router.url;
     return url.includes('/watch-lessons');
   });

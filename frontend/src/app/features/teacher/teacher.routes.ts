@@ -21,6 +21,14 @@ export const teacherRoutes: Routes = [
       import('../../core/layout/blank-layout/blank-layout.component').then(
         mod => mod.BlankLayoutComponent
       ),
-    children: [],
+    children: [
+      {
+        path: 'watch-lessons',
+        loadComponent: () =>
+          import('./watch-lessons/watch-lessons.component').then(
+            mod => mod.WatchLessonsComponent
+          ),
+      },
+    ],
   },
 ];

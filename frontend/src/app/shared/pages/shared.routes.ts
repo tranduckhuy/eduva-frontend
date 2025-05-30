@@ -17,6 +17,13 @@ export const sharedRoutes: Routes = [
         loadChildren: () =>
           import('./settings/settings.routes').then(mod => mod.settingsRoutes),
       },
+      {
+        path: 'profile',
+        loadComponent: () =>
+          import('../pages/profile/profile.component').then(
+            mod => mod.ProfileComponent
+          ),
+      },
       // {
       //   path: '**', // Not-Found
       // },
