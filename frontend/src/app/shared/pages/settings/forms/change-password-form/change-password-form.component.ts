@@ -7,11 +7,17 @@ import {
 import { FormsModule } from '@angular/forms';
 import { FormControlComponent } from '../../../../components/form-control/form-control.component';
 import { CommonModule } from '@angular/common';
+import { ForgetPasswordFormComponent } from '../forget-password-form/forget-password-form.component';
 
 @Component({
   selector: 'app-change-password-form',
   standalone: true,
-  imports: [FormsModule, FormControlComponent, CommonModule],
+  imports: [
+    FormsModule,
+    FormControlComponent,
+    CommonModule,
+    ForgetPasswordFormComponent,
+  ],
   templateUrl: './change-password-form.component.html',
   styleUrl: './change-password-form.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

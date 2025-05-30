@@ -44,7 +44,9 @@
           <app-change-password-form (close)="closeDialog()" />
         </app-dialog>
       } @else if (openedDialog() === '2fa') {
-        <app-dialog (close)="closeDialog()"> </app-dialog>
+        <app-dialog (close)="closeDialog()">
+          <app-activate-otp-verify-form />
+        </app-dialog>
       }
     </section>
   </div>
