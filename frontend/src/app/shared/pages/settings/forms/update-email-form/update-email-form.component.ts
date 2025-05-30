@@ -3,15 +3,15 @@ import { FormsModule } from '@angular/forms';
 import { FormControlComponent } from '../../../../components/form-control/form-control.component';
 
 @Component({
-  selector: 'app-update-name-form',
+  selector: 'app-update-email-form',
   standalone: true,
   imports: [FormsModule, FormControlComponent],
-  templateUrl: './update-name-form.component.html',
-  styleUrl: './update-name-form.component.css',
+  templateUrl: './update-email-form.component.html',
+  styleUrl: './update-email-form.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UpdateNameFormComponent {
-  fullname = signal('');
+export class UpdateEmailFormComponent {
+  email = signal('');
 
   onSubmit() {}
 }
