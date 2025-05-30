@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-} from '@angular/core';
-import { Router } from '@angular/router';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
 
@@ -28,13 +22,7 @@ import { NotificationsComponent } from './notifications/notifications.component'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserActionsComponent {
-  private readonly router = inject(Router);
   readonly submenuService = inject(SubmenuService);
-
-  isHidden = computed(() => {
-    const url = this.router.url;
-    return url.includes('/watch-lessons');
-  });
 
   toggleMenu(submenuKey: string): void {
     const current = this.submenuService.getActiveSubmenuMenu();

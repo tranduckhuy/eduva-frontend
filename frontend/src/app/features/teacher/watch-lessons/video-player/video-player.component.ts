@@ -40,12 +40,14 @@ export class VideoPlayerComponent {
 
   private vgApi = inject(VgApiService);
   private readonly iconLibrary = inject(FaIconLibrary);
+  private hideControlsTimeout!: ReturnType<typeof setTimeout>;
 
   // ? State Management
   preload = signal<string>('metadata');
   isPaused = signal<boolean>(true);
   hasStarted = signal<boolean>(false);
   isLoading = signal<boolean>(false);
+  showMobileControls = signal<boolean>(true);
   currentTime = signal<number>(0);
   duration = signal<number>(0);
   volumeLevel = signal<number>(1);
@@ -54,6 +56,9 @@ export class VideoPlayerComponent {
   bufferedProgress = signal<number>(0);
 
   showUiControls = computed(() => this.hasStarted());
+  showingUiClass = computed(() =>
+    this.showMobileControls() ? 'opacity-100 visible' : 'opacity-0 invisible'
+  );
 
   constructor() {
     this.iconLibrary.addIcons(
@@ -101,11 +106,15 @@ export class VideoPlayerComponent {
       }
     });
 
-    media.subscriptions.waiting.subscribe(() => this.isLoading.set(true));
+    media.subscriptions.waiting.subscribe(() => {
+      this.isLoading.set(true);
+      this.showMobileControls.set(false);
+    });
     media.subscriptions.playing.subscribe(() => {
       this.isLoading.set(false);
       this.hasStarted.set(true);
       this.isPaused.set(false);
+      this.onMobileTap();
     });
     media.subscriptions.pause.subscribe(() => this.isPaused.set(true));
   }
@@ -128,11 +137,13 @@ export class VideoPlayerComponent {
   rewind(seconds = 10) {
     const media = this.vgApi.getDefaultMedia();
     media.currentTime = Math.max(0, media.currentTime - seconds);
+    this.onMobileTap();
   }
 
   forward(seconds = 10) {
     const media = this.vgApi.getDefaultMedia();
     media.currentTime = Math.min(media.duration, media.currentTime + seconds);
+    this.onMobileTap();
   }
 
   seekTo(event: MouseEvent) {
@@ -180,6 +191,15 @@ export class VideoPlayerComponent {
     } else {
       document.exitFullscreen();
     }
+  }
+
+  onMobileTap() {
+    this.showMobileControls.set(true);
+
+    clearTimeout(this.hideControlsTimeout);
+    this.hideControlsTimeout = setTimeout(() => {
+      this.showMobileControls.set(false);
+    }, 3000);
   }
 
   formatTime(seconds: number): string {

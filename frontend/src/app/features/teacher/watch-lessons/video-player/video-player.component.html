@@ -26,7 +26,7 @@
     </video>
   </vg-player>
 
-  <div class="overlay" (click)="togglePlayPause()"></div>
+  <div class="overlay" (click)="togglePlayPause(); onMobileTap()"></div>
 
   @if (!hasStarted()) {
     <div class="poster">
@@ -41,7 +41,12 @@
 
   @if (showUiControls()) {
     <!-- ? Progress Bar -->
-    <div class="progress-bar">
+    <div
+      class="progress-bar invisible opacity-0"
+      [class.opacity-100]="showMobileControls()"
+      [class.visible]="showMobileControls()"
+      [class.opacity-0]="!showMobileControls()"
+      [class.invisible]="!showMobileControls()">
       <span class="current-time">{{ formatTime(currentTime()) }}</span>
       <div
         class="progress-holder"
@@ -55,10 +60,15 @@
     </div>
 
     <!-- ? Controls Bar -->
-    <div class="controls-bar">
+    <div
+      class="controls-bar invisible opacity-0"
+      [class.opacity-100]="showMobileControls()"
+      [class.visible]="showMobileControls()"
+      [class.opacity-0]="!showMobileControls()"
+      [class.invisible]="!showMobileControls()">
       <div class="flex items-center">
         <!-- ? Rewind -->
-        <button class="control-btn" (click)="rewind()">
+        <button class="control-btn sm:hidden" (click)="rewind()">
           <fa-icon [icon]="'rotate-left'"></fa-icon>
         </button>
         <!-- ? Play -->
@@ -69,7 +79,7 @@
           <fa-icon [icon]="isPaused() ? 'play' : 'pause'"></fa-icon>
         </button>
         <!-- ? Forward -->
-        <button class="control-btn" (click)="forward()">
+        <button class="control-btn sm:hidden" (click)="forward()">
           <fa-icon [icon]="'rotate-right'"></fa-icon>
         </button>
         <!-- ? Volume -->
@@ -85,7 +95,7 @@
               "></fa-icon>
           </button>
           <!-- ? Volume Control -->
-          <div class="volume-control">
+          <div class="volume-control sm:hidden">
             <div
               class="volume-panel"
               (mousedown)="startVolumeDrag($event)"
@@ -100,14 +110,14 @@
 
       <div class="flex items-center">
         <!-- ? Quality -->
-        <div class="control-btn quality-btn">
+        <div class="control-btn quality-btn flex items-center sm:hidden">
           <span>
             1080p
             <span class="hd-icon">HD</span>
           </span>
         </div>
         <!-- ? Subtitle -->
-        <button class="control-btn ml-6">
+        <button class="control-btn ml-6 sm:hidden">
           <fa-icon [icon]="'closed-captioning'"></fa-icon>
         </button>
         <!-- ? Settings -->
@@ -123,10 +133,38 @@
   }
 
   @if (!hasStarted()) {
-    <button class="btn play-btn" (click)="playVideo()">
+    <button
+      class="btn big-btn play-btn play-btn-first-load"
+      (click)="playVideo()">
       <fa-icon
         [icon]="'play'"
         class="relative left-[3px] text-[45px] text-white"></fa-icon>
+    </button>
+  }
+
+  @if (hasStarted()) {
+    <button
+      class="btn big-btn big-btn-mobile play-btn play-btn-mobile hidden sm:flex"
+      [class]="showingUiClass()"
+      (click)="togglePlayPause()">
+      <span
+        class="pi"
+        [class]="isPaused() ? 'pi-play relative left-[3px]' : 'pi-pause'"
+        style="font-size: 30px"></span>
+    </button>
+
+    <button
+      class="btn big-btn big-btn-mobile rewind-big-btn hidden sm:flex"
+      [class]="showingUiClass()"
+      (click)="rewind()">
+      <fa-icon [icon]="'rotate-left'"></fa-icon>
+    </button>
+
+    <button
+      class="btn big-btn big-btn-mobile forward-big-btn hidden sm:flex"
+      [class]="showingUiClass()"
+      (click)="forward()">
+      <fa-icon [icon]="'rotate-right'"></fa-icon>
     </button>
   }
 
