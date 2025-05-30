@@ -52,6 +52,7 @@
           (close)="closeDialog()"
           title="Cập nhật tên của bạn"
           desc="Tên sẽ được hiển thị trên trang cá nhân, trong các bình luận và bài viết của bạn.">
+          <app-update-name-form />
         </app-dialog>
       } @else if (openedDialog() === 'username') {
         <app-dialog
