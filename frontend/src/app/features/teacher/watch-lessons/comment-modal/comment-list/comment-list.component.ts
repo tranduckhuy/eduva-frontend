@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, output } from '@angular/core';
 
 @Component({
   selector: 'comment-list',
@@ -8,4 +8,15 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrl: './comment-list.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CommentListComponent {}
+export class CommentListComponent {
+  viewComment = output<number | string>();
+  newQuestion = output<void>();
+
+  onSelectComment(id: number | string) {
+    this.viewComment.emit(id);
+  }
+
+  onClickNewQuestion() {
+    this.newQuestion.emit();
+  }
+}

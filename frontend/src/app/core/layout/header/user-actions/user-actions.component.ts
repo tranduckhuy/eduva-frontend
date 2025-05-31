@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
 
-import { SubmenuService } from '../services/submenu.service';
+import { HeaderSubmenuService } from '../services/header-submenu.service';
 
 import { SubjectsComponent } from './subjects/subjects.component';
 import { InformationComponent } from './information/information.component';
@@ -22,15 +22,15 @@ import { NotificationsComponent } from './notifications/notifications.component'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserActionsComponent {
-  readonly submenuService = inject(SubmenuService);
+  readonly headerSubmenuService = inject(HeaderSubmenuService);
 
   toggleMenu(submenuKey: string): void {
-    const current = this.submenuService.getActiveSubmenuMenu();
+    const current = this.headerSubmenuService.getActiveSubmenuMenu();
     if (current === submenuKey) {
-      this.submenuService.close();
+      this.headerSubmenuService.close();
     } else {
-      this.submenuService.open(submenuKey);
-      setTimeout(() => this.submenuService.open(submenuKey));
+      this.headerSubmenuService.open(submenuKey);
+      setTimeout(() => this.headerSubmenuService.open(submenuKey));
     }
   }
 }

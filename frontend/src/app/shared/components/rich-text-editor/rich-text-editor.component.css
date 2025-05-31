@@ -1,0 +1,122 @@
+:host {
+  width: 100%;
+}
+
+ckeditor {
+  display: block;
+  border-radius: 8px;
+  outline: none;
+  overflow: hidden;
+  transition: outline-color 0.2s ease;
+}
+
+ckeditor:focus-within {
+  outline: 1px solid #0093fc;
+}
+
+ckeditor:focus-within ::ng-deep .ck-toolbar,
+ckeditor:focus-within ::ng-deep .ck.ck-editor__editable_inline {
+  background-color: #fff !important;
+}
+
+ckeditor ::ng-deep .mention {
+  display: inline-block;
+  min-width: 70px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 600;
+  color: #0093fc;
+  background-color: #f6f7f9;
+  text-align: center;
+}
+
+ckeditor.height-textbox ::ng-deep .ck.ck-content {
+  min-height: 120px !important;
+}
+
+ckeditor ::ng-deep code {
+  padding: 1px 3px;
+  border-radius: 3px;
+  color: #2e3441;
+  background-color: #c9fffc !important;
+  white-space: pre-wrap;
+  word-break: keep-all;
+}
+
+ckeditor ::ng-deep blockquote {
+  border-left: 2px solid #00aaaa !important;
+}
+
+ckeditor ::ng-deep blockquote p {
+  color: #4e586b;
+  font-weight: 600;
+  font-style: normal;
+}
+
+ckeditor ::ng-deep a {
+  color: #0093fc;
+  text-decoration: underline;
+}
+
+ckeditor ::ng-deep .image img {
+  border-radius: 8px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+::ng-deep .ck-toolbar,
+::ng-deep .ck.ck-editor__editable_inline {
+  transition: background-color 0.2s ease !important;
+  background-color: #eef4fc !important;
+}
+
+::ng-deep .ck.ck-editor__top .ck-sticky-panel .ck-sticky-panel__content,
+::ng-deep .ck.ck-editor__editable_inline {
+  border: none !important;
+}
+
+::ng-deep .ck-toolbar {
+  padding: 0 8px;
+}
+
+::ng-deep .ck.ck-editor__editable_inline {
+  padding: 0 16px;
+}
+
+::ng-deep .ck.ck-button {
+  cursor: pointer;
+  border: none !important;
+  color: #323c4a !important;
+}
+
+::ng-deep .ck.ck-button.ck-off,
+::ng-deep .ck-placeholder {
+  opacity: 0.4;
+  transition: opacity 0.2s ease;
+}
+
+::ng-deep .ck.ck-button.ck-off:hover,
+::ng-deep .ck.ck-button.ck-on:hover {
+  opacity: 1;
+  background-color: transparent !important;
+}
+
+::ng-deep .ck.ck-button.ck-off:active,
+::ng-deep .ck.ck-button.ck-off:focus,
+::ng-deep .ck.ck-button.ck-on,
+::ng-deep .ck.ck-button.ck-on:active,
+::ng-deep .ck.ck-button.ck-on:focus {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+}
+
+::ng-deep .ck.ck-editor__editable {
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+::ng-deep .ck.ck-editor__editable.ck-focused:not(.ck-editor__nested-editable) {
+  box-shadow: none;
+}

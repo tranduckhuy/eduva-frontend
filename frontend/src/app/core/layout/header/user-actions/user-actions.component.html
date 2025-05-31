@@ -13,8 +13,8 @@
       size="small"
       [rounded]="true"
       (click)="toggleMenu('subjects')" />
-    @if (submenuService.getActiveSubmenuMenu() === 'subjects') {
-      <header-subjects (clickOutside)="submenuService.close()" />
+    @if (headerSubmenuService.getActiveSubmenuMenu() === 'subjects') {
+      <header-subjects (clickOutside)="headerSubmenuService.close()" />
     }
   </div>
   <div class="flex items-center gap-3">
@@ -24,8 +24,8 @@
         class="notify__btn"
         [rounded]="true"
         (click)="toggleMenu('notifications')" />
-      @if (submenuService.getActiveSubmenuMenu() === 'notifications') {
-        <header-notifications (clickOutside)="submenuService.close()" />
+      @if (headerSubmenuService.getActiveSubmenuMenu() === 'notifications') {
+        <header-notifications (clickOutside)="headerSubmenuService.close()" />
       }
     </div>
     <div
@@ -39,8 +39,9 @@
         src="./images/icons/user-info.svg"
         alt="User Information Icon"
         class="absolute right-[-6px] top-[-1px] z-[9999] h-[10px] w-[10px]" />
-      @if (submenuService.getActiveSubmenuMenu() === 'information') {
-        <header-user-information (clickOutside)="submenuService.close()" />
+      @if (headerSubmenuService.getActiveSubmenuMenu() === 'information') {
+        <header-user-information
+          (clickOutside)="headerSubmenuService.close()" />
       }
     </div>
   </div>
