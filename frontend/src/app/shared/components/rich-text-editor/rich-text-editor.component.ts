@@ -5,7 +5,6 @@ import {
   Input,
   input,
   Output,
-  output,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
@@ -146,8 +145,8 @@ export class RichTextEditorComponent {
       if (!img) return;
 
       const pImage = document.createElement('p-image');
-      pImage.setAttribute('src', img.getAttribute('src') || '');
-      pImage.setAttribute('alt', img.getAttribute('alt') || '');
+      pImage.setAttribute('src', img.getAttribute('src') ?? '');
+      pImage.setAttribute('alt', img.getAttribute('alt') ?? '');
       pImage.setAttribute('preview', 'true');
 
       figure.replaceWith(pImage);
