@@ -10,7 +10,7 @@ import {
   selector: '[clickOutsideSubmenu]',
   standalone: true,
 })
-export class HeaderSubmenuDirective {
+export class SubmenuDirective {
   private readonly elRef = inject(ElementRef);
 
   clickOutside = output();

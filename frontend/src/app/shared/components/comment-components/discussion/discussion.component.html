@@ -1,0 +1,48 @@
+<div class="mb-[70px] mt-7">
+  <app-user-comment-textbox
+    [comment]="comment()"
+    (changeData)="getData($event)" />
+
+  <!-- ? Comment List -->
+  <div class="mt-6">
+    <h2 class="text-lg font-semibold text-[#4e586b]">1 bình luận</h2>
+
+    <!-- ? Comments -->
+    <comment-context />
+
+    <!-- ? Replies -->
+    <div class="border-l-[#dae4f0 ] ml-2 mt-[30px] border-l">
+      <comment-context
+        [index]="0"
+        [isReplyMode]="true"
+        [isBestComment]="isBestComment(0)"
+        [canMarkAsBest]="canMarkBestComment(0)"
+        (markAsBest)="setBestComment(0)"
+        (unMarkAsBest)="clearBestComment()" />
+
+      <comment-context
+        [index]="1"
+        [isReplyMode]="true"
+        [isBestComment]="isBestComment(1)"
+        [canMarkAsBest]="canMarkBestComment(1)"
+        (markAsBest)="setBestComment(1)"
+        (unMarkAsBest)="clearBestComment()" />
+
+      <comment-context
+        [index]="2"
+        [isReplyMode]="true"
+        [isBestComment]="isBestComment(2)"
+        [canMarkAsBest]="canMarkBestComment(2)"
+        (markAsBest)="setBestComment(2)"
+        (unMarkAsBest)="clearBestComment()" />
+
+      <comment-context
+        [index]="3"
+        [isReplyMode]="true"
+        [isBestComment]="isBestComment(3)"
+        [canMarkAsBest]="canMarkBestComment(3)"
+        (markAsBest)="setBestComment(3)"
+        (unMarkAsBest)="clearBestComment()" />
+    </div>
+  </div>
+</div>

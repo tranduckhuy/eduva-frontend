@@ -5,7 +5,7 @@ import {
   signal,
 } from '@angular/core';
 
-import { HeaderSubmenuDirective } from '../../../../../shared/directives/header-submenu.directive';
+import { SubmenuDirective } from '../../../../../shared/directives/submenu/submenu.directive';
 
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
@@ -13,7 +13,7 @@ import { TooltipModule } from 'primeng/tooltip';
 @Component({
   selector: 'header-notifications',
   standalone: true,
-  imports: [HeaderSubmenuDirective, ButtonModule, TooltipModule],
+  imports: [SubmenuDirective, ButtonModule, TooltipModule],
   templateUrl: './notifications.component.html',
   styleUrl: './notifications.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

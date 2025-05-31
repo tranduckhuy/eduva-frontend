@@ -1,5 +1,6 @@
 @import '@angular/cdk/overlay-prebuilt.css';
 @import 'primeicons/primeicons.css';
+@import 'ckeditor5/ckeditor5.css';
 
 @import './grid.css';
 

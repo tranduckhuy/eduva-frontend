@@ -1,8 +1,8 @@
-import { HeaderSubmenuDirective } from './header-submenu.directive';
+import { SubmenuDirective } from './submenu.directive';
 
 describe('HeaderSubmenuDirective', () => {
   it('should create an instance', () => {
-    const directive = new HeaderSubmenuDirective();
+    const directive = new SubmenuDirective();
     expect(directive).toBeTruthy();
   });
 });

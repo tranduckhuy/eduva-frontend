@@ -1,0 +1,80 @@
+<div class="mt-6">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <img
+        src="https://files.fullstack.edu.vn/f8-prod/user_avatars/378826/661cf89e8d5a0.jpg"
+        alt="Quy Nguyen"
+        class="h-10 w-10 rounded-[50%]" />
+      <div class="flex items-center">
+        <h3 class="font-bold text-[#0093fc]">Quy Nguyen</h3>
+        <span class="text-[#4e586b ] ml-1 text-[13px] font-normal">
+          Một năm trước
+        </span>
+      </div>
+    </div>
+    <!-- <div class="flex items-center gap-1">
+      <img
+        src="./images/icons/circle-question-mark.svg"
+        alt="Chưa trả lời"
+        class="relative top-[1px]" />
+      <span class="text-[13px] text-[#4e586b]">Chưa trả lời</span>
+    </div> -->
+    <div class="flex items-center gap-1">
+      <img
+        src="./images/icons/circle-check-green.svg"
+        alt="Chưa trả lời"
+        class="relative top-[1px]" />
+      <span class="text-[13px] text-[#48bd79]">Đã trả lời</span>
+    </div>
+  </div>
+</div>
+
+<div class="content">
+  <p>
+    Phần slideshow của em đang code có những con số tỉ lệ khá lạ. Em cũng không
+    biết tại sao. Như trong video anh Sơn có code 2 Pseudo-element của slider có
+    translate: -90% -50%/90% -50% thì 2 Pseudo-element sẽ nằm đúng ở 2 đầu của
+    thanh trắng slider. Nhưng như trong code của em thì phải dùng tỉ lệ cao hơn
+    90% và -90% rất nhiều.
+  </p>
+  <p>
+    <a href="https://htmlcss.fullstack.edu.vn">
+      https://htmlcss.fullstack.edu.vn
+    </a>
+  </p>
+  <blockquote>
+    <p>abc</p>
+  </blockquote>
+  <p>
+    <code>abc</code>
+  </p>
+  <p>
+    <p-image
+      src="https://files.fullstack.edu.vn/f8-prod/public-images/6637c2b03533b.png"
+      alt=""
+      [preview]="true" />
+  </p>
+</div>
+
+<div class="relative flex items-center">
+  <div class="ml-auto flex w-[122px] items-center justify-center gap-[10px]">
+    <span class="text-xs font-normal text-[#4e586b]">Đã chỉnh sửa</span>
+    <button (click)="toggleFooterOptions()">
+      <span
+        class="pi pi-ellipsis-h relative top-[3px] cursor-pointer text-[#0093fc] hover:opacity-70"></span>
+    </button>
+  </div>
+  @if (isOptionsOpen()) {
+    <div
+      clickOutsideSubmenu
+      (clickOutside)="closeFooterOptions()"
+      class="content-footer-options absolute right-3 top-[25px] z-10">
+      <div class="content-footer-option-item">
+        <span>Chỉnh sửa</span>
+      </div>
+      <div class="content-footer-option-item">
+        <span>Xóa</span>
+      </div>
+    </div>
+  }
+</div>
