@@ -52,6 +52,7 @@ export class FormControlComponent implements OnInit, ControlValueAccessor {
   minLength = input<number>(0);
   minWords = input<number>(0);
   email = input<boolean>(false);
+  phone = input<boolean>(false);
   required = input<boolean>(false);
   pattern = input<string | RegExp | null>(null);
   errorMessages = input<{ [key: string]: string }>({});
@@ -117,8 +118,14 @@ export class FormControlComponent implements OnInit, ControlValueAccessor {
 
     // ? Required
     if (this.required()) validators.push(Validators.required);
-    // ? Match Pattern
-    if (this.pattern()) validators.push(Validators.pattern(this.pattern()!));
+    // ? Match Phone Number (Vietnam)
+    if (this.phone()) {
+      // Vietnamese phone: starts with 0, 10 or 11 digits total
+      validators.push(Validators.pattern(/^0\d{9,10}$/));
+    } else if (this.pattern()) {
+      // ? Match Pattern
+      validators.push(Validators.pattern(this.pattern()!));
+    }
     // ? Match Email Format
     if (this.email()) validators.push(Validators.email);
     // ? Match Min Word Count

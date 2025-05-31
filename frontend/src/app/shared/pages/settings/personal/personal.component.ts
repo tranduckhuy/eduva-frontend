@@ -1,13 +1,12 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { ProfileCardComponent } from '../profile-card/profile-card.component';
 import { DialogComponent } from '../dialog/dialog.component';
-import { UpdateNameFormComponent } from '../forms/update-name-form/update-name-form.component';
-import { UpdateUsernameFormComponent } from '../forms/update-username-form/update-username-form.component';
 import { UpdateBioFormComponent } from '../forms/update-bio-form/update-bio-form.component';
 import { UpdateAvatarFormComponent } from '../forms/update-avatar-form/update-avatar-form.component';
-import { UpdateEmailFormComponent } from '../forms/socials/update-email-form/update-email-form.component';
-import { UpdateFacebookFormComponent } from '../forms/socials/update-facebook-form/update-facebook-form.component';
 import { RouterLink } from '@angular/router';
+import { UpdatePhoneNumberFormComponent } from '../forms/update-phone-number-form/update-phone-number-form.component';
+import { UpdateEmailFormComponent } from '../forms/update-email-form/update-email-form.component';
+import { UpdateSocialFormComponent } from '../forms/update-social-form/update-social-form.component';
 
 @Component({
   selector: 'app-personal',
@@ -16,12 +15,11 @@ import { RouterLink } from '@angular/router';
     RouterLink,
     ProfileCardComponent,
     DialogComponent,
-    UpdateNameFormComponent,
-    UpdateUsernameFormComponent,
     UpdateBioFormComponent,
     UpdateAvatarFormComponent,
     UpdateEmailFormComponent,
-    UpdateFacebookFormComponent,
+    UpdatePhoneNumberFormComponent,
+    UpdateSocialFormComponent,
   ],
   templateUrl: './personal.component.html',
   styleUrl: './personal.component.css',

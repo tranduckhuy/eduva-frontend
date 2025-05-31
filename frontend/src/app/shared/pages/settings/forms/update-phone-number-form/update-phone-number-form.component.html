@@ -1,11 +1,14 @@
 <form (ngSubmit)="onSubmit()">
   <div class="max-h-[60vh] min-h-[122px] overflow-y-auto pb-[30px]">
     <app-form-control
-      label="Trang cá nhân"
-      type="text"
-      placeholder="Nhập đường dẫn trang cá nhân của bạn"
-      [name]="'facebook'"
-      [(ngModel)]="facebook">
+      label="Số điện thoại"
+      type="tel"
+      placeholder="Nhập số điện thoại của bạn"
+      [phone]="true"
+      [(ngModel)]="phone"
+      [errorMessages]="{
+        pattern: 'Số điện thoại không đúng định dạng',
+      }">
     </app-form-control>
   </div>
   <footer>
