@@ -159,15 +159,15 @@ export class FormControlComponent implements OnInit, ControlValueAccessor {
       email: 'Email không hợp lệ',
       minWords: `Cần có ít nhất ${this.minWords()} từ`,
 
-      passwordTooShort: 'Mật khẩu phải có ít nhất 8 ký tự',
-      passwordTooLong: 'Mật khẩu không được vượt quá 18 ký tự',
+      passTooShort: 'Mật khẩu phải có ít nhất 8 ký tự',
+      passTooLong: 'Mật khẩu không được vượt quá 18 ký tự',
       missingLowercase: 'Mật khẩu cần ít nhất một chữ cái thường (a-z)',
       missingUppercase: 'Mật khẩu cần ít nhất một chữ cái in hoa (A-Z)',
       missingNumber: 'Mật khẩu cần ít nhất một chữ số (0-9)',
       missingSpecialChar:
         'Mật khẩu cần ít nhất một ký tự đặc biệt (ví dụ: !@#$%)',
 
-      passwordMismatch: 'Mật khẩu xác nhận không khớp',
+      passMismatch: 'Mật khẩu xác nhận không khớp',
     };
 
     return defaultMessages[error] ?? 'Giá trị không hợp lệ';
