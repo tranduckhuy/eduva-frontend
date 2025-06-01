@@ -1,0 +1,335 @@
+<div>
+  <!-- ? Lesson Title -->
+  <div class="border-b border-b-[#dae4f0] pb-5">
+    <h3 class="text-lg font-semibold leading-6 text-[#808b9a]">
+      Hoàn thành dự án 8
+    </h3>
+  </div>
+  <!-- ? Comment Title -->
+  <div class="mt-4">
+    <!-- ? Comment List -->
+    <div>
+      <h4 class="text-[#4e586b ] font-semibold leading-6">
+        Các câu hỏi thường gặp
+      </h4>
+
+      <!-- ? Comment List -->
+      <div class="mt-3">
+        <ul>
+          <li>
+            <button class="comment-item" (click)="onSelectComment(0)">
+              <div class="comment-content">
+                <img
+                  src="./images/icons/circle-question-mark.svg"
+                  alt="Chưa trả lời" />
+                <p
+                  class="line-clamp-1 max-w-[545px] items-center text-base leading-[1.6]">
+                  Cho anh hỏi có phần hướng dẫn hay demo cho phần trang quản trị
+                  admin không em?
+                </p>
+              </div>
+              <span class="comment-category">Các loại bài tập khác</span>
+            </button>
+          </li>
+          <li>
+            <button class="comment-item" (click)="onSelectComment(0)">
+              <div class="comment-content">
+                <img
+                  src="./images/icons/circle-check-green.svg"
+                  alt="Đã trả lời" />
+                <p
+                  class="line-clamp-1 max-w-[545px] items-center text-base leading-[1.6]">
+                  Cho anh hỏi có phần hướng dẫn hay demo cho phần trang quản trị
+                  admin không em?
+                </p>
+              </div>
+              <span class="comment-category">Bài học lý thuyết</span>
+            </button>
+          </li>
+          <li>
+            <button class="comment-item" (click)="onSelectComment(0)">
+              <div class="comment-content">
+                <img
+                  src="./images/icons/circle-question-mark.svg"
+                  alt="Chưa trả lời" />
+                <p
+                  class="line-clamp-1 max-w-[545px] items-center text-base leading-[1.6]">
+                  Cho anh hỏi có phần hướng dẫn hay demo cho phần trang quản trị
+                  admin không em?
+                </p>
+              </div>
+              <span class="comment-category">Các loại bài tập khác</span>
+            </button>
+          </li>
+          <li>
+            <button class="comment-item" (click)="onSelectComment(0)">
+              <div class="comment-content">
+                <img
+                  src="./images/icons/circle-question-mark.svg"
+                  alt="Chưa trả lời" />
+                <p
+                  class="line-clamp-1 max-w-[545px] items-center text-base leading-[1.6]">
+                  Cho anh hỏi có phần hướng dẫn hay demo cho phần trang quản trị
+                  admin không em?
+                </p>
+              </div>
+              <span class="comment-category">Các loại bài tập khác</span>
+            </button>
+          </li>
+          <li>
+            <button class="comment-item" (click)="onSelectComment(0)">
+              <div class="comment-content">
+                <img
+                  src="./images/icons/circle-check-green.svg"
+                  alt="Đã trả lời" />
+                <p
+                  class="line-clamp-1 max-w-[545px] items-center text-base leading-[1.6]">
+                  Cho anh hỏi có phần hướng dẫn hay demo cho phần trang quản trị
+                  admin không em?
+                </p>
+              </div>
+              <span class="comment-category">Bài học lý thuyết</span>
+            </button>
+          </li>
+          <li>
+            <button class="comment-item" (click)="onSelectComment(0)">
+              <div class="comment-content">
+                <img
+                  src="./images/icons/circle-question-mark.svg"
+                  alt="Chưa trả lời" />
+                <p
+                  class="line-clamp-1 max-w-[545px] items-center text-base leading-[1.6]">
+                  Cho anh hỏi có phần hướng dẫn hay demo cho phần trang quản trị
+                  admin không em?
+                </p>
+              </div>
+              <span class="comment-category">Các loại bài tập khác</span>
+            </button>
+          </li>
+          <li>
+            <button class="comment-item" (click)="onSelectComment(0)">
+              <div class="comment-content">
+                <img
+                  src="./images/icons/circle-check-green.svg"
+                  alt="Đã trả lời" />
+                <p
+                  class="line-clamp-1 max-w-[545px] items-center text-base leading-[1.6]">
+                  Cho anh hỏi có phần hướng dẫn hay demo cho phần trang quản trị
+                  admin không em?
+                </p>
+              </div>
+              <span class="comment-category">Bài học lý thuyết</span>
+            </button>
+          </li>
+          <li>
+            <button class="comment-item" (click)="onSelectComment(0)">
+              <div class="comment-content">
+                <img
+                  src="./images/icons/circle-question-mark.svg"
+                  alt="Chưa trả lời" />
+                <p
+                  class="line-clamp-1 max-w-[545px] items-center text-base leading-[1.6]">
+                  Cho anh hỏi có phần hướng dẫn hay demo cho phần trang quản trị
+                  admin không em?
+                </p>
+              </div>
+              <span class="comment-category">Các loại bài tập khác</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ? Pagination -->
+      <div class="mt-7 flex justify-center">
+        <div class="relative flex items-center justify-center">
+          <div class="flex items-center px-[10px]">
+            <span class="select-none text-[#a2adbd]">Trang:</span>
+            <div class="prev disabled">
+              <span
+                class="pi pi-angle-left text-[#0093fc]"
+                style="font-size: 20px"></span>
+            </div>
+            <div class="page active">1</div>
+            <div class="page">2</div>
+            <div class="page">3</div>
+            <div class="page">4</div>
+            <div class="page">5</div>
+            <div class="next">
+              <span
+                class="pi pi-angle-right text-[#0093fc]"
+                style="font-size: 20px"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ? New Comment -->
+    <div class="my-7 flex items-center justify-center gap-2">
+      <span class="text-base text-[#4e586b]">
+        Không tìm thấy câu hỏi bạn cần?
+      </span>
+      <app-button-outline-gradient
+        [variant]="'outline'"
+        [text]="'Đặt câu hỏi mới'"
+        (click)="onClickNewQuestion()" />
+    </div>
+
+    <!-- ? My Comment -->
+    <div>
+      <h4 class="text-[#4e586b ] font-semibold leading-6">
+        Các câu hỏi của bạn
+      </h4>
+
+      <!-- ? My Comment List -->
+      <div class="mt-3">
+        <ul>
+          <li>
+            <button class="comment-item" (click)="onSelectComment(0)">
+              <div class="comment-content">
+                <img
+                  src="./images/icons/circle-question-mark.svg"
+                  alt="Chưa trả lời" />
+                <p
+                  class="line-clamp-1 max-w-[545px] items-center text-base leading-[1.6]">
+                  Cho anh hỏi có phần hướng dẫn hay demo cho phần trang quản trị
+                  admin không em?
+                </p>
+              </div>
+              <span class="comment-category">Các loại bài tập khác</span>
+            </button>
+          </li>
+          <li>
+            <button class="comment-item" (click)="onSelectComment(0)">
+              <div class="comment-content">
+                <img
+                  src="./images/icons/circle-check-green.svg"
+                  alt="Đã trả lời" />
+                <p
+                  class="line-clamp-1 max-w-[545px] items-center text-base leading-[1.6]">
+                  Cho anh hỏi có phần hướng dẫn hay demo cho phần trang quản trị
+                  admin không em?
+                </p>
+              </div>
+              <span class="comment-category">Bài học lý thuyết</span>
+            </button>
+          </li>
+          <li>
+            <button class="comment-item" (click)="onSelectComment(0)">
+              <div class="comment-content">
+                <img
+                  src="./images/icons/circle-question-mark.svg"
+                  alt="Chưa trả lời" />
+                <p
+                  class="line-clamp-1 max-w-[545px] items-center text-base leading-[1.6]">
+                  Cho anh hỏi có phần hướng dẫn hay demo cho phần trang quản trị
+                  admin không em?
+                </p>
+              </div>
+              <span class="comment-category">Các loại bài tập khác</span>
+            </button>
+          </li>
+          <li>
+            <button class="comment-item" (click)="onSelectComment(0)">
+              <div class="comment-content">
+                <img
+                  src="./images/icons/circle-question-mark.svg"
+                  alt="Chưa trả lời" />
+                <p
+                  class="line-clamp-1 max-w-[545px] items-center text-base leading-[1.6]">
+                  Cho anh hỏi có phần hướng dẫn hay demo cho phần trang quản trị
+                  admin không em?
+                </p>
+              </div>
+              <span class="comment-category">Các loại bài tập khác</span>
+            </button>
+          </li>
+          <li>
+            <button class="comment-item" (click)="onSelectComment(0)">
+              <div class="comment-content">
+                <img
+                  src="./images/icons/circle-check-green.svg"
+                  alt="Đã trả lời" />
+                <p
+                  class="line-clamp-1 max-w-[545px] items-center text-base leading-[1.6]">
+                  Cho anh hỏi có phần hướng dẫn hay demo cho phần trang quản trị
+                  admin không em?
+                </p>
+              </div>
+              <span class="comment-category">Bài học lý thuyết</span>
+            </button>
+          </li>
+          <li>
+            <button class="comment-item" (click)="onSelectComment(0)">
+              <div class="comment-content">
+                <img
+                  src="./images/icons/circle-question-mark.svg"
+                  alt="Chưa trả lời" />
+                <p
+                  class="line-clamp-1 max-w-[545px] items-center text-base leading-[1.6]">
+                  Cho anh hỏi có phần hướng dẫn hay demo cho phần trang quản trị
+                  admin không em?
+                </p>
+              </div>
+              <span class="comment-category">Các loại bài tập khác</span>
+            </button>
+          </li>
+          <li>
+            <button class="comment-item" (click)="onSelectComment(0)">
+              <div class="comment-content">
+                <img
+                  src="./images/icons/circle-check-green.svg"
+                  alt="Đã trả lời" />
+                <p
+                  class="line-clamp-1 max-w-[545px] items-center text-base leading-[1.6]">
+                  Cho anh hỏi có phần hướng dẫn hay demo cho phần trang quản trị
+                  admin không em?
+                </p>
+              </div>
+              <span class="comment-category">Bài học lý thuyết</span>
+            </button>
+          </li>
+          <li>
+            <button class="comment-item" (click)="onSelectComment(0)">
+              <div class="comment-content">
+                <img
+                  src="./images/icons/circle-question-mark.svg"
+                  alt="Chưa trả lời" />
+                <p
+                  class="line-clamp-1 max-w-[545px] items-center text-base leading-[1.6]">
+                  Cho anh hỏi có phần hướng dẫn hay demo cho phần trang quản trị
+                  admin không em?
+                </p>
+              </div>
+              <span class="comment-category">Các loại bài tập khác</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+
+      <!-- ? Pagination -->
+      <div class="mt-7 flex justify-center">
+        <div class="relative flex items-center justify-center">
+          <div class="flex items-center px-[10px]">
+            <span class="select-none text-[#a2adbd]">Trang:</span>
+            <div class="prev disabled">
+              <span
+                class="pi pi-angle-left text-[#0093fc]"
+                style="font-size: 20px"></span>
+            </div>
+            <div class="page active">1</div>
+            <div class="page">2</div>
+            <div class="page">3</div>
+            <div class="page">4</div>
+            <div class="page">5</div>
+            <div class="next">
+              <span
+                class="pi pi-angle-right text-[#0093fc]"
+                style="font-size: 20px"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

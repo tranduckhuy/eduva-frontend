@@ -1,0 +1,38 @@
+<div class="navbar-container shrink-0">
+  <div
+    class="z-8 navbar sticky left-0 top-[80px] flex w-[96px] shrink-0 flex-col items-center px-2 md:z-10">
+    <ul
+      class="flex flex-col gap-y-1 pl-0 sm:flex sm:w-full sm:flex-row sm:justify-evenly">
+      <li>
+        <a routerLink="/" class="active nav-link" [class.active]="true">
+          <fa-icon [icon]="'house'" class="nav-icon"></fa-icon>
+          <span class="nav-text">Trang chủ</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/create" class="nav-link">
+          <fa-icon [icon]="'square-plus'" class="nav-icon"></fa-icon>
+          <span class="nav-text">Tạo bài</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/create" class="nav-link">
+          <fa-icon [icon]="'file-circle-check'" class="nav-icon"></fa-icon>
+          <span class="nav-text">Duyệt bài</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/create" class="nav-link">
+          <fa-icon [icon]="'share-from-square'" class="nav-icon"></fa-icon>
+          <span class="nav-text">Bài chung</span>
+        </a>
+      </li>
+      <li>
+        <a routerLink="/comments" class="nav-link">
+          <fa-icon [icon]="'comments'" class="nav-icon"></fa-icon>
+          <span class="nav-text"> Hỏi đáp </span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
