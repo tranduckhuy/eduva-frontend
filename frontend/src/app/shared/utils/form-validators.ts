@@ -16,8 +16,8 @@ export function strongPasswordValidator(
   const value: string = control.value ?? '';
   const errors: ValidationErrors = {};
 
-  if (value.length < 8) errors['passwordTooShort'] = true;
-  if (value.length > 18) errors['passwordTooLong'] = true;
+  if (value.length < 8) errors['passTooShort'] = true;
+  if (value.length > 18) errors['passTooLong'] = true;
   if (!/[a-z]/.test(value)) errors['missingLowercase'] = true;
   if (!/[A-Z]/.test(value)) errors['missingUppercase'] = true;
   if (!/\d/.test(value)) errors['missingNumber'] = true;
@@ -40,7 +40,7 @@ export function matchPasswordValidator(
   control: AbstractControl,
   newPassword: string
 ): { [key: string]: boolean } | null {
-  return control.value === newPassword ? null : { passwordMismatch: true };
+  return control.value === newPassword ? null : { passMismatch: true };
 }
 
 /**
