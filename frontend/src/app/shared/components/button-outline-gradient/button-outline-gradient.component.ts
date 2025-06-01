@@ -17,10 +17,23 @@ import { TooltipModule } from 'primeng/tooltip';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ButtonOutlineGradientComponent {
-  tooltipText = input<string>();
-  imgSrc = input.required<string>();
+  variant = input.required<'outline' | 'text' | 'icon'>();
+  text = input<string>('');
+  imgSrc = input<string>('');
+  tooltipText = input<string>('');
+  isDisabled = input<boolean>(false);
 
   mouseClick = output();
+
+  get btnClass() {
+    return {
+      btn: true,
+      'btn--icon': this.variant() === 'icon',
+      'btn--outline': this.variant() === 'outline',
+      'btn--text': this.variant() === 'text',
+      'btn--disabled': this.isDisabled(),
+    };
+  }
 
   @HostListener('click', ['$event'])
   onHostClick(event: MouseEvent) {
