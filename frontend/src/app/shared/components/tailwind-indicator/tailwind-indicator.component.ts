@@ -8,7 +8,14 @@ import { ChangeDetectionStrategy, Component, isDevMode } from '@angular/core';
     @if (_isDevMode) {
       <div
         class="fixed bottom-1 left-1 z-[99999] flex h-6 w-6 items-center justify-center rounded-full bg-gray-800 p-3 text-xs text-white">
-        <div class="block xl:hidden" title="xxl: >=1400px">xxl</div>
+        <div class="block xxxxl:hidden" title="xxl: >=1400px">xxxxxl</div>
+        <div class="hidden xxxxl:block xxxl:hidden" title="xxl: >=1400px">
+          xxxxl
+        </div>
+        <div class="hidden xxxl:block xxl:hidden" title="xxl: >=1400px">
+          xxxl
+        </div>
+        <div class="hidden xxl:block xl:hidden" title="xxl: >=1400px">xxl</div>
         <div class="hidden xl:block lg:hidden" title="xl: >=1200px && <1400">
           xl
         </div>
