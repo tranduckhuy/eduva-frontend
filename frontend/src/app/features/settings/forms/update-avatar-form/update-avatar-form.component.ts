@@ -4,7 +4,6 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import {
   ImageCropperComponent,
   ImageCroppedEvent,
-  LoadedImage,
   ImageTransform,
 } from 'ngx-image-cropper';
 import { Slider } from 'primeng/slider';

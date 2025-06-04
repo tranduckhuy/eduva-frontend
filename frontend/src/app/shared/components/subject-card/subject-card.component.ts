@@ -37,7 +37,7 @@ export class SubjectCardComponent {
   libIcon = inject(FaIconLibrary);
 
   subject = input.required<Subject>();
-  withProgress = input<Boolean>(false);
+  withProgress = input<boolean>(false);
 
   constructor() {
     this.libIcon.addIcons(faClock, faCirclePlay);
