@@ -296,9 +296,8 @@ export class VideoPlayerComponent {
   }
 
   onSubtitleChange(code: 'vi' | 'en') {
-    const trackList = this.getVideoElement().textTracks;
-    for (let i = 0; i < trackList.length; i++) {
-      const track = trackList[i];
+    const trackList = Array.from(this.getVideoElement().textTracks);
+    for (const track of trackList) {
       track.mode = track.language === code ? 'showing' : 'disabled';
     }
   }

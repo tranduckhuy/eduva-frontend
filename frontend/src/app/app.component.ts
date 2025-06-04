@@ -1,6 +1,10 @@
+import {
+  Router,
+  RouterOutlet,
+  NavigationEnd,
+  ActivatedRoute,
+} from '@angular/router';
 import { Component, inject } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 
 import { filter, map, mergeMap } from 'rxjs';
