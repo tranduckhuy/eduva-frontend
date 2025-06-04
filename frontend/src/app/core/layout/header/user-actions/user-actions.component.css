@@ -1,12 +1,13 @@
 /* ? Not Logged In */
 .actions__btn ::ng-deep .p-button {
-  background: linear-gradient(to right bottom, #ff8f26, #ff5117);
+  background: linear-gradient(to right bottom, #4dbfe9, #2093e7);
   border-color: transparent;
+  white-space: nowrap;
   transition: opacity 0.2s linear;
 }
 
 .actions__btn ::ng-deep .p-button:hover {
-  background: linear-gradient(to right bottom, #ff8f26, #ff5117);
+  background: linear-gradient(to right bottom, #4dbfe9, #2093e7);
   border-color: transparent;
   opacity: 0.9;
 }

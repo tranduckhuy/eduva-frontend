@@ -1,4 +1,4 @@
-::ng-deep code {
+.comment ::ng-deep code {
   padding: 1px 3px;
   border-radius: 3px;
   color: #2e3441;
@@ -7,22 +7,22 @@
   word-break: keep-all;
 }
 
-::ng-deep blockquote {
-  border-left: 2px solid #00aaaa !important;
+.comment ::ng-deep blockquote {
+  border-left: 2px solid #0093fc !important;
 }
 
-::ng-deep blockquote p {
+.comment ::ng-deep blockquote p {
   color: #4e586b;
   font-weight: 600;
   font-style: normal;
 }
 
-::ng-deep a {
+.comment ::ng-deep a {
   color: #0093fc;
   text-decoration: underline;
 }
 
-::ng-deep .image img {
+.comment ::ng-deep .image img {
   border-radius: 8px;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
 }

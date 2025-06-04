@@ -1,20 +1,20 @@
-<div class="flex items-center gap-[12px]">
-  <!-- <p-button label="Đăng Ký" variant="text" size="small" [rounded]="true" />
+<div class="flex shrink-0 items-center gap-[12px]">
   <p-button
     label="Đăng Nhập"
     size="small"
     class="actions__btn"
-    [rounded]="true" /> -->
+    [rounded]="true"
+    (click)="openAuthModal()" />
 
-  <div class="relative md:hidden">
+  <!-- <div class="relative md:hidden">
     <p-button
       label="Môn học của tôi"
       variant="text"
       size="small"
       [rounded]="true"
-      (click)="toggleMenu('subjects')" />
-    @if (headerSubmenuService.getActiveSubmenuMenu() === 'subjects') {
-      <header-subjects (clickOutside)="headerSubmenuService.close()" />
+      (click)="toggleSubMenu('subjects')" />
+    @if (activeSubmenu === 'subjects') {
+      <header-subjects (clickOutside)="closeSubMenu()" />
     }
   </div>
   <div class="flex items-center gap-3">
@@ -23,14 +23,14 @@
         icon="fas fa-bell"
         class="notify__btn"
         [rounded]="true"
-        (click)="toggleMenu('notifications')" />
-      @if (headerSubmenuService.getActiveSubmenuMenu() === 'notifications') {
-        <header-notifications (clickOutside)="headerSubmenuService.close()" />
+        (click)="toggleSubMenu('notifications')" />
+      @if (activeSubmenu === 'notifications') {
+        <header-notifications (clickOutside)="closeSubMenu()" />
       }
     </div>
     <div
       class="avatar-wrapper relative flex h-[33px] w-[33px] cursor-pointer rounded-full p-[2px]"
-      (click)="toggleMenu('information')">
+      (click)="toggleSubMenu('information')">
       <img
         src="https://files.fullstack.edu.vn/f8-prod/user_avatars/378826/661cf89e8d5a0.jpg"
         alt="Quy Nguyen"
@@ -39,10 +39,9 @@
         src="./images/icons/user-info.svg"
         alt="User Information Icon"
         class="absolute right-[-6px] top-[-1px] z-[9999] h-[10px] w-[10px]" />
-      @if (headerSubmenuService.getActiveSubmenuMenu() === 'information') {
-        <header-user-information
-          (clickOutside)="headerSubmenuService.close()" />
+      @if (activeSubmenu === 'information') {
+        <header-user-information (clickOutside)="closeSubMenu()" />
       }
     </div>
-  </div>
+  </div> -->
 </div>

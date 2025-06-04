@@ -1,0 +1,108 @@
+.modal-background {
+  position: relative;
+}
+
+.modal-background::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -2;
+  content: '';
+  border-radius: 16px;
+  background: #fff;
+}
+
+.modal-background::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  content: '';
+  border-radius: 16px;
+  opacity: 0.08;
+  background-image:
+    radial-gradient(#ffffff40, #fff0 40%),
+    radial-gradient(
+      hsl(44, 100%, 66%) 30%,
+      hsl(338, 68%, 65%),
+      hsla(338, 68%, 65%, 0.4) 41%,
+      transparent 52%
+    ),
+    radial-gradient(hsl(272, 100%, 60%) 37%, transparent 46%),
+    linear-gradient(155deg, transparent 65%, hsl(142, 70%, 49%) 95%),
+    linear-gradient(45deg, #0065e0, #0f8bff);
+  background-size:
+    200% 200%,
+    285% 500%,
+    285% 500%,
+    cover,
+    cover;
+  background-position:
+    bottom left,
+    109% 68%,
+    109% 68%,
+    center,
+    center;
+}
+
+.remember-label::before {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #2093e7;
+  border-radius: 4px;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.remember-label::after {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(calc(-50% + 4px));
+}
+
+.remember-input:checked + .remember-label::before {
+  background-color: #2093e7;
+}
+
+.remember-input:checked + .remember-label::after {
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 10px;
+  left: 6px;
+  margin-top: -6px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.button-submit {
+  background-image: linear-gradient(
+    70.06deg,
+    #4dbfe9 -5%,
+    #2093e7 50%,
+    #22cfd2 106%
+  );
+}
+
+.animation-scale {
+  animation: scaleUp 0.3s linear;
+}
+
+@keyframes scaleUp {
+  0% {
+    opacity: 0;
+    scale: 0;
+  }
+  100% {
+    opacity: 1;
+    scale: 1;
+  }
+}
