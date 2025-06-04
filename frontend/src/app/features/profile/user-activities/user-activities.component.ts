@@ -11,6 +11,7 @@ type Subject = {
   subjectImage: string;
   creatorAvatar: string;
   isRecommend?: boolean;
+  progress?: number;
 };
 
 @Component({
@@ -33,6 +34,7 @@ export class UserActivitiesComponent {
         'https://files.fullstack.edu.vn/f8-prod/courses/15/62f13d2424a47.png',
       creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
       isRecommend: true,
+      progress: 90,
     },
     {
       title: 'JavaScript Pro',
@@ -44,6 +46,7 @@ export class UserActivitiesComponent {
         'https://files.fullstack.edu.vn/f8-prod/courses/19/66aa28194b52b.png',
       creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
       isRecommend: true,
+      progress: 50,
     },
     {
       title: 'Ngôn ngữ SASS',
@@ -55,6 +58,7 @@ export class UserActivitiesComponent {
         'https://files.fullstack.edu.vn/f8-prod/courses/27/64e184ee5d7a2.png',
       creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
       isRecommend: true,
+      progress: 0,
     },
     {
       title: 'HTML CSS Pro',
@@ -66,6 +70,7 @@ export class UserActivitiesComponent {
         'https://files.fullstack.edu.vn/f8-prod/courses/15/62f13d2424a47.png',
       creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
       isRecommend: true,
+      progress: 12,
     },
     {
       title: 'JavaScript Pro',
@@ -77,6 +82,7 @@ export class UserActivitiesComponent {
         'https://files.fullstack.edu.vn/f8-prod/courses/19/66aa28194b52b.png',
       creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
       isRecommend: true,
+      progress: 100,
     },
     {
       title: 'Ngôn ngữ SASS',
@@ -88,6 +94,7 @@ export class UserActivitiesComponent {
         'https://files.fullstack.edu.vn/f8-prod/courses/27/64e184ee5d7a2.png',
       creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
       isRecommend: true,
+      progress: 0,
     },
     {
       title: 'HTML CSS Pro',
@@ -99,6 +106,7 @@ export class UserActivitiesComponent {
         'https://files.fullstack.edu.vn/f8-prod/courses/15/62f13d2424a47.png',
       creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
       isRecommend: true,
+      progress: 70,
     },
     {
       title: 'JavaScript Pro',
@@ -110,6 +118,7 @@ export class UserActivitiesComponent {
         'https://files.fullstack.edu.vn/f8-prod/courses/19/66aa28194b52b.png',
       creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
       isRecommend: true,
+      progress: 80,
     },
     {
       title: 'Ngôn ngữ SASS',
@@ -121,6 +130,7 @@ export class UserActivitiesComponent {
         'https://files.fullstack.edu.vn/f8-prod/courses/27/64e184ee5d7a2.png',
       creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
       isRecommend: true,
+      progress: 25,
     },
   ]);
 }

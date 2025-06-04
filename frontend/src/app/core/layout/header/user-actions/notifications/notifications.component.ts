@@ -5,10 +5,9 @@ import {
   signal,
 } from '@angular/core';
 
-import { SubmenuDirective } from '../../../../../shared/directives/submenu/submenu.directive';
-
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
+import { SubmenuDirective } from '../../../../../shared/directives/submenu/submenu.directive';
 
 @Component({
   selector: 'header-notifications',
