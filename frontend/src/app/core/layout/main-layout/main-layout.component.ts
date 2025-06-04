@@ -5,11 +5,18 @@ import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { FooterComponent } from '../footer/footer.component';
+import { AuthModalComponent } from '../../../shared/components/auth-modal/auth-modal.component';
 
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, NavbarComponent, FooterComponent],
+  imports: [
+    RouterOutlet,
+    HeaderComponent,
+    NavbarComponent,
+    FooterComponent,
+    AuthModalComponent,
+  ],
   template: `
     <app-header />
 
@@ -23,6 +30,8 @@ import { FooterComponent } from '../footer/footer.component';
     </main>
 
     <app-footer />
+
+    <app-auth-modal />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

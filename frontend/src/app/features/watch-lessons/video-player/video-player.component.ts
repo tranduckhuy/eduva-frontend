@@ -1,14 +1,17 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  HostListener,
   computed,
   ElementRef,
   inject,
   signal,
   ViewChild,
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import { VgApiService, VgCoreModule } from '@videogular/ngx-videogular/core';
+
 import {
   FontAwesomeModule,
   FaIconLibrary,
@@ -25,16 +28,25 @@ import {
   faExpand,
   faClosedCaptioning,
 } from '@fortawesome/free-solid-svg-icons';
+import { SettingsMenuComponent } from './settings-menu/settings-menu.component';
+
+type VideoQuality = '1440' | '1080' | '720' | '360' | 'auto';
 
 @Component({
   selector: 'video-player',
   standalone: true,
-  imports: [FontAwesomeModule, VgCoreModule],
+  imports: [
+    CommonModule,
+    FontAwesomeModule,
+    VgCoreModule,
+    SettingsMenuComponent,
+  ],
   templateUrl: './video-player.component.html',
   styleUrl: './video-player.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VideoPlayerComponent {
+  @ViewChild('video') videoRef!: ElementRef<HTMLVideoElement>;
   @ViewChild('progressBar') progressBarRef!: ElementRef<HTMLDivElement>;
   @ViewChild('volumeBar') volumeBarRef!: ElementRef<HTMLDivElement>;
 
@@ -42,19 +54,33 @@ export class VideoPlayerComponent {
   private readonly iconLibrary = inject(FaIconLibrary);
   private hideControlsTimeout!: ReturnType<typeof setTimeout>;
 
-  // ? State Management
+  // ? State Video Management
   preload = signal<string>('metadata');
+  currentTime = signal<number>(0);
+  duration = signal<number>(0);
   isPaused = signal<boolean>(true);
   hasStarted = signal<boolean>(false);
   isLoading = signal<boolean>(false);
   showMobileControls = signal<boolean>(true);
-  currentTime = signal<number>(0);
-  duration = signal<number>(0);
-  volumeLevel = signal<number>(1);
-  lastVolumeLevel = signal<number>(1);
+
+  // ? State Controls Bar Management
   playedProgress = signal<number>(0);
   bufferedProgress = signal<number>(0);
+  volumeLevel = signal<number>(1);
+  lastVolumeLevel = signal<number>(1);
+  menuType = signal<'settings' | 'quality'>('settings');
+  selectedQuality = signal<VideoQuality>('1080');
+  videoSources = signal<Record<VideoQuality, string>>({
+    '1440': './videoplayback.mp4',
+    '1080': './videoplayback.mp4',
+    '720': './videoplayback.mp4',
+    '360': './videoplayback.mp4',
+    auto: './videoplayback.mp4',
+  });
+  isSettingsMenuOpen = signal(false);
+  currentSettingsMenu = signal<'home' | 'subtitle' | 'speed'>('home');
 
+  // ? Computed for state detect changes
   showUiControls = computed(() => this.hasStarted());
   showingUiClass = computed(() =>
     this.showMobileControls() ? 'opacity-100 visible' : 'opacity-0 invisible'
@@ -117,6 +143,25 @@ export class VideoPlayerComponent {
       this.onMobileTap();
     });
     media.subscriptions.pause.subscribe(() => this.isPaused.set(true));
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent): void {
+    if (this.shouldIgnoreKeyboardEvent(event)) return;
+
+    const actions: Record<string, () => void> = {
+      Space: () => {
+        event.preventDefault(); // tránh scroll khi nhấn space
+        this.togglePlayPause();
+      },
+      ArrowRight: () => this.forward(10),
+      ArrowLeft: () => this.rewind(10),
+      KeyF: () => this.toggleFullscreen(),
+      KeyM: () => this.toggleMute(),
+    };
+
+    const action = actions[event.code];
+    if (action) action();
   }
 
   playVideo() {
@@ -185,7 +230,7 @@ export class VideoPlayerComponent {
   }
 
   toggleFullscreen() {
-    const videoEl = document.getElementById('singleVideo');
+    const videoEl = document.getElementById('video-player');
     if (!document.fullscreenElement) {
       videoEl?.requestFullscreen();
     } else {
@@ -193,13 +238,85 @@ export class VideoPlayerComponent {
     }
   }
 
+  openOrToggleMenu(type: 'settings' | 'quality') {
+    const currentOpen = this.isSettingsMenuOpen();
+    const currentType = this.menuType();
+    const isSameMenu = currentType === type;
+
+    if (currentOpen && isSameMenu) {
+      this.isSettingsMenuOpen.set(false);
+      return;
+    }
+
+    this.isSettingsMenuOpen.set(false);
+
+    setTimeout(() => {
+      this.menuType.set(type);
+      this.isSettingsMenuOpen.set(true);
+
+      if (type === 'settings') {
+        this.currentSettingsMenu.set('home');
+      }
+    }, 180);
+  }
+
+  onSettingsBtnClick(event: Event) {
+    event.stopPropagation();
+    this.openOrToggleMenu('settings');
+  }
+
+  onQualityBtnClick(event: Event) {
+    event.stopPropagation();
+    this.openOrToggleMenu('quality');
+  }
+
+  onMenuClosed() {
+    this.isSettingsMenuOpen.set(false);
+  }
+
+  onMenuChange(menu: 'home' | 'subtitle' | 'speed') {
+    this.currentSettingsMenu.set(menu);
+  }
+
+  onQualityChange(q: string) {
+    this.selectedQuality.set(q as VideoQuality);
+
+    const videoEl = this.videoRef.nativeElement;
+    const currentTime = videoEl.currentTime;
+    const wasPaused = videoEl.paused;
+
+    videoEl.load();
+
+    videoEl.onloadedmetadata = () => {
+      videoEl.currentTime = currentTime;
+      if (!wasPaused) {
+        videoEl.play();
+      }
+    };
+  }
+
+  onSubtitleChange(code: 'vi' | 'en') {
+    const trackList = this.getVideoElement().textTracks;
+    for (let i = 0; i < trackList.length; i++) {
+      const track = trackList[i];
+      track.mode = track.language === code ? 'showing' : 'disabled';
+    }
+  }
+
+  onRateChange(rate: number) {
+    this.getVideoElement().playbackRate = rate;
+  }
+
   onMobileTap() {
+    const video = this.getVideoElement();
     this.showMobileControls.set(true);
 
     clearTimeout(this.hideControlsTimeout);
-    this.hideControlsTimeout = setTimeout(() => {
-      this.showMobileControls.set(false);
-    }, 3000);
+    if (!video.paused) {
+      this.hideControlsTimeout = setTimeout(() => {
+        this.showMobileControls.set(false);
+      }, 3000);
+    }
   }
 
   formatTime(seconds: number): string {
@@ -237,5 +354,12 @@ export class VideoPlayerComponent {
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('mouseup', onMouseUp);
     onMouseMove(event);
+  }
+
+  private shouldIgnoreKeyboardEvent(event: KeyboardEvent): boolean {
+    const target = event.target as HTMLElement;
+    return (
+      ['INPUT', 'TEXTAREA'].includes(target.tagName) || target.isContentEditable
+    );
   }
 }

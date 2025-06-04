@@ -5,24 +5,15 @@
     (onPlayerReady)="onPlayerReady($event)"
     class="absolute left-0 top-0 h-full w-full">
     <video
-      #media
-      id="singleVideo"
-      [vgMedia]="$any(media)"
+      #video
+      id="video-player"
+      [vgMedia]="$any(video)"
       [preload]="preload()"
       crossorigin>
-      <source src="./videoplayback.mp4" type="video/mp4" />
+      <source [src]="videoSources()[selectedQuality()]" type="video/mp4" />
       <!-- <source src="./videoplayback.webm" type="video/webm" /> -->
-      <!-- <track
-        label="Vietnamese"
-        kind="captions"
-        srclang="vi"
-        src="resources/myvideo-vi.vtt"
-        default />
-      <track
-        label="English"
-        kind="captions"
-        srclang="en"
-        src="resources/myvideo-en.vtt" /> -->
+      <!-- <track kind="subtitles" label="Tiếng Việt" srclang="vi" src="..." default />
+           <track kind="subtitles" label="English" srclang="en" src="..." /> -->
     </video>
   </vg-player>
 
@@ -110,20 +101,33 @@
 
       <div class="flex items-center">
         <!-- ? Quality -->
-        <div class="control-btn quality-btn flex items-center sm:hidden">
+        <div
+          class="control-btn quality-btn flex select-none items-center"
+          (click)="onQualityBtnClick($event)">
           <span>
-            1080p
-            <span class="hd-icon">HD</span>
+            {{ selectedQuality() }}p
+            @if (selectedQuality() === '1440' || selectedQuality() === '1080') {
+              <span class="hd-icon">HD</span>
+            }
           </span>
         </div>
-        <!-- ? Subtitle -->
-        <button class="control-btn ml-6 sm:hidden">
-          <fa-icon [icon]="'closed-captioning'"></fa-icon>
-        </button>
+
         <!-- ? Settings -->
-        <button class="control-btn">
+        <button class="control-btn ml-6" (click)="onSettingsBtnClick($event)">
           <fa-icon [icon]="'gear'"></fa-icon>
         </button>
+
+        <!-- ? Settings Menu -->
+        <video-settings-menu
+          [type]="menuType()"
+          [isSettingsMenuOpen]="isSettingsMenuOpen()"
+          [currentSettingsMenu]="currentSettingsMenu()"
+          (closed)="onMenuClosed()"
+          (menuChange)="onMenuChange($event)"
+          (subtitleChange)="onSubtitleChange($event)"
+          (playbackRateChange)="onRateChange($event)"
+          (qualityChange)="onQualityChange($event)" />
+
         <!-- ? Expand -->
         <button class="control-btn" (click)="toggleFullscreen()">
           <fa-icon [icon]="'expand'"></fa-icon>
