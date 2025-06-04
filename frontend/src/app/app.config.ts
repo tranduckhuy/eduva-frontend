@@ -16,13 +16,13 @@ import { MyPreset } from './my-preset';
 
 import { routes } from './app.routes';
 
-import { apiInterceptor } from './core/interceptors/api.interceptor';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { tokenInterceptor } from './core/interceptors/token.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideExperimentalZonelessChangeDetection(),
-    provideHttpClient(withInterceptors([apiInterceptor, tokenInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptor, tokenInterceptor])),
     provideRouter(
       routes,
       withComponentInputBinding(),
