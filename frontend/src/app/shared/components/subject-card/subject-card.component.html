@@ -22,6 +22,16 @@
       <a href="#!">{{ subject().title }}</a>
     </h3>
     <p class="text-sm font-semibold text-primary">Khối {{ subject().grade }}</p>
+    @if (withProgress()) {
+      <div
+        class="relative mt-2 h-2 w-full overflow-hidden rounded bg-[#ddd]"
+        tooltipPosition="top"
+        pTooltip="{{ subject().progress + '%' }}">
+        <div
+          class="absolute bottom-0 left-0 top-0 bg-primary"
+          [style.width.%]="subject().progress"></div>
+      </div>
+    }
     <div class="mt-[18px] flex items-center justify-between sm:mt-[10px]">
       <div class="flex items-center gap-[6px] lg:gap-1 md:hidden">
         <figure class="h-[18px] w-[18px] rounded-[50%]">
