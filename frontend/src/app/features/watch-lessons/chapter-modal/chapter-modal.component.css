@@ -1,0 +1,14 @@
+.chapter-modal-content {
+  box-shadow: #00000026 0px 4px 12px;
+}
+
+@media (max-width: 739.98px) {
+  .chapter-modal {
+    width: 780px;
+    min-width: 0;
+  }
+
+  .chapter-modal-content {
+    padding: 18px;
+  }
+}

@@ -1,0 +1,19 @@
+<div class="w-full pl-[50px] lg:mt-[50px] lg:pl-0">
+  <div class="flex w-full gap-6 border-b border-[#e0e0e0]">
+    <span
+      class="tab-active -mb-px flex cursor-pointer items-center gap-[10px] p-[10px] font-semibold opacity-70 transition-all duration-300 ease-in-out">
+      <i class="fa-solid fa-book"></i>
+      Khóa học đã đăng ký (9)
+    </span>
+  </div>
+
+  <div class="mt-6">
+    <div class="e-row e-g-4 e-g-xl-3 e-g-md-2">
+      @for (subject of subjects(); track $index) {
+        <div class="e-col-3 e-col-xxxl-4 e-col-xl-6 e-col-lg-4 e-col-md-6">
+          <subject-card [subject]="subject" [withProgress]="true" />
+        </div>
+      }
+    </div>
+  </div>
+</div>

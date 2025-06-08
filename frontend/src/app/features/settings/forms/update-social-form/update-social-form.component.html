@@ -1,0 +1,14 @@
+<form (ngSubmit)="onSubmit()">
+  <div class="max-h-[60vh] min-h-[122px] overflow-y-auto pb-[30px]">
+    <app-form-control
+      [label]="label()"
+      type="text"
+      [placeholder]="placeholder()"
+      [name]="name()"
+      [(ngModel)]="socialValue">
+    </app-form-control>
+  </div>
+  <footer>
+    <app-button [text]="'Lưu lại'" [type]="'rounded'" />
+  </footer>
+</form>

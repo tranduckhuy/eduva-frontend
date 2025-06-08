@@ -1,0 +1,65 @@
+<div class="mt-[10px] w-full overflow-hidden">
+  <div class="w-full text-left text-[#292929]">
+    @if (label()) {
+      <div class="flex justify-between">
+        <label class="my-[10px] ml-2 block font-semibold">
+          {{ label() }}
+        </label>
+      </div>
+    }
+
+    <div
+      class="relative flex h-[44px] overflow-hidden rounded-[44px] border-[1.5px] border-[#dee3e9] bg-white focus-within:border-[#1dbfaf]"
+      [class.border-[#f33a58]]="control.invalid && control.touched"
+      [class.focus-within:border-[#f33a58]]="control.invalid && control.touched"
+      [style.backgroundColor]="
+        control.invalid && control.touched ? '#ff00001a' : ''
+      ">
+      <input
+        class="block w-full border-none bg-transparent py-3 pl-5 pr-[42px] outline-none placeholder:text-base placeholder:text-black/60"
+        [class.text-[#f33a58]]="
+          control.invalid && control.touched && control.dirty
+        "
+        [type]="inputType()"
+        [name]="name()"
+        [placeholder]="placeholder()"
+        [formControl]="control"
+        [spellcheck]="false"
+        (blur)="handleTouched()" />
+      @if (control.invalid && control.touched && type() !== 'password') {
+        <i
+          class="fa-solid fa-triangle-exclamation absolute right-[18px] top-[20%] block animate-shake text-base text-[#f33a58]"></i>
+      } @else if (type() === 'password') {
+        @if (isShowPassword()) {
+          <i
+            class="fa-solid fa-eye-slash absolute right-[18px] top-[20%] block text-base text-[#666]"
+            (mousedown)="$event.preventDefault()"
+            (click)="
+              toggleShowPassword();
+              $event.stopPropagation();
+              $event.preventDefault()
+            "></i>
+        } @else {
+          <i
+            class="fa-solid fa-eye absolute right-[18px] top-[20%] block text-base text-[#666]"
+            (mousedown)="$event.preventDefault()"
+            (click)="
+              toggleShowPassword();
+              $event.stopPropagation();
+              $event.preventDefault()
+            "></i>
+        }
+      }
+    </div>
+
+    @if (control.invalid && control.touched) {
+      <div class="my-2 ml-2 font-medium leading-normal text-[#f33a58]">
+        {{ errorMessage }}
+      </div>
+    }
+
+    <div
+      class="input-container"
+      [class.invalid]="control.invalid && control.touched"></div>
+  </div>
+</div>

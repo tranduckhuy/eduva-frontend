@@ -1,0 +1,23 @@
+<div class="flex flex-col gap-4">
+  <!-- ? Comment Textbox -->
+  <div class="flex items-start gap-2">
+    <img
+      src="https://files.fullstack.edu.vn/f8-prod/user_avatars/378826/661cf89e8d5a0.jpg"
+      alt="Quy Nguyen"
+      class="h-10 w-10 rounded-[50%]" />
+
+    <app-rich-text-editor
+      [editorValue]="commentValue"
+      [isAutoFocus]="isReply()"
+      [placeholder]="'Nhập bình luận mới của bạn'"
+      (valueChange)="commentChange.emit($event)" />
+  </div>
+
+  <!-- ? Comment Button -->
+  <div class="ml-auto flex">
+    <button
+      class="h-8 min-w-40 rounded-lg bg-[#0093fc] px-4 py-1 font-bold uppercase tracking-[1px] text-white transition-opacity ease-in hover:opacity-90">
+      Bình Luận
+    </button>
+  </div>
+</div>

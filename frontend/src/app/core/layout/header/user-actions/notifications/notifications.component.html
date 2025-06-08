@@ -1,0 +1,56 @@
+<div
+  class="absolute right-0 top-12 z-[10]"
+  clickOutsideSubmenu
+  (clickOutside)="clickOutside.emit()">
+  <div
+    class="animate-fadeInForward rounded-[10px] bg-white shadow-filterBox transition-all duration-300 ease-in-out will-change-[opacity,transform]">
+    <!-- ? Notifications -->
+    <div class="w-[380px] pb-2">
+      <div
+        class="sticky top-0 flex items-center justify-between rounded-tl-[10px] rounded-tr-[10px] bg-white px-5 py-4">
+        <h5 class="text-lg font-semibold text-[#1d2129]">Thông báo</h5>
+        <p-button
+          label="Đánh dấu đã đọc"
+          variant="text"
+          size="small"
+          class="header-btn hover:text-primary" />
+      </div>
+      <ul class="max-h-[70vh] overflow-y-auto overscroll-contain">
+        @for (notify of mock(); track $index) {
+          <li>
+            <a
+              href="#!"
+              class="mx-2 mb-2 flex items-center gap-3 rounded-[10px] p-2 pl-3 pr-6 transition-colors duration-300"
+              [class.bg-primary-100]="!notify.isSeen"
+              [class.hover:bg-[#1618230d]]="notify.isSeen">
+              <img
+                src="https://fullstack.edu.vn/assets/f8-icon-lV2rGpF0.png"
+                alt="{{ notify.title }}"
+                class="h-12 w-12 rounded-full" />
+              <div class="">
+                <p
+                  class="line-clamp-2 max-w-[220px]"
+                  pTooltip="{{ notify.title }}"
+                  [autoHide]="false"
+                  tooltipPosition="bottom">
+                  {{ notify.title }}
+                </p>
+                <time class="inline-block font-semibold text-primary">
+                  8 ngày trước
+                </time>
+              </div>
+              @if (!notify.isSeen) {
+                <span class="relative flex h-3 w-3">
+                  <span
+                    class="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary-400 opacity-75"></span>
+                  <span
+                    class="relative inline-flex h-3 w-3 rounded-full bg-primary"></span>
+                </span>
+              }
+            </a>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+</div>

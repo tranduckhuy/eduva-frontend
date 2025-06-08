@@ -1,0 +1,15 @@
+<form (ngSubmit)="onSubmit()">
+  <div class="max-h-[60vh] min-h-[122px] overflow-y-auto pb-[30px]">
+    <app-form-control
+      label="Địa chỉ email"
+      type="email"
+      placeholder="Nhập địa chỉ email của bạn"
+      [name]="'email'"
+      [email]="true"
+      [(ngModel)]="email">
+    </app-form-control>
+  </div>
+  <footer>
+    <app-button [text]="'Lưu lại'" [type]="'rounded'" />
+  </footer>
+</form>

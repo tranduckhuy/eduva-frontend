@@ -1,0 +1,24 @@
+<div
+  class="pointer-events-auto fixed inset-0 z-[1101] flex items-center justify-center bg-black/70"
+  (click)="onClose()">
+  <div
+    (click)="$event.stopPropagation()"
+    [style]="{ 'max-width': 'min(' + width() + 'px, calc(100% - 32px))' }"
+    class="pointer-events-auto relative -top-[5%] z-[1] overflow-hidden rounded-[16px] bg-white px-[30px] pb-[30px] pt-[10px]">
+    <div class="background"></div>
+    <div class="mx-[-18px] flex items-center">
+      <button
+        class="ml-auto size-10 cursor-pointer rounded-full text-xl opacity-70 transition-colors duration-200 hover:bg-[#0000001a]"
+        (click)="onClose()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <header class="mt-[10px]">
+      <h2 class="text-2xl font-semibold">{{ title() }}</h2>
+      <p class="mt-2 text-[15px] opacity-90">
+        {{ desc() }}
+      </p>
+    </header>
+    <ng-content />
+  </div>
+</div>

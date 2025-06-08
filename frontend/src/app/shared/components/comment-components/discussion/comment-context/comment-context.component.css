@@ -1,0 +1,59 @@
+.comment ::ng-deep code {
+  padding: 1px 3px;
+  border-radius: 3px;
+  color: #2e3441;
+  background-color: #c9fffc !important;
+  white-space: pre-wrap;
+  word-break: keep-all;
+}
+
+.comment ::ng-deep blockquote {
+  border-left: 2px solid #0093fc !important;
+}
+
+.comment ::ng-deep blockquote p {
+  color: #4e586b;
+  font-weight: 600;
+  font-style: normal;
+}
+
+.comment ::ng-deep a {
+  color: #0093fc;
+  text-decoration: underline;
+}
+
+.comment ::ng-deep .image img {
+  border-radius: 8px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+.best-comment {
+  border-radius: 8px;
+  border: 1px solid rgba(72, 189, 121, 0.16);
+  background: #48bd790a;
+}
+
+.content-footer-options {
+  display: flex;
+  flex-direction: column;
+  width: 254px;
+  border-radius: 8px;
+  background-color: #eef4fc;
+  box-shadow: 0px 8px 16px 0px rgba(35, 115, 159, 0.16);
+  overflow: hidden;
+}
+
+.content-footer-option-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #2e3441;
+  user-select: none;
+  cursor: pointer;
+}
+
+.content-footer-option-item:hover {
+  background-color: #f2f9ff;
+}

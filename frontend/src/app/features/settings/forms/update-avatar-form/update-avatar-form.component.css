@@ -1,0 +1,47 @@
+.background {
+  background-image:
+    radial-gradient(#ffffff40, #fff0 40%),
+    radial-gradient(
+      hsl(44, 100%, 66%) 30%,
+      hsl(338, 68%, 65%),
+      hsla(338, 68%, 65%, 0.4) 41%,
+      transparent 52%
+    ),
+    radial-gradient(hsl(272, 100%, 60%) 37%, transparent 46%),
+    linear-gradient(155deg, transparent 65%, hsl(142, 70%, 49%) 95%),
+    linear-gradient(45deg, #0065e0, #0f8bff);
+  background-size:
+    200% 200%,
+    285% 500%,
+    285% 500%,
+    cover,
+    cover;
+  background-position:
+    bottom left,
+    109% 68%,
+    109% 68%,
+    center,
+    center;
+}
+
+::ng-deep .custom-cropper .source-image-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background-color: rgba(0, 0, 0, 0.6); /* Màu phủ bên ngoài */
+
+  mask-image: radial-gradient(circle at center, transparent 120px, black 125px);
+
+  -webkit-mask-image: radial-gradient(
+    circle at center,
+    transparent 120px,
+    black 125px
+  );
+
+  pointer-events: none;
+  z-index: 2;
+}

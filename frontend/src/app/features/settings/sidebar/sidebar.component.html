@@ -1,0 +1,49 @@
+<aside
+  class="h-full border-r border-[#dee3e9] pr-10 pt-[30px] md:border-none md:pr-0">
+  <div class="sticky top-[30px]">
+    <header>
+      <a href="https://fullstack.edu.vn" target="_top"
+        ><img
+          class="size-10 rounded-[10px]"
+          src="https://accounts.fullstack.edu.vn/assets/logo-lV2rGpF0.png"
+          alt="logo"
+      /></a>
+      <h2 class="mb-[10px] mt-[14px] text-2xl font-semibold leading-9">
+        Cài đặt tài khoản
+      </h2>
+      <p class="text-[15px] leading-5 text-black opacity-90">
+        Quản lý cài đặt tài khoản của bạn như thông tin cá nhân, cài đặt bảo
+        mật, quản lý thông báo, v.v.
+      </p>
+    </header>
+    <nav
+      class="my-5 flex flex-col gap-1 md:gap-0 md:overflow-hidden md:rounded-[10px]">
+      <a
+        routerLink="/settings/personal"
+        routerLinkActive="active"
+        class="flex items-center justify-between rounded-[10px] px-[18px] py-[14px] font-medium opacity-90 transition-colors duration-100 hover:cursor-pointer hover:bg-[#0000001a] md:rounded-none md:bg-white">
+        <div class="flex items-center gap-4 text-base font-medium text-black">
+          <i class="fa-solid fa-user text-lg text-black"></i>
+          Thông tin cá nhân
+        </div>
+        <button
+          class="hidden h-full cursor-pointer items-center outline-none lg:hidden md:flex">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </a>
+      <a
+        routerLink="/settings/security"
+        routerLinkActive="active"
+        class="flex items-center justify-between rounded-[10px] px-[18px] py-[14px] font-medium opacity-90 transition-colors duration-100 hover:cursor-pointer hover:bg-[#0000001a] md:rounded-none md:border-t md:border-[#dee3e9] md:bg-white">
+        <div class="flex items-center gap-4 text-base font-medium text-black">
+          <i class="fa-solid fa-shield text-lg text-black"></i>
+          Mật khẩu và bảo mật
+        </div>
+        <button
+          class="hidden h-full cursor-pointer items-center outline-none md:flex">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </a>
+    </nav>
+  </div>
+</aside>

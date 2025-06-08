@@ -1,0 +1,24 @@
+<form (ngSubmit)="onSubmit()">
+  <div class="max-h-[60vh] min-h-[122px] overflow-y-auto pb-[30px]">
+    <div class="mt-[10px] w-full overflow-hidden">
+      <div class="w-full text-left text-[#292929]">
+        <div class="flex justify-between">
+          <label class="my-[10px] ml-2 block font-semibold"> Giới thiệu </label>
+        </div>
+        <div
+          class="relative flex min-h-[100px] overflow-hidden rounded-2xl border-[1.5px] border-[#dee3e9] bg-white focus-within:border-[#1dbfaf]">
+          <textarea
+            class="block w-full resize-none border-none bg-transparent py-3 pl-4 pr-[42px] leading-[1.4] outline-none placeholder:text-black/60"
+            type="text"
+            name="bio"
+            [(ngModel)]="bio"
+            placeholder="Nhập tiểu sử của bạn"
+            maxlength="150"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <app-button [text]="'Lưu lại'" [type]="'rounded'" />
+  </footer>
+</form>

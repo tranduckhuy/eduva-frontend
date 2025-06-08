@@ -1,0 +1,36 @@
+/* ? Not Logged In */
+.actions__btn ::ng-deep .p-button {
+  background-color: #2093e7;
+  background-image: linear-gradient(to right bottom, #4dbfe9, #2093e7 50%);
+  border-color: transparent;
+  white-space: nowrap;
+  transition: opacity 0.2s linear;
+}
+
+.actions__btn ::ng-deep .p-button:hover {
+  background-color: #2093e7;
+  background-image: linear-gradient(to right bottom, #4dbfe9, #2093e7 50%);
+  border-color: transparent;
+  opacity: 0.8;
+}
+
+/* ? Logged In */
+.avatar-wrapper {
+  background: linear-gradient(180deg, #ffd900, #b45264 93.68%);
+}
+
+.notify__btn ::ng-deep .p-button {
+  border-color: transparent;
+  color: #707070;
+  background: transparent;
+}
+
+.notify__btn ::ng-deep .p-button span {
+  font-size: 20px;
+}
+
+.notify__btn ::ng-deep .p-button:hover {
+  border-color: transparent;
+  color: #707070;
+  background: transparent;
+}

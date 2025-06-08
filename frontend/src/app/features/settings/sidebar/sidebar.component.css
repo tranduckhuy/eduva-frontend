@@ -1,0 +1,20 @@
+.active {
+  @apply bg-[#344854] opacity-100;
+}
+
+.active > div,
+.active i {
+  @apply text-white;
+}
+
+/* Reset all .active styles at md breakpoint and above */
+@media (max-width: 991.98px) {
+  .active {
+    background-color: white !important;
+    opacity: 1 !important;
+  }
+  .active > div,
+  .active i {
+    color: inherit !important;
+  }
+}
