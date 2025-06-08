@@ -7,9 +7,10 @@
       class="h-10 w-10 rounded-[50%]" />
 
     <app-rich-text-editor
-      [(value)]="commentValue"
+      [editorValue]="commentValue"
       [isAutoFocus]="isReply()"
-      [placeholder]="'Nhập bình luận mới của bạn'" />
+      [placeholder]="'Nhập bình luận mới của bạn'"
+      (valueChange)="commentChange.emit($event)" />
   </div>
 
   <!-- ? Comment Button -->

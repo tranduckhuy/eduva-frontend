@@ -1,10 +1,10 @@
 .header-btn ::ng-deep .p-button {
-  color: #f05123;
+  color: #2093e7;
 }
 
 .header-btn ::ng-deep .p-button:hover {
-  color: #e0481f;
-  background: #fef1ec;
+  color: #2093e7;
+  background: #f0f9ff;
 }
 
 .header-btn ::ng-deep .p-button span {

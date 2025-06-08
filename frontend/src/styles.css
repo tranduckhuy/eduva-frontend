@@ -41,6 +41,7 @@
     font-size: 14px;
     color: #333;
     text-rendering: optimizeSpeed;
+    overscroll-behavior: none;
     direction: ltr;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

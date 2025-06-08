@@ -27,7 +27,7 @@ import { NewQuestionComponent } from './new-question/new-question.component';
 export class CommentModalComponent {
   isOpen = input.required<boolean>();
 
-  closeCommentModal = output();
+  closeCommentModal = output<void>();
 
   currentState = signal<'list' | 'loading' | 'content' | 'question'>('list');
 

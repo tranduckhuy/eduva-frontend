@@ -38,14 +38,13 @@
     <div class="mt-[10px] text-center">
       <p>
         Không nhận được mã OTP?
-        <span class="cursor-pointer text-[#1dbfaf]">Gửi lại</span>
+        <span class="cursor-pointer text-primary">Gửi lại</span>
       </p>
     </div>
   }
   <footer>
-    <button
-      class="mt-5 block w-full cursor-pointer whitespace-nowrap rounded-full border-none bg-[#1dbfaf] bg-[linear-gradient(70.06deg,_#2cccff_-5%,_#22dfbf_106%)] px-5 py-3 text-base font-semibold text-white transition-opacity duration-[250] hover:opacity-80">
-      Xác nhận
-    </button>
+    <div [class.mt-5]="isEmailValid()">
+      <app-button [text]="'Xác nhận'" [type]="'rounded'" />
+    </div>
   </footer>
 </form>

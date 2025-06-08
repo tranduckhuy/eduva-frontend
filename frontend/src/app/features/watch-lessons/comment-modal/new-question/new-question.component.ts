@@ -23,4 +23,8 @@ export class NewQuestionComponent {
   closeOptionOpen() {
     this.isOptionsOpen.set(false);
   }
+
+  getData(value: string) {
+    console.log(value);
+  }
 }

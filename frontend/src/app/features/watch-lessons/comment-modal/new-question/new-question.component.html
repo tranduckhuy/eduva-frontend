@@ -37,9 +37,10 @@
 
   <div class="flex w-full items-center justify-between">
     <app-rich-text-editor
-      [(value)]="description"
+      [editorValue]="description()"
       [isHeightTextBox]="true"
-      [placeholder]="'Mô tả chi tiết câu hỏi của bạn'" />
+      [placeholder]="'Mô tả chi tiết câu hỏi của bạn'"
+      (valueChange)="getData($event)" />
   </div>
 
   <div class="flex justify-end">

@@ -1,0 +1,73 @@
+<form action="" autocomplete="off">
+  <app-form-control
+    label="Tên của bạn?"
+    type="text"
+    placeholder="Họ và tên của bạn"
+    [name]="'name'"
+    [required]="true"
+    [(ngModel)]="name" />
+
+  <app-form-control
+    label="Email của bạn"
+    type="email"
+    placeholder="Địa chỉ email"
+    [name]="'email'"
+    [required]="true"
+    [email]="true"
+    [(ngModel)]="email" />
+
+  <app-form-control
+    type="password"
+    placeholder="Mật khẩu"
+    [name]="'password'"
+    [(ngModel)]="password"
+    [required]="true" />
+  <div class="mx-1 my-[10px]">
+    <div class="flex gap-1">
+      <div
+        class="h-[5px] flex-1 rounded-[4px]"
+        [ngClass]="{
+          'bg-[#e1e4eb]': !passwordLevel(),
+          'bg-[#d43031]': passwordLevel()! < 4,
+          'bg-[#faa61b]': passwordLevel() === 4,
+          'bg-[#02875a]': passwordLevel() === 5,
+        }"></div>
+      <div
+        class="h-[5px] flex-1 rounded-[4px]"
+        [ngClass]="{
+          'bg-[#e1e4eb]': !passwordLevel() || passwordLevel()! < 3,
+          'bg-[#d43031]': passwordLevel() === 3,
+          'bg-[#faa61b]': passwordLevel() === 4,
+          'bg-[#02875a]': passwordLevel() === 5,
+        }"></div>
+      <div
+        class="h-[5px] flex-1 rounded-[4px]"
+        [ngClass]="{
+          'bg-[#e1e4eb]': !passwordLevel() || passwordLevel()! < 4,
+          'bg-[#faa61b]': passwordLevel() === 4,
+          'bg-[#02875a]': passwordLevel() === 5,
+        }"></div>
+      <div
+        class="h-[5px] flex-1 rounded-[4px]"
+        [ngClass]="{
+          'bg-[#e1e4eb]': passwordLevel() !== 5,
+          'bg-[#02875a]': passwordLevel() === 5,
+        }"></div>
+    </div>
+    <div class="py-2 text-right text-xs font-medium text-[#666]">
+      {{
+        passwordLevel() &&
+          (passwordLevel() === 5
+            ? 'Mật khẩu mạnh'
+            : passwordLevel() === 4
+              ? 'Mật khẩu trung bình'
+              : 'Mật khẩu yếu')
+      }}
+    </div>
+  </div>
+
+  <!-- ? Submit Button -->
+  <div class="mt-5">
+    <app-button [text]="'Đăng ký'" [type]="'rounded'" />
+  </div>
+</form>

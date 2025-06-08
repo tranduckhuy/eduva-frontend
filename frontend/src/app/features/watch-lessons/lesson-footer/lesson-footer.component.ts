@@ -20,8 +20,8 @@ import { ButtonOutlineGradientComponent } from '../../../shared/components/butto
 export class LessonFooterComponent {
   isSidebarOpen = input.required<boolean>();
 
-  toggleSidebar = output();
-  openCommentModal = output();
+  toggleSidebar = output<void>();
+  openCommentModal = output<void>();
 
   get iconSrc(): string {
     return this.isSidebarOpen()

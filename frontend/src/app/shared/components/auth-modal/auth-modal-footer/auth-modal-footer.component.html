@@ -1,0 +1,21 @@
+<!-- ? Links -->
+<div class="mx-auto mt-8">
+  <p>
+    {{ isLogin() ? 'Bạn chưa có tài khoản?' : 'Bạn đã có tài khoản?' }}
+    <span
+      class="cursor-pointer select-none font-semibold text-primary underline"
+      (click)="switchState.emit()">
+      {{ isLogin() ? 'Đăng ký' : 'Đăng nhập' }}
+    </span>
+  </p>
+  <a href="#!" class="mt-3 inline-block font-semibold text-primary underline">
+    Quên mật khẩu?
+  </a>
+</div>
+
+<!-- ? Policy -->
+<p class="mx-auto w-[min(400px,100%)] p-4 pb-10 text-xs text-[#666]">
+  Việc bạn tiếp tục sử dụng trang web này đồng nghĩa bạn đồng ý với
+  <a href="#!" target="_blank" class="underline">điều khoản sử dụng</a>
+  của chúng tôi
+</p>

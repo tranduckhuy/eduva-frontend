@@ -18,7 +18,7 @@ import { SidebarTracksComponent } from './sidebar-tracks/sidebar-tracks.componen
 export class LessonSidebarComponent {
   isOpen = input.required<boolean>();
 
-  openChapterModal = output();
+  openChapterModal = output<void>();
 
   onOpenChapterModalClick() {
     this.openChapterModal.emit();

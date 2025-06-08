@@ -1,8 +1,12 @@
 <div class="mt-[10px] w-full overflow-hidden">
   <div class="w-full text-left text-[#292929]">
-    <div class="flex justify-between">
-      <label class="my-[10px] ml-2 block font-semibold"> {{ label() }} </label>
-    </div>
+    @if (label()) {
+      <div class="flex justify-between">
+        <label class="my-[10px] ml-2 block font-semibold">
+          {{ label() }}
+        </label>
+      </div>
+    }
 
     <div
       class="relative flex h-[44px] overflow-hidden rounded-[44px] border-[1.5px] border-[#dee3e9] bg-white focus-within:border-[#1dbfaf]"
@@ -12,13 +16,15 @@
         control.invalid && control.touched ? '#ff00001a' : ''
       ">
       <input
-        class="block w-full border-none bg-transparent py-3 pl-5 pr-[42px] outline-none placeholder:text-black/60"
+        class="block w-full border-none bg-transparent py-3 pl-5 pr-[42px] outline-none placeholder:text-base placeholder:text-black/60"
         [class.text-[#f33a58]]="
           control.invalid && control.touched && control.dirty
         "
         [type]="inputType()"
+        [name]="name()"
         [placeholder]="placeholder()"
         [formControl]="control"
+        [spellcheck]="false"
         (blur)="handleTouched()" />
       @if (control.invalid && control.touched && type() !== 'password') {
         <i

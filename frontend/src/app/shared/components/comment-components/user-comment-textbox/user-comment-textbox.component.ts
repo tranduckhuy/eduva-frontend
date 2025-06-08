@@ -19,9 +19,10 @@ import { RichTextEditorComponent } from '../../rich-text-editor/rich-text-editor
 })
 export class UserCommentTextboxComponent implements OnInit {
   comment = input.required<string>();
+  commentChange = output<string>();
+
   isReply = input<boolean>(false);
   mention = input<string>('');
-  changeData = output<string>();
 
   commentValue: string = '';
 

@@ -1,10 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
-  Input,
   input,
-  Output,
+  output,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
@@ -43,8 +41,8 @@ import type { Writer } from '@ckeditor/ckeditor5-engine';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RichTextEditorComponent {
-  @Input() value: string = '';
-  @Output() valueChange = new EventEmitter<string>();
+  editorValue = input.required<string>();
+  valueChange = output<string>();
 
   placeholder = input<string>('Nhập nội dung...');
   isAutoFocus = input<boolean>(false);
@@ -119,6 +117,12 @@ export class RichTextEditorComponent {
   onEditorReady(editor: any) {
     this.editorInstance = editor;
 
+    editor.model.document.on('change:data', () => {
+      const rawHtml = editor.getData();
+      const cleaned = this.convertImgToPImage(rawHtml);
+      this.valueChange.emit(cleaned);
+    });
+
     if (this.isAutoFocus()) {
       setTimeout(() => {
         editor.editing.view.focus();
@@ -131,11 +135,6 @@ export class RichTextEditorComponent {
         });
       });
     }
-  }
-
-  onEditorChange(value: string) {
-    const cleaned = this.convertImgToPImage(value);
-    this.valueChange.emit(cleaned);
   }
 
   convertImgToPImage(html: string): string {

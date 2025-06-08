@@ -16,6 +16,7 @@ export class DiscussionComponent {
   bestCommentIndex = signal<number | null>(null);
 
   getData(value: string) {
+    console.log(value);
     this.comment.set(value);
     console.log(this.comment());
   }

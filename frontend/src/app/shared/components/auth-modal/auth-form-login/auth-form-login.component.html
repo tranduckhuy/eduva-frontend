@@ -1,0 +1,35 @@
+<form action="" autocomplete="off">
+  <app-form-control
+    label="Tên đăng nhập"
+    type="text"
+    placeholder="Email hoặc Username"
+    [name]="'username'"
+    [required]="true"
+    [(ngModel)]="username" />
+
+  <app-form-control
+    type="password"
+    placeholder="Mật khẩu"
+    [name]="'password'"
+    [(ngModel)]="password"
+    [required]="true" />
+
+  <!-- ? Checkbox Remember -->
+  <div class="mt-4 w-full">
+    <input
+      type="checkbox"
+      name="remember"
+      id="remember"
+      class="remember-input hidden" />
+    <label
+      for="remember"
+      class="remember-label relative ml-1 flex select-none items-center gap-2 font-medium opacity-70">
+      <span for="remember">Ghi nhớ đăng nhập</span>
+    </label>
+  </div>
+
+  <!-- ? Submit Button -->
+  <div class="mt-5">
+    <app-button [text]="'Đăng nhập'" [type]="'rounded'" />
+  </div>
+</form>

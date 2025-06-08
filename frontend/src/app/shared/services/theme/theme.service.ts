@@ -43,9 +43,9 @@ export class ThemeService {
       const el = this._document.documentElement;
 
       if (theme === 'dark') {
-        this._renderer.addClass(el, 'my-app-dark');
+        this._renderer.addClass(el, 'dark');
       } else {
-        this._renderer.removeClass(el, 'my-app-dark');
+        this._renderer.removeClass(el, 'dark');
       }
     });
   }

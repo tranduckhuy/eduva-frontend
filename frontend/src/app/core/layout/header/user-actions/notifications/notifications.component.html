@@ -13,9 +13,9 @@
           label="Đánh dấu đã đọc"
           variant="text"
           size="small"
-          class="header-btn hover:text-primary-600" />
+          class="header-btn hover:text-primary" />
       </div>
-      <ul class="max-h-[70vh] overflow-auto">
+      <ul class="max-h-[70vh] overflow-y-auto overscroll-contain">
         @for (notify of mock(); track $index) {
           <li>
             <a

@@ -15,7 +15,9 @@
 }
 
 .user .link {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 12px;
   padding: 10px 0;
   font-size: 14px;
   color: #666;

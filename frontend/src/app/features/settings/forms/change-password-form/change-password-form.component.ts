@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 
 import { ForgetPasswordFormComponent } from '../forget-password-form/forget-password-form.component';
 import { FormControlComponent } from '../../../../shared/components/form-control/form-control.component';
+import { ButtonComponent } from '../../../../shared/components/button/button.component';
 
 @Component({
   selector: 'app-change-password-form',
@@ -18,6 +19,7 @@ import { FormControlComponent } from '../../../../shared/components/form-control
     FormControlComponent,
     CommonModule,
     ForgetPasswordFormComponent,
+    ButtonComponent,
   ],
   templateUrl: './change-password-form.component.html',
   styleUrl: './change-password-form.component.css',

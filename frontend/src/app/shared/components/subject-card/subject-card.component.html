@@ -10,7 +10,7 @@
     </div>
   }
   <a
-    href="#!"
+    routerLink="/watch-lessons"
     class="relative block w-full overflow-hidden rounded-tl-2xl rounded-tr-2xl object-cover pt-[56.25%]">
     <img
       [src]="subject().subjectImage"
@@ -19,7 +19,7 @@
   </a>
   <div class="flex grow flex-col gap-3 px-5 py-4 sm:gap-2 sm:p-[10px]">
     <h3 class="line-clamp-2 break-words text-base font-semibold text-[#292929]">
-      <a href="#!">{{ subject().title }}</a>
+      <a routerLink="/watch-lessons">{{ subject().title }}</a>
     </h3>
     <p class="text-sm font-semibold text-primary">Khối {{ subject().grade }}</p>
     @if (withProgress()) {

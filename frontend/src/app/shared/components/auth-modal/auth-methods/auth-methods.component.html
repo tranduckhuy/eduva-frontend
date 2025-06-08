@@ -1,0 +1,8 @@
+<div class="flex flex-col gap-3">
+  @for (method of methods(); track $index) {
+    <auth-method-button
+      [iconUrl]="method.iconUrl"
+      [method]="method.method"
+      (click)="handleClick(method.type)" />
+  }
+</div>

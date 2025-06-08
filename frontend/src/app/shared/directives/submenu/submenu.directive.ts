@@ -13,11 +13,12 @@ import {
 export class SubmenuDirective {
   private readonly elRef = inject(ElementRef);
 
-  clickOutside = output();
+  clickOutside = output<void>();
 
-  @HostListener('document:click', ['$event.target'])
-  onClick(target: HTMLElement) {
-    if (!this.elRef.nativeElement.contains(target)) {
+  @HostListener('document:click', ['$event'])
+  onClick(event: MouseEvent) {
+    const path = event.composedPath();
+    if (!path.includes(this.elRef.nativeElement)) {
       this.clickOutside.emit();
     }
   }

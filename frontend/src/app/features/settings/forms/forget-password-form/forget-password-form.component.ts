@@ -7,10 +7,12 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { ButtonComponent } from '../../../../shared/components/button/button.component';
+
 @Component({
   selector: 'app-forget-password-form',
   standalone: true,
-  imports: [],
+  imports: [ButtonComponent],
   templateUrl: './forget-password-form.component.html',
   styleUrl: './forget-password-form.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
