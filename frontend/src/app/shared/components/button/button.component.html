@@ -1,0 +1,10 @@
+<button
+  class="btn"
+  [ngClass]="{
+    'btn--primary': typeList.includes('primary'),
+    'btn--rounded': typeList.includes('rounded'),
+    'btn--text': typeList.includes('text'),
+    'btn--outline': typeList.includes('outline'),
+  }">
+  {{ text() }}
+</button>

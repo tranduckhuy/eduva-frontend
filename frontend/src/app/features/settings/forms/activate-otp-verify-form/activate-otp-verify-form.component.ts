@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { InputOtp } from 'primeng/inputotp';
 
 import { FormControlComponent } from '../../../../shared/components/form-control/form-control.component';
+import { ButtonComponent } from '../../../../shared/components/button/button.component';
 
 @Component({
   selector: 'app-activate-otp-verify-form',
   standalone: true,
-  imports: [FormsModule, InputOtp, FormControlComponent],
+  imports: [FormsModule, InputOtp, FormControlComponent, ButtonComponent],
   templateUrl: './activate-otp-verify-form.component.html',
   styleUrl: './activate-otp-verify-form.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

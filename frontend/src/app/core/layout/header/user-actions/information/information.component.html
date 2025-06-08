@@ -29,25 +29,52 @@
         <div class="separator"></div>
         <ul>
           <li>
-            <a href="#!" class="link">Trang Cá Nhân</a>
+            <a routerLink="/profile" class="link">
+              <span class="pi pi-user"></span>
+              Trang Cá Nhân
+            </a>
           </li>
           <li class="hidden sm:block">
-            <a href="#!" class="link">Thông báo</a>
+            <a href="#!" class="link">
+              <span class="pi pi-bell"></span>
+              Thông báo
+            </a>
           </li>
         </ul>
         <div class="separator"></div>
         <ul class="hidden md:block">
           <li>
-            <a href="#!" class="link">Môn học của tôi</a>
+            <a href="#!" class="link">
+              <span class="pi pi-users"></span>
+              Nhóm của tôi
+            </a>
           </li>
         </ul>
         <div class="separator hidden md:block"></div>
         <ul>
           <li>
-            <a href="#!" class="link">Cài Đặt</a>
+            <button class="link" (click)="toggleTheme()">
+              <span
+                class="pi"
+                [class.pi-moon]="theme() === 'light'"
+                [class.pi-sun]="theme() === 'dark'"></span>
+              Bật giao diện {{ theme() === 'dark' ? 'sáng' : 'tối' }}
+            </button>
+          </li>
+        </ul>
+        <div class="separator"></div>
+        <ul>
+          <li>
+            <a routerLink="/settings" class="link">
+              <span class="pi pi-cog" style="font-size: 16px"></span>
+              Cài Đặt
+            </a>
           </li>
           <li>
-            <a href="#!" class="link">Đăng Xuất</a>
+            <button class="link">
+              <span class="pi pi-sign-out"></span>
+              Đăng Xuất
+            </button>
           </li>
         </ul>
       </div>

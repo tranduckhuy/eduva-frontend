@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -28,7 +29,7 @@ type Subject = {
 @Component({
   selector: 'subject-card',
   standalone: true,
-  imports: [FontAwesomeModule, CommonModule, TooltipModule],
+  imports: [CommonModule, RouterLink, FontAwesomeModule, TooltipModule],
   templateUrl: './subject-card.component.html',
   styleUrl: './subject-card.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

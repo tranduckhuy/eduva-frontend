@@ -19,7 +19,7 @@ import { ChapterListComponent } from './chapter-list/chapter-list.component';
 export class ChapterModalComponent {
   isOpen = input.required<boolean>();
 
-  closeChapterModal = output();
+  closeChapterModal = output<void>();
 
   closeModal() {
     this.closeChapterModal.emit();

@@ -23,7 +23,7 @@ export class ButtonOutlineGradientComponent {
   tooltipText = input<string>('');
   isDisabled = input<boolean>(false);
 
-  mouseClick = output();
+  mouseClick = output<void>();
 
   get btnClass() {
     return {

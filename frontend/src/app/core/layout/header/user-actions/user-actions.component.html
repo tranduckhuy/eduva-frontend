@@ -1,20 +1,20 @@
-<div class="flex shrink-0 items-center gap-[12px]">
-  <p-button
+<div class="flex items-center gap-[12px]">
+  <!-- <p-button
     label="Đăng Nhập"
     size="small"
     class="actions__btn"
     [rounded]="true"
-    (click)="openAuthModal()" />
+    (click)="openAuthModal()" /> -->
 
-  <!-- <div class="relative md:hidden">
+  <div class="relative md:hidden">
     <p-button
-      label="Môn học của tôi"
+      label="Nhóm của tôi"
       variant="text"
       size="small"
       [rounded]="true"
-      (click)="toggleSubMenu('subjects')" />
-    @if (activeSubmenu === 'subjects') {
-      <header-subjects (clickOutside)="closeSubMenu()" />
+      (click)="toggleSubMenu('groups')" />
+    @if (activeSubmenu === 'groups') {
+      <header-groups (clickOutside)="closeSubMenu()" />
     }
   </div>
   <div class="flex items-center gap-3">
@@ -43,5 +43,5 @@
         <header-user-information (clickOutside)="closeSubMenu()" />
       }
     </div>
-  </div> -->
+  </div>
 </div>
