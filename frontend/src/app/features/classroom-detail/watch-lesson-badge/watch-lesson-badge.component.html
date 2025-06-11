@@ -1,0 +1,52 @@
+<div class="flex flex-col items-center gap-5">
+  <!-- ? Image Preview -->
+  <div
+    class="relative w-[calc(100%-2px)] overflow-hidden rounded-2xl object-cover pt-[45%]">
+    <img
+      src="https://www.gstatic.com/classroom/themes/WorldStudies_thumb.jpg"
+      alt="Lớp 12_A3_NgoaiNgu_2324"
+      class="absolute left-0 top-0 z-[1] h-full w-full object-right" />
+    <div
+      class="image-overlay absolute left-0 top-0 z-[2] h-full w-full opacity-80"></div>
+    <button
+      class="absolute bottom-2 right-2 z-[3] flex size-10 items-center justify-center rounded-full border-none bg-white outline-none transition-opacity duration-200 ease-in hover:opacity-95">
+      <fa-icon [icon]="'pencil'" class="text-lg text-primary"></fa-icon>
+    </button>
+  </div>
+
+  <!-- ? Classroom Information -->
+  <div class="flex flex-col gap-6">
+    <button
+      class="h-[32px] min-w-[180px] rounded-full bg-primary text-white transition-opacity duration-200 ease-in hover:opacity-90">
+      <span
+        class="flex h-full w-full items-center justify-center px-4 py-1 font-bold uppercase tracking-[1px]">
+        Vào học ngay
+      </span>
+    </button>
+    <ul>
+      <li class="item">
+        <fa-icon [icon]="'gauge-high'"></fa-icon>
+        <span>Trình độ cơ bản</span>
+      </li>
+      <li class="item">
+        <fa-icon [icon]="'film'"></fa-icon>
+        <span>
+          Tổng số
+          <strong>13</strong>
+          bài học
+        </span>
+      </li>
+      <li class="item">
+        <fa-icon [icon]="'clock'"></fa-icon>
+        <span>
+          Thời lượng
+          <strong>01 giờ 34 phút</strong>
+        </span>
+      </li>
+      <li class="item">
+        <fa-icon [icon]="'battery-full'"></fa-icon>
+        <span>Học mọi lúc mọi nơi</span>
+      </li>
+    </ul>
+  </div>
+</div>
