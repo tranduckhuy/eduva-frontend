@@ -15,6 +15,13 @@ export const routes: Routes = [
             mod => mod.HomeComponent
           ),
       },
+      {
+        path: 'classroom-detail',
+        loadComponent: () =>
+          import('./features/classroom-detail/classroom-detail.component').then(
+            mod => mod.ClassroomDetailComponent
+          ),
+      },
     ],
   },
   {

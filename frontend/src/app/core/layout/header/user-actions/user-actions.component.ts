@@ -10,7 +10,7 @@ import { ButtonModule } from 'primeng/button';
 import { HeaderSubmenuService } from '../services/header-submenu.service';
 import { AuthModalService } from '../../../../shared/services/modal/auth-modal/auth-modal.service';
 
-import { GroupsComponent } from './groups/groups.component';
+import { ClassroomsComponent } from './classrooms/classrooms.component';
 import { InformationComponent } from './information/information.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 
@@ -21,7 +21,7 @@ import { NotificationsComponent } from './notifications/notifications.component'
     ButtonModule,
     NotificationsComponent,
     InformationComponent,
-    GroupsComponent,
+    ClassroomsComponent,
   ],
   templateUrl: './user-actions.component.html',
   styleUrl: './user-actions.component.css',

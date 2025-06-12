@@ -1,15 +1,15 @@
 <home-carousel />
 
 <div class="px-8 pb-[75px] md:px-0">
-  @for (section of subjectSections(); track $index) {
+  @for (section of classroomSections(); track $index) {
     <div class="mt-[50px]">
-      <div class="subjects">
-        <h2 class="subjects__header">{{ section.title }}</h2>
+      <div class="classrooms">
+        <h2 class="classrooms__header">{{ section.title }}</h2>
         <div
-          class="subjects__list grid grid-cols-4 gap-x-6 gap-y-10 xl:grid-cols-3 xl:gap-x-4 xl:gap-y-6 lg:gap-x-3 md:grid-cols-2">
-          @for (subject of section.subjects; track $index) {
+          class="classrooms__list grid grid-cols-4 gap-x-6 gap-y-10 xl:grid-cols-3 xl:gap-x-4 xl:gap-y-6 lg:gap-x-3 md:grid-cols-2">
+          @for (classroom of section.classrooms; track $index) {
             <div>
-              <subject-card [subject]="subject" />
+              <classroom-card [classroom]="classroom" />
             </div>
           }
         </div>

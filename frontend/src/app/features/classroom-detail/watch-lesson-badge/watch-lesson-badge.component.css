@@ -1,0 +1,18 @@
+.image-overlay {
+  background-image: radial-gradient(
+    400px 180px ellipse at bottom right,
+    #202124,
+    transparent
+  );
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #494949;
+}
+
+.item + .item {
+  margin-top: 10px;
+}

@@ -7,13 +7,13 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { SubmenuDirective } from '../../../../../shared/directives/submenu/submenu.directive';
 
 @Component({
-  selector: 'header-groups',
+  selector: 'header-classrooms',
   standalone: true,
   imports: [SubmenuDirective, ButtonModule, TooltipModule, ProgressBarModule],
-  templateUrl: './groups.component.html',
-  styleUrl: './groups.component.css',
+  templateUrl: './classrooms.component.html',
+  styleUrl: './classrooms.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class GroupsComponent {
+export class ClassroomsComponent {
   readonly clickOutside = output<void>();
 }

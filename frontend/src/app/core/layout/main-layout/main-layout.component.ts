@@ -20,7 +20,8 @@ import { AuthModalComponent } from '../../../shared/components/auth-modal/auth-m
   template: `
     <app-header />
 
-    <main class="flex sm:h-auto sm:flex-col-reverse sm:items-center">
+    <main
+      class="flex min-h-[100vh] sm:h-auto sm:flex-col-reverse sm:items-center">
       <app-navbar />
 
       <div

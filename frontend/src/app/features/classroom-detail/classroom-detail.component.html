@@ -1,0 +1,64 @@
+<div class="e-container-fluid">
+  <div class="mt-3 px-11 pb-16">
+    <div class="e-row">
+      <div class="e-col-9 e-col-xxxxxl-8">
+        <article class="flex flex-col gap-[30px]">
+          <!-- ? Heading -->
+          <div>
+            <h2 class="text-[32px] font-bold text-black">
+              Lớp 12_A3_NgoaiNgu_2324
+            </h2>
+            <p class="mt-4 leading-4 text-[#000c]">
+              Xây dựng ứng dụng đưa ra cảnh báo khi người dùng sờ tay lên mặt.
+              Chúng ta sẽ sử dụng thư viện ReactJS & Tensoflow để hoàn thiện ứng
+              dụng này.
+            </p>
+          </div>
+
+          <!-- ? Classroom Contents -->
+          <div>
+            <h3 class="text-xl font-bold text-black">Danh sách bài học</h3>
+            <div class="mt-4 flex items-center justify-between">
+              <ul class="flex items-center">
+                <li>
+                  <strong>3</strong>
+                  chương
+                </li>
+                <li class="mx-2 size-1 rounded-full bg-black"></li>
+                <li>
+                  <strong>13</strong>
+                  bài học
+                </li>
+                <li class="mx-2 size-1 rounded-full bg-black"></li>
+                <li>
+                  Thời lượng
+                  <strong>01 giờ 34 phút</strong>
+                </li>
+              </ul>
+              <div
+                class="cursor-pointer select-none font-semibold text-primary transition-opacity duration-200 hover:opacity-80"
+                (click)="toggleAllCurriculums()">
+                {{ areAllExpanded() ? 'Thu nhỏ tất cả' : 'Mở rộng tất cả' }}
+              </div>
+            </div>
+
+            <!-- ? Curriculums -->
+            <div class="mt-5">
+              @for (curriculum of curriculums(); track $index; let i = $index) {
+                <curriculum-item
+                  [curriculum]="curriculum"
+                  [isCollapsed]="collapsedStateList()[i]"
+                  (toggleCollapsed)="toggleCollapse(i)" />
+              }
+            </div>
+          </div>
+        </article>
+      </div>
+      <div class="e-col-3 e-col-xxxxxl-4">
+        <div class="sticky top-24 mb-16 ml-6 bg-white pb-5">
+          <classroom-watch-lesson-badge />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
