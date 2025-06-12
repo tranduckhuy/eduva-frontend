@@ -1,44 +1,44 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { HomeCarouselComponent } from '../../shared/components/home-carousel/home-carousel.component';
-import { SubjectCardComponent } from '../../shared/components/subject-card/subject-card.component';
+import { ClassroomCardComponent } from '../../shared/components/classroom-card/classroom-card.component';
 
-type Subject = {
+type Classroom = {
   title: string;
   grade: string;
   createdBy: string;
   mediaNumbers: string;
   duration: string;
-  subjectImage: string;
+  classroomImage: string;
   creatorAvatar: string;
   isRecommend?: boolean;
 };
 
-type SubjectSection = {
+type ClassroomSection = {
   title: string;
-  subjects: Subject[];
+  classrooms: Classroom[];
 };
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [HomeCarouselComponent, SubjectCardComponent],
+  imports: [HomeCarouselComponent, ClassroomCardComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent {
-  subjectSections = signal<SubjectSection[]>([
+  classroomSections = signal<ClassroomSection[]>([
     {
-      title: 'Môn đã học',
-      subjects: [
+      title: 'Lớp học của tôi',
+      classrooms: [
         {
           title: '12_A3_NgoaiNgu_2324',
           grade: '12',
           createdBy: 'Sơn Đặng',
           mediaNumbers: '590',
           duration: '116h50p',
-          subjectImage:
+          classroomImage:
             'https://www.gstatic.com/classroom/themes/WorldStudies_thumb.jpg',
           creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
           isRecommend: true,
@@ -49,7 +49,7 @@ export class HomeComponent {
           createdBy: 'Sơn Đặng',
           mediaNumbers: '231',
           duration: '42h32p',
-          subjectImage:
+          classroomImage:
             'https://gstatic.com/classroom/themes/WorldHistory_thumb.jpg',
           creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
           isRecommend: true,
@@ -60,7 +60,7 @@ export class HomeComponent {
           createdBy: 'Sơn Đặng',
           mediaNumbers: '27',
           duration: '6h18p',
-          subjectImage:
+          classroomImage:
             'https://www.gstatic.com/classroom/themes/SocialStudies_thumb.jpg',
           creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
           isRecommend: true,
@@ -71,7 +71,7 @@ export class HomeComponent {
           createdBy: 'Sơn Đặng',
           mediaNumbers: '27',
           duration: '6h18p',
-          subjectImage:
+          classroomImage:
             'https://gstatic.com/classroom/themes/Psychology_thumb.jpg',
           creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
           isRecommend: true,
@@ -82,7 +82,7 @@ export class HomeComponent {
           createdBy: 'Sơn Đặng',
           mediaNumbers: '27',
           duration: '6h18p',
-          subjectImage:
+          classroomImage:
             'https://www.gstatic.com/classroom/themes/Physics_thumb.jpg',
           creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
           isRecommend: true,
@@ -93,7 +93,7 @@ export class HomeComponent {
           createdBy: 'Sơn Đặng',
           mediaNumbers: '27',
           duration: '6h18p',
-          subjectImage:
+          classroomImage:
             'https://www.gstatic.com/classroom/themes/English_thumb.jpg',
           creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
           isRecommend: true,
@@ -101,15 +101,15 @@ export class HomeComponent {
       ],
     },
     {
-      title: 'Môn đã học',
-      subjects: [
+      title: 'Lớp học của tôi',
+      classrooms: [
         {
           title: '10_A5_DiaLy_2324',
           grade: '10',
           createdBy: 'Sơn Đặng',
           mediaNumbers: '9',
           duration: '3h12p',
-          subjectImage:
+          classroomImage:
             'https://www.gstatic.com/classroom/themes/Geography_thumb.jpg',
           creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
         },
@@ -119,7 +119,7 @@ export class HomeComponent {
           createdBy: 'Sơn Đặng',
           mediaNumbers: '9',
           duration: '3h12p',
-          subjectImage:
+          classroomImage:
             'https://www.gstatic.com/classroom/themes/img_code_thumb.jpg',
           creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
         },
@@ -129,7 +129,7 @@ export class HomeComponent {
           createdBy: 'Sơn Đặng',
           mediaNumbers: '117',
           duration: '29h5p',
-          subjectImage:
+          classroomImage:
             'https://www.gstatic.com/classroom/themes/Geometry_thumb.jpg',
           creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
           isRecommend: true,
@@ -140,7 +140,7 @@ export class HomeComponent {
           createdBy: 'Sơn Đặng',
           mediaNumbers: '34',
           duration: '6h31p',
-          subjectImage:
+          classroomImage:
             'https://gstatic.com/classroom/themes/Biology_thumb.jpg',
           creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
         },
@@ -150,7 +150,7 @@ export class HomeComponent {
           createdBy: 'Sơn Đặng',
           mediaNumbers: '112',
           duration: '24h15p',
-          subjectImage: 'https://gstatic.com/classroom/themes/Math_thumb.jpg',
+          classroomImage: 'https://gstatic.com/classroom/themes/Math_thumb.jpg',
           creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
           isRecommend: true,
         },
@@ -160,7 +160,7 @@ export class HomeComponent {
           createdBy: 'Sơn Đặng',
           mediaNumbers: '19',
           duration: '8h41p',
-          subjectImage:
+          classroomImage:
             'https://gstatic.com/classroom/themes/Chemistry_thumb.jpg',
           creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
           isRecommend: true,
