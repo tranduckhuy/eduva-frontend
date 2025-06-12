@@ -8,13 +8,13 @@
 
   <div class="relative md:hidden">
     <p-button
-      label="Nhóm của tôi"
+      label="Lớp học của tôi"
       variant="text"
       size="small"
       [rounded]="true"
-      (click)="toggleSubMenu('groups')" />
-    @if (activeSubmenu === 'groups') {
-      <header-groups (clickOutside)="closeSubMenu()" />
+      (click)="toggleSubMenu('classrooms')" />
+    @if (activeSubmenu === 'classrooms') {
+      <header-classrooms (clickOutside)="closeSubMenu()" />
     }
   </div>
   <div class="flex items-center gap-3">
