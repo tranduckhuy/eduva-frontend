@@ -33,7 +33,14 @@ export class ThemeService {
   private _syncThemeFromLocalStorage(): void {
     if (isPlatformBrowser(this._platformId)) {
       const saved = localStorage.getItem(this.THEME);
-      this._theme.set(saved === 'dark' ? 'dark' : 'light');
+      if (saved === 'light' || saved === 'dark') {
+        this._theme.set(saved);
+      } else {
+        const prefersDark = window.matchMedia?.(
+          '(prefers-color-scheme: dark)'
+        ).matches;
+        this._theme.set(prefersDark ? 'dark' : 'light');
+      }
     }
   }
 

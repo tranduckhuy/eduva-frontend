@@ -6,19 +6,19 @@
   width: 72px;
   height: 72px;
   border-radius: 16px;
-  color: #404040;
-  background-color: #fff;
+  color: var(--color-navbar-text2);
+  background-color: var(--color-bg);
   cursor: pointer;
 }
 
 .nav-link:hover {
-  color: #1a1a1a;
-  background-color: #f5f5f5;
+  color: var(--color-navbar-text);
+  background-color: var(--color-bg3);
 }
 
 .nav-link.active {
-  color: #1a1a1a;
-  background-color: #e8ebed;
+  color: var(--color-navbar-text);
+  background-color: var(--color-bg2);
 }
 
 .nav-text {
@@ -54,7 +54,7 @@
   }
 
   .nav-link.active > .nav-icon {
-    color: #f05123;
+    color: var(--color-primary);
   }
 
   .nav-icon,
