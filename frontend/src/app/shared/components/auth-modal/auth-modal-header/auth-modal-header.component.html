@@ -12,16 +12,13 @@
       class="h-12 w-12 rounded-lg object-contain" />
   </a>
   <h2 class="my-3 text-[28px] font-bold leading-[1.4]">
-    <ng-container *ngIf="screenState() === 'login'; else forgotPassword">
+    @if (screenState() === 'login') {
       Đăng nhập vào <strong class="system-name">EDUVA</strong>
-    </ng-container>
-    <ng-template #forgotPassword>
-      <ng-container
-        *ngIf="screenState() === 'forgot-password'; else resetPassword">
-        Quên mật khẩu?
-      </ng-container>
-    </ng-template>
-    <ng-template #resetPassword> Đặt lại mật khẩu </ng-template>
+    } @else if (screenState() === 'forgot-password') {
+      Quên mật khẩu?
+    } @else {
+      Đặt lại mật khẩu
+    }
   </h2>
   <p
     class="mx-auto w-[min(400px,90%)]"
@@ -32,7 +29,7 @@
       screenState() === 'login'
         ? 'Mỗi người nên sử dụng riêng một tài khoản, tài khoản nhiều người sử dụng chung sẽ bị khóa.'
         : screenState() === 'forgot-password'
-          ? 'Nhập email  của bạn và chúng tôi sẽ gửi cho bạn mã khôi phục mật khẩu.'
+          ? 'Nhập địa chỉ email của bạn và chúng tôi sẽ gửi mã khôi phục mật khẩu gồm 6 chữ số đến hộp thư của bạn.'
           : 'Đặt mật khẩu mới cho tài khoản của bạn để có thể tiếp tục truy cập các khóa học.'
     }}
   </p>

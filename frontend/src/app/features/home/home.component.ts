@@ -1,5 +1,15 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  inject,
+  signal,
+} from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
+import { GlobalModalService } from '../../shared/services/layout/global-modal/global-modal.service';
+
+import { AuthModalComponent } from '../../shared/components/auth-modal/auth-modal.component';
 import { HomeCarouselComponent } from '../../shared/components/home-carousel/home-carousel.component';
 import { ClassroomCardComponent } from '../../shared/components/classroom-card/classroom-card.component';
 
@@ -27,7 +37,25 @@ type ClassroomSection = {
   styleUrl: './home.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly globalModalService = inject(GlobalModalService);
+
+  ngOnInit(): void {
+    this.activatedRoute.queryParamMap.subscribe(params => {
+      const email = params.get('email');
+      const token = params.get('token');
+
+      if (email && token) {
+        this.globalModalService.open(AuthModalComponent, {
+          isReset: true,
+          email,
+          token,
+        });
+      }
+    });
+  }
+
   classroomSections = signal<ClassroomSection[]>([
     {
       title: 'Lớp học của tôi',

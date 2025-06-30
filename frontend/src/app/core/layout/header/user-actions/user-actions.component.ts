@@ -1,20 +1,15 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  effect,
-  inject,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
 
+import { AuthService } from '../../../auth/services/auth.service';
+import { UserService } from '../../../../shared/services/api/user/user.service';
 import { HeaderSubmenuService } from '../services/header-submenu.service';
-import { AuthModalService } from '../../../../shared/services/modal/auth-modal/auth-modal.service';
 
 import { ClassroomsComponent } from './classrooms/classrooms.component';
 import { InformationComponent } from './information/information.component';
 import { NotificationsComponent } from './notifications/notifications.component';
-import { GlobalModalService } from '../../../../shared/services/global-modal/global-modal.service';
-import { AuthFormLoginComponent } from '../../../../shared/components/auth-modal/auth-form-login/auth-form-login.component';
+import { GlobalModalService } from '../../../../shared/services/layout/global-modal/global-modal.service';
 import { AuthModalComponent } from '../../../../shared/components/auth-modal/auth-modal.component';
 
 @Component({
@@ -31,23 +26,16 @@ import { AuthModalComponent } from '../../../../shared/components/auth-modal/aut
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserActionsComponent {
+  private readonly authService = inject(AuthService);
+  private readonly userService = inject(UserService);
   private readonly headerSubmenuService = inject(HeaderSubmenuService);
-  private readonly authModalService = inject(AuthModalService);
   private readonly globalModalService = inject(GlobalModalService);
 
-  constructor() {
-    effect(() => {
-      const isModalOpen = this.authModalService.isOpen();
-      document.body.classList.toggle('overflow-hidden', isModalOpen);
-    });
-  }
+  isLoggedIn = this.authService.isLoggedIn;
+  user = this.userService.currentUser;
 
   get activeSubmenu() {
     return this.headerSubmenuService.getActiveSubmenuMenu();
-  }
-
-  openAuthModal() {
-    this.authModalService.open();
   }
 
   toggleSubMenu(submenuKey: string): void {

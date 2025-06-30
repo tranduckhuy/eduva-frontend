@@ -2,7 +2,7 @@
 @import 'primeicons/primeicons.css';
 @import 'ckeditor5/ckeditor5.css';
 
-@import './grid.css';
+@import './assets/css/grid.css';
 
 @tailwind base;
 @tailwind components;
@@ -10,10 +10,6 @@
 
 @layer base {
   :root {
-    --font-family:
-      system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
-      'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
-
     --font-family:
       system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
       'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
