@@ -6,6 +6,7 @@ import { HeaderComponent } from '../header/header.component';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { FooterComponent } from '../footer/footer.component';
 import { AuthModalComponent } from '../../../shared/components/auth-modal/auth-modal.component';
+import { GlobalModalHostComponent } from '../../../shared/components/global-modal-host/global-modal-host.component';
 
 @Component({
   selector: 'app-main-layout',
@@ -16,6 +17,7 @@ import { AuthModalComponent } from '../../../shared/components/auth-modal/auth-m
     NavbarComponent,
     FooterComponent,
     AuthModalComponent,
+    GlobalModalHostComponent,
   ],
   template: `
     <app-header />
@@ -33,6 +35,7 @@ import { AuthModalComponent } from '../../../shared/components/auth-modal/auth-m
     <app-footer />
 
     <app-auth-modal />
+    <app-global-modal-host />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

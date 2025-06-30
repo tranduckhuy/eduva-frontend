@@ -8,9 +8,13 @@
       {{ isLogin() ? 'Đăng ký' : 'Đăng nhập' }}
     </span>
   </p> -->
-  <a href="#!" class="inline-block font-semibold text-primary underline">
-    Quên mật khẩu?
-  </a>
+  @if (isLogin()) {
+    <button
+      (click)="switchState.emit()"
+      class="inline-block font-semibold text-primary underline">
+      Quên mật khẩu?
+    </button>
+  }
 </div>
 
 <!-- ? Policy -->

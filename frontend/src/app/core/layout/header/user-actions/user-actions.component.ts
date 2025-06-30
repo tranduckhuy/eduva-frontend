@@ -13,6 +13,9 @@ import { AuthModalService } from '../../../../shared/services/modal/auth-modal/a
 import { ClassroomsComponent } from './classrooms/classrooms.component';
 import { InformationComponent } from './information/information.component';
 import { NotificationsComponent } from './notifications/notifications.component';
+import { GlobalModalService } from '../../../../shared/services/global-modal/global-modal.service';
+import { AuthFormLoginComponent } from '../../../../shared/components/auth-modal/auth-form-login/auth-form-login.component';
+import { AuthModalComponent } from '../../../../shared/components/auth-modal/auth-modal.component';
 
 @Component({
   selector: 'header-user-actions',
@@ -30,6 +33,7 @@ import { NotificationsComponent } from './notifications/notifications.component'
 export class UserActionsComponent {
   private readonly headerSubmenuService = inject(HeaderSubmenuService);
   private readonly authModalService = inject(AuthModalService);
+  private readonly globalModalService = inject(GlobalModalService);
 
   constructor() {
     effect(() => {
@@ -58,5 +62,9 @@ export class UserActionsComponent {
 
   closeSubMenu() {
     this.headerSubmenuService.close();
+  }
+
+  openSignInModal() {
+    this.globalModalService.open(AuthModalComponent);
   }
 }
