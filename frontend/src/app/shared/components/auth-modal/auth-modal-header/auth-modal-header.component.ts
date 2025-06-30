@@ -10,5 +10,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthModalHeaderComponent {
-  isLogin = input<boolean>();
+  screenState = input.required<
+    'login' | 'forgot-password' | 'reset-password'
+  >();
 }

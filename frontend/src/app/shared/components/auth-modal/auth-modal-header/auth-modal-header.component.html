@@ -2,25 +2,38 @@
   <a href="/" class="flex items-center justify-center">
     <img
       src="./images/logo.png"
-      alt="Đăng nhập vào EDUVA"
-      [alt]="isLogin() ? 'Đăng nhập vào EDUVA' : 'Quên mật khẩu'"
+      [alt]="
+        screenState() === 'login'
+          ? 'Đăng nhập vào EDUVA'
+          : screenState() === 'forgot-password'
+            ? 'Quên mật khẩu'
+            : 'Đặt lại mật khẩu'
+      "
       class="h-12 w-12 rounded-lg object-contain" />
   </a>
   <h2 class="my-3 text-[28px] font-bold leading-[1.4]">
-    <ng-container *ngIf="isLogin(); else forgotPassword">
+    <ng-container *ngIf="screenState() === 'login'; else forgotPassword">
       Đăng nhập vào <strong class="system-name">EDUVA</strong>
     </ng-container>
-    <ng-template #forgotPassword> Quên mật khẩu? </ng-template>
+    <ng-template #forgotPassword>
+      <ng-container
+        *ngIf="screenState() === 'forgot-password'; else resetPassword">
+        Quên mật khẩu?
+      </ng-container>
+    </ng-template>
+    <ng-template #resetPassword> Đặt lại mật khẩu </ng-template>
   </h2>
   <p
     class="mx-auto w-[min(400px,90%)]"
     [ngClass]="{
-      'text-warningText': isLogin(),
+      'text-warningText': screenState() === 'login',
     }">
     {{
-      isLogin()
+      screenState() === 'login'
         ? 'Mỗi người nên sử dụng riêng một tài khoản, tài khoản nhiều người sử dụng chung sẽ bị khóa.'
-        : 'Nhập email  của bạn và chúng tôi sẽ gửi cho bạn mã khôi phục mật khẩu.'
+        : screenState() === 'forgot-password'
+          ? 'Nhập email  của bạn và chúng tôi sẽ gửi cho bạn mã khôi phục mật khẩu.'
+          : 'Đặt mật khẩu mới cho tài khoản của bạn để có thể tiếp tục truy cập các khóa học.'
     }}
   </p>
 </div>
