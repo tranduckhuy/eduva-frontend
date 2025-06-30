@@ -1,7 +1,7 @@
 <div>
   <!-- ? Lesson Information -->
   <div
-    class="sticky top-0 z-[1] flex cursor-pointer select-none items-center justify-between border-b border-b-[#e4eef0] bg-white px-4 pb-3 pt-2 text-lg font-medium tracking-[1.6] text-[#2e3441] transition-colors duration-300 ease-out hover:bg-[#f2f9ff]"
+    class="dark:bg-dark-400 dark:text-white dark:hover:bg-[#32353b] dark:border-[#181d1e] sticky top-0 z-[1] flex cursor-pointer select-none items-center justify-between border-b border-b-[#e4eef0] bg-white px-4 pb-3 pt-2 text-lg font-medium tracking-[1px] text-[#2e3441] transition-colors duration-300 ease-out hover:bg-[#f2f9ff]"
     (click)="toggleExpand()">
     <div>
       <h3>1. Bắt đầu</h3>
@@ -19,13 +19,13 @@
 
   <!-- ? Media List -->
   <div
-    class="animate-fadeIn bg-white"
+    class="dark:bg-dark-400 dark:text-white dark:hover:bg-[#32353b] animate-fadeIn bg-white"
     [ngClass]="{
       'block opacity-100': isExpanded(),
       'hidden opacity-0': !isExpanded(),
     }">
     <div
-      class="active relative flex cursor-pointer select-none items-center border-b border-b-[#e4eef0] px-[10px] py-2 text-sm font-normal tracking-[1.6] text-[#2e3441] transition-colors duration-300 ease-out hover:bg-[#f2f9ff]">
+      class="active dark:text-white dark:hover:bg-[#32353b] dark:border-[#181d1e] relative flex cursor-pointer select-none items-center border-b border-b-[#e4eef0] px-[10px] py-2 text-sm font-normal tracking-[1px] text-[#2e3441] transition-colors duration-300 ease-out hover:bg-[#f2f9ff]">
       <!-- ? Media Icon -->
       <div class="mr-[2px] flex w-6 items-center justify-center">
         <fa-icon
@@ -48,7 +48,7 @@
     </div>
 
     <div
-      class="relative flex cursor-pointer select-none items-center border-b border-b-[#e4eef0] px-[10px] py-2 text-sm font-normal tracking-[1.6] text-[#2e3441] transition-colors duration-300 ease-out hover:bg-[#f2f9ff]">
+      class="dark:text-white dark:hover:bg-[#32353b] dark:border-[#181d1e] relative flex cursor-pointer select-none items-center border-b border-b-[#e4eef0] px-[10px] py-2 text-sm font-normal tracking-[1px] text-[#2e3441] transition-colors duration-300 ease-out hover:bg-[#f2f9ff]">
       <!-- ? Media Icon -->
       <div class="mr-[2px] flex w-6 items-center justify-center">
         <fa-icon
@@ -71,7 +71,7 @@
     </div>
 
     <div
-      class="relative flex cursor-pointer select-none items-center border-b border-b-[#e4eef0] px-[10px] py-2 text-sm font-normal tracking-[1.6] text-[#2e3441] transition-colors duration-300 ease-out hover:bg-[#f2f9ff]">
+      class="dark:text-white dark:hover:bg-[#32353b] dark:border-[#181d1e] relative flex cursor-pointer select-none items-center border-b border-b-[#e4eef0] px-[10px] py-2 text-sm font-normal tracking-[1px] text-[#2e3441] transition-colors duration-300 ease-out hover:bg-[#f2f9ff]">
       <!-- ? Media Icon -->
       <div class="mr-[2px] flex w-6 items-center justify-center">
         <span

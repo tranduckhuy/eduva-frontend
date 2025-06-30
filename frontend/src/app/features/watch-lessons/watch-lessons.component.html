@@ -4,7 +4,8 @@
   class="fixed left-0 right-0 top-0 mt-[66px] flex h-full"
   [ngClass]="isSidebarOpen() ? 'open' : ''">
   <!-- ? Video Wrapper -->
-  <div class="lesson-content bg-[#f6f7f999]">
+  <div
+    class="lesson-content dark:bg-[#191d1e] bg-[#f6f7f999] transition-colors duration-[0.25s] ease-in">
     <div class="video-wrapper">
       <!-- ? Video Player -->
       <div class="bg-black">
@@ -18,10 +19,10 @@
         <!-- ? Video Title & Updated Date -->
         <div class="video-info mt-5">
           <h2
-            class="text-2xl font-semibold leading-[1.5] tracking-[-0.3px] text-[#45494f]">
+            class="dark:text-[#fff] text-2xl font-semibold leading-[1.5] tracking-[-0.3px] text-[#45494f]">
             Tìm hiểu flex-wrap và align-content
           </h2>
-          <p class="mt-1 text-xs font-normal text-[#808b9a]">
+          <p class="dark:text-[#fffc] mt-1 text-xs font-normal text-[#808b9a]">
             Cập nhật tháng 4 năm 2025
           </p>
         </div>
@@ -40,7 +41,8 @@
   </div>
 
   <!-- ? Sidebar -->
-  <div class="lesson-sidebar">
+  <div
+    class="lesson-sidebar dark:bg-dark-400 bg-white transition-colors duration-[0.25s] ease-in">
     <lesson-sidebar
       (openChapterModal)="openChapterModal()"
       [isOpen]="isSidebarOpen()" />
