@@ -1,20 +1,28 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  OnInit,
   inject,
   signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { GlobalModalService } from '../../services/global-modal/global-modal.service';
+import { GlobalModalService } from '../../services/layout/global-modal/global-modal.service';
 
 import { AuthModalHeaderComponent } from './auth-modal-header/auth-modal-header.component';
 import { AuthModalFooterComponent } from './auth-modal-footer/auth-modal-footer.component';
 import { AuthFormLoginComponent } from './auth-form-login/auth-form-login.component';
 import { AuthFormForgotPasswordComponent } from './auth-form-forgot-password/auth-form-forgot-password.component';
-import { nAuthFormResetPasswordComponent } from './auth-form-reset-password/auth-form-reset-password.component';
+import { AuthFormResetPasswordComponent } from './auth-form-reset-password/auth-form-reset-password.component';
+import { MODAL_DATA } from '../../tokens/injection/modal-data.token';
 
 type ScreenState = 'login' | 'forgot-password' | 'reset-password';
+
+interface ResetModalData {
+  isReset: boolean;
+  email: string;
+  token: string;
+}
 
 @Component({
   selector: 'app-auth-modal',
@@ -25,17 +33,25 @@ type ScreenState = 'login' | 'forgot-password' | 'reset-password';
     AuthModalFooterComponent,
     AuthFormLoginComponent,
     AuthFormForgotPasswordComponent,
-    nAuthFormResetPasswordComponent,
+    AuthFormResetPasswordComponent,
   ],
   templateUrl: './auth-modal.component.html',
   styleUrl: './auth-modal.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AuthModalComponent {
+export class AuthModalComponent implements OnInit {
   private readonly globalModalService = inject(GlobalModalService);
-  isModalOpen = true;
+  readonly modalData = inject(MODAL_DATA) as ResetModalData;
 
   screenState = signal<ScreenState>('login');
+
+  isModalOpen = true;
+
+  ngOnInit(): void {
+    if (this.modalData && this.modalData.isReset) {
+      this.screenState.set('reset-password');
+    }
+  }
 
   closeModal() {
     this.globalModalService.close();
@@ -54,6 +70,9 @@ export class AuthModalComponent {
   }
 
   isFormScreen() {
-    return this.screenState() === 'forgot-password';
+    return (
+      this.screenState() === 'forgot-password' ||
+      this.screenState() === 'reset-password'
+    );
   }
 }

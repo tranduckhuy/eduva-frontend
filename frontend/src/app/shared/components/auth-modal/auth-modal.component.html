@@ -42,8 +42,11 @@
             <auth-form-forgot-password
               (openResetPassword)="showResetPasswordForm()" />
           }
-          @if (screenState() === 'reset-password') {
-            <auth-form-reset-password />
+          @if (screenState() === 'reset-password' && modalData) {
+            <auth-form-reset-password
+              [email]="modalData.email"
+              [token]="modalData.token"
+              (passwordChanged)="showLogin()" />
           }
         </div>
 
@@ -55,4 +58,3 @@
     </div>
   </div>
 </div>
-<!-- </div> -->

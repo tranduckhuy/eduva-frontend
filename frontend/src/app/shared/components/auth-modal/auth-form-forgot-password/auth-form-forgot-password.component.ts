@@ -5,19 +5,19 @@ import {
   output,
   signal,
 } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 import { ButtonModule } from 'primeng/button';
 
+import { customEmailValidator } from '../../../utils/form-validators';
+
+import { PasswordService } from '../../../../core/auth/services/password.service';
+
 import { FormControlComponent } from '../../form-control/form-control.component';
 import { ButtonComponent } from '../../button/button.component';
-import { CommonModule } from '@angular/common';
-import { customEmailValidator } from '../../../utils/form-validators';
+
+import { type EmailLinkRequest } from '../../../../core/auth/models/request/email-link-request.model';
 
 @Component({
   selector: 'auth-form-forgot-password',
@@ -35,62 +35,28 @@ import { customEmailValidator } from '../../../utils/form-validators';
 })
 export class AuthFormForgotPasswordComponent {
   private readonly fb = inject(FormBuilder);
+  private readonly passwordService = inject(PasswordService);
 
   form!: FormGroup;
 
   readonly openResetPassword = output();
 
   submitted = signal<boolean>(false);
-  isSentCode = signal<boolean>(false);
-  isResentCode = signal<boolean>(false);
-  readonly countdown = signal<number>(120);
-
-  private countdownInterval!: ReturnType<typeof setInterval>;
 
   constructor() {
     this.form = this.fb.group({
       email: ['', [customEmailValidator]],
-      code: ['', [Validators.required, Validators.pattern(/^[0-9]{6}$/)]],
     });
   }
 
-  onCodeInput(event: Event) {
-    const input = event.target as HTMLInputElement;
-    input.value = input.value.replace(/[^0-9]/g, '').slice(0, 6);
-    this.form.get('code')?.setValue(input.value, { emitEvent: false });
-  }
-
-  sendCode() {
-    this.startCountdown();
-  }
-
-  private startCountdown(): void {
-    this.isSentCode.set(true);
-    this.isResentCode.set(true);
-    this.countdown.set(10);
-
-    this.countdownInterval = setInterval(() => {
-      const current = this.countdown();
-      if (current <= 1) {
-        this.stopCountdown();
-      } else {
-        this.countdown.set(current - 1);
-      }
-    }, 1000);
-  }
-
-  private stopCountdown(): void {
-    clearInterval(this.countdownInterval);
-    this.isResentCode.set(false);
-  }
-
-  onSubmit() {
+  onSubmit(): void {
     this.submitted.set(true);
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
+    this.form.markAllAsTouched();
 
-    this.openResetPassword.emit();
+    if (this.form.invalid) return;
+
+    const request: EmailLinkRequest = this.form.value;
+
+    this.passwordService.forgotPassword(request).subscribe();
   }
 }

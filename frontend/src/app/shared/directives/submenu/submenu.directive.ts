@@ -2,8 +2,10 @@ import {
   Directive,
   ElementRef,
   HostListener,
+  DestroyRef,
   inject,
   output,
+  signal,
 } from '@angular/core';
 
 @Directive({
@@ -12,14 +14,29 @@ import {
 })
 export class SubmenuDirective {
   private readonly elRef = inject(ElementRef);
+  private readonly destroyRef = inject(DestroyRef);
 
-  clickOutside = output<void>();
+  private readonly destroyed = signal(false);
 
-  @HostListener('document:click', ['$event'])
-  onClick(event: MouseEvent) {
-    const path = event.composedPath();
-    if (!path.includes(this.elRef.nativeElement)) {
-      this.clickOutside.emit();
-    }
+  clickOutside = output();
+
+  constructor() {
+    this.destroyRef.onDestroy(() => this.destroyed.set(true));
+  }
+
+  @HostListener('document:click', ['$event.target'])
+  onClick(target: HTMLElement) {
+    setTimeout(() => {
+      if (this.destroyed()) return;
+
+      if (!this.elRef.nativeElement.contains(target)) {
+        this.clickOutside.emit();
+      }
+    });
+  }
+
+  @HostListener('window:close-all-submenus')
+  onCloseAllSubmenus() {
+    this.clickOutside.emit();
   }
 }

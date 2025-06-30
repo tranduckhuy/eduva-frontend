@@ -1,5 +1,6 @@
 <button
   class="btn"
+  [type]="buttonType()"
   [disabled]="disabled()"
   [ngClass]="{
     'btn--primary': typeList.includes('primary'),

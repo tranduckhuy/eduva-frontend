@@ -1,8 +1,9 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
   inject,
+  input,
+  output,
   signal,
 } from '@angular/core';
 import {
@@ -11,14 +12,19 @@ import {
   Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
-
-import { FormControlComponent } from '../../form-control/form-control.component';
-import { ButtonComponent } from '../../button/button.component';
 import { CommonModule } from '@angular/common';
+
 import {
   strongPasswordValidator,
   matchPasswordValidator,
 } from '../../../../shared/utils/form-validators';
+
+import { PasswordService } from '../../../../core/auth/services/password.service';
+
+import { FormControlComponent } from '../../form-control/form-control.component';
+import { ButtonComponent } from '../../button/button.component';
+
+import { type ResetPasswordRequest } from '../../../../core/auth/models/request/reset-password-request.model';
 
 @Component({
   selector: 'auth-form-reset-password',
@@ -33,13 +39,18 @@ import {
   styleUrl: './auth-form-reset-password.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class nAuthFormResetPasswordComponent {
+export class AuthFormResetPasswordComponent {
   private readonly fb = inject(FormBuilder);
+  private readonly passwordService = inject(PasswordService);
+
+  email = input.required<string>();
+  token = input.required<string>();
+
+  passwordChanged = output<void>();
 
   form!: FormGroup;
 
   submitted = signal<boolean>(false);
-
   passwordLevel = signal<number | undefined>(undefined);
 
   constructor() {
@@ -80,10 +91,17 @@ export class nAuthFormResetPasswordComponent {
 
   onSubmit() {
     this.submitted.set(true);
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
-    // handle successful reset here
+    this.form.markAllAsTouched();
+
+    if (this.form.invalid) return;
+
+    const request: ResetPasswordRequest = {
+      email: this.email(),
+      token: this.token(),
+      ...this.form.value,
+    };
+    this.passwordService
+      .resetPassword(request)
+      .subscribe(() => this.passwordChanged.emit());
   }
 }

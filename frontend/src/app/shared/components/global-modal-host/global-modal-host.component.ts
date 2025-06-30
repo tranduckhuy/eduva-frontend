@@ -6,7 +6,8 @@ import {
   effect,
 } from '@angular/core';
 import { NgComponentOutlet, CommonModule } from '@angular/common';
-import { GlobalModalService } from '../../services/global-modal/global-modal.service';
+
+import { GlobalModalService } from '../../services/layout/global-modal/global-modal.service';
 
 @Component({
   selector: 'app-global-modal-host',
@@ -40,10 +41,6 @@ export class GlobalModalHostComponent {
 
   get injector() {
     return this.modalService.injector;
-  }
-
-  get data() {
-    return this.modalService.data();
   }
 
   get modalClass() {

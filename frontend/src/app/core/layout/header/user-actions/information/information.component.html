@@ -3,7 +3,7 @@
   clickOutsideSubmenu
   (clickOutside)="clickOutside.emit()">
   <div
-    class="dark:bg-dark-500 dark:shadow-filterBoxDark animate-fadeInForward overflow-hidden rounded-[10px] bg-white shadow-filterBox transition-all duration-300 ease-in-out will-change-[opacity,transform]">
+    class="animate-fadeInForward overflow-hidden rounded-[10px] bg-white shadow-filterBox transition-all duration-300 ease-in-out will-change-[opacity,transform] dark:bg-dark-500 dark:shadow-filterBoxDark">
     <div class="min-w-[230px] overflow-y-auto overscroll-contain px-6 py-3">
       <!-- ? User -->
       <div class="user">
@@ -12,8 +12,8 @@
           <div
             class="avatar-wrapper relative my-[10px] h-[60px] w-[60px] rounded-full p-1">
             <img
-              src="https://files.fullstack.edu.vn/f8-prod/user_avatars/378826/661cf89e8d5a0.jpg"
-              alt="Quy Nguyen"
+              [src]="user()?.avatarUrl"
+              [alt]="user()?.fullName"
               class="h-full w-full rounded-full object-cover" />
             <img
               src="./images/icons/user-info.svg"
@@ -21,14 +21,14 @@
               class="absolute right-[-14px] top-[-1px] z-[9999] h-5 w-5" />
           </div>
           <div class="user__info">
-            <h5 class="text-base font-semibold">Quy Nguyen</h5>
-            <span class="dark:text-[#ffffff99] mt-2 text-[#757575]">
+            <h5 class="text-base font-semibold">{{ user()?.fullName }}</h5>
+            <span class="mt-2 text-[#757575] dark:text-[#ffffff99]">
               &#64;15795
             </span>
           </div>
         </a>
         <!-- ? List -->
-        <div class="separator dark:bg-[#181d1e] bg-[#0000000d]"></div>
+        <div class="separator bg-[#0000000d] dark:bg-[#323c4a]"></div>
         <ul>
           <li>
             <a routerLink="/profile" class="link">
@@ -43,17 +43,21 @@
             </a>
           </li>
         </ul>
-        <div class="separator dark:bg-[#181d1e] bg-[#0000000d]"></div>
+
+        <div class="separator bg-[#0000000d] dark:bg-[#323c4a]"></div>
+
         <ul class="hidden md:block">
           <li>
             <a href="#!" class="link">
               <span class="pi pi-users"></span>
-              Nhóm của tôi
+              Lớp học của tôi
             </a>
           </li>
         </ul>
+
         <div
-          class="separator dark:bg-[#181d1e] hidden bg-[#0000000d] md:block"></div>
+          class="separator hidden bg-[#0000000d] md:block dark:bg-[#323c4a]"></div>
+
         <ul>
           <li>
             <button class="link" (click)="toggleTheme()">
@@ -65,7 +69,9 @@
             </button>
           </li>
         </ul>
-        <div class="separator dark:bg-[#181d1e] bg-[#0000000d]"></div>
+
+        <div class="separator bg-[#0000000d] dark:bg-[#323c4a]"></div>
+
         <ul>
           <li>
             <a routerLink="/settings" class="link">
@@ -74,7 +80,7 @@
             </a>
           </li>
           <li>
-            <button class="link">
+            <button class="link" (click)="logout()">
               <span class="pi pi-sign-out"></span>
               Đăng Xuất
             </button>

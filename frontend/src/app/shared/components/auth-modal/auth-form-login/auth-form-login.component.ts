@@ -6,8 +6,12 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
+import { AuthService } from '../../../../core/auth/services/auth.service';
+
 import { FormControlComponent } from '../../form-control/form-control.component';
 import { ButtonComponent } from '../../button/button.component';
+
+import { type LoginRequest } from '../../../../core/auth/models/request/login-request.model';
 
 @Component({
   selector: 'auth-form-login',
@@ -19,6 +23,7 @@ import { ButtonComponent } from '../../button/button.component';
 })
 export class AuthFormLoginComponent {
   private readonly fb = inject(FormBuilder);
+  private readonly authService = inject(AuthService);
 
   form!: FormGroup;
 
@@ -31,11 +36,14 @@ export class AuthFormLoginComponent {
     });
   }
 
-  onSubmit() {
+  onSubmit(): void {
     this.submitted.set(true);
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
+    this.form.markAllAsTouched();
+
+    if (this.form.invalid) return;
+
+    const request: LoginRequest = this.form.value;
+
+    this.authService.login(request).subscribe();
   }
 }
