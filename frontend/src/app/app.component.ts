@@ -1,5 +1,5 @@
 import { RouterOutlet } from '@angular/router';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 import { PageTitleService } from './shared/services/core/page-title/page-title.service';
 import { ThemeService } from './shared/services/core/theme/theme.service';
