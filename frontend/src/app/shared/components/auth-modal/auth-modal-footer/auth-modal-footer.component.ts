@@ -14,6 +14,8 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthModalFooterComponent {
-  isLogin = input<boolean>();
+  screenState = input.required<
+    'login' | 'forgot-password' | 'reset-password'
+  >();
   switchState = output<void>();
 }

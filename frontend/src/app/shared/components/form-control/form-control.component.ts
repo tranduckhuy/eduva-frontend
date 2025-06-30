@@ -26,6 +26,7 @@ import {
   strongPasswordValidator,
   matchPasswordValidator,
   minWordCountValidator,
+  customEmailValidator,
 } from '../../utils/form-validators';
 
 @Component({
@@ -165,7 +166,7 @@ export class FormControlComponent
     if (this.phone()) validators.push(Validators.pattern(/^0\d{9,10}$/));
     else if (this.pattern())
       validators.push(Validators.pattern(this.pattern()!));
-    if (this.email()) validators.push(Validators.email);
+    if (this.email()) validators.push(customEmailValidator);
     if (this.minWords() > 0)
       validators.push((c: AbstractControl) =>
         minWordCountValidator(c, this.minWords())

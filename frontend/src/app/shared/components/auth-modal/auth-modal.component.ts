@@ -12,7 +12,7 @@ import { AuthModalHeaderComponent } from './auth-modal-header/auth-modal-header.
 import { AuthModalFooterComponent } from './auth-modal-footer/auth-modal-footer.component';
 import { AuthFormLoginComponent } from './auth-form-login/auth-form-login.component';
 import { AuthFormForgotPasswordComponent } from './auth-form-forgot-password/auth-form-forgot-password.component';
-import { AuthFormResetPasswordComponent } from './auth-form-reset-password/auth-form-reset-password.component';
+import { nAuthFormResetPasswordComponent } from './auth-form-reset-password/auth-form-reset-password.component';
 
 type ScreenState = 'login' | 'forgot-password' | 'reset-password';
 
@@ -25,7 +25,7 @@ type ScreenState = 'login' | 'forgot-password' | 'reset-password';
     AuthModalFooterComponent,
     AuthFormLoginComponent,
     AuthFormForgotPasswordComponent,
-    AuthFormResetPasswordComponent,
+    nAuthFormResetPasswordComponent,
   ],
   templateUrl: './auth-modal.component.html',
   styleUrl: './auth-modal.component.css',
@@ -35,7 +35,6 @@ export class AuthModalComponent {
   private readonly globalModalService = inject(GlobalModalService);
   isModalOpen = true;
 
-  isLogin = signal<boolean>(true);
   screenState = signal<ScreenState>('login');
 
   closeModal() {
@@ -43,13 +42,15 @@ export class AuthModalComponent {
   }
 
   showLogin() {
-    this.isLogin.set(true);
     this.screenState.set('login');
   }
 
   showForgotPasswordForm() {
-    this.isLogin.set(false);
     this.screenState.set('forgot-password');
+  }
+
+  showResetPasswordForm() {
+    this.screenState.set('reset-password');
   }
 
   isFormScreen() {

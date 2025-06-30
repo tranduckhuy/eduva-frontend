@@ -29,7 +29,7 @@
     <div class="flex flex-col items-center text-center">
       <!-- ? Header -->
 
-      <auth-modal-header [isLogin]="isLogin()" />
+      <auth-modal-header [screenState]="screenState()" />
 
       <!-- ? Main -->
       <div class="mt-6">
@@ -39,7 +39,8 @@
           }
           <!-- ? Forms -->
           @if (screenState() === 'forgot-password') {
-            <auth-form-forgot-password />
+            <auth-form-forgot-password
+              (openResetPassword)="showResetPasswordForm()" />
           }
           @if (screenState() === 'reset-password') {
             <auth-form-reset-password />
@@ -49,7 +50,7 @@
         <!-- ? Footer -->
         <auth-modal-footer
           (switchState)="showForgotPasswordForm()"
-          [isLogin]="isLogin()" />
+          [screenState]="screenState()" />
       </div>
     </div>
   </div>
