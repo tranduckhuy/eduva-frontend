@@ -14,6 +14,7 @@ type ButtonType = 'primary' | 'rounded' | 'text' | 'outline';
 export class ButtonComponent {
   text = input.required<string>();
   type = input.required<ButtonType | ButtonType[]>();
+  disabled = input<boolean>(false);
 
   get typeList(): ButtonType[] {
     const value = this.type();
