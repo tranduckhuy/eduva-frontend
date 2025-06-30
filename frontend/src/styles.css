@@ -9,6 +9,104 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --font-family:
+      system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+      'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+
+    --font-family:
+      system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+      'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+
+    /* === White Scale === */
+    --color-white-0: #ffffff00;
+    --color-white-50: #ffffff0a;
+    --color-white-100: #ffffff1a;
+    --color-white-200: #ffffff29;
+    --color-white-300: #ffffff3d;
+    --color-white-400: #ffffff5a;
+    --color-white-500: #ffffff70;
+    --color-white-600: #ffffff8a;
+    --color-white-700: #f5f5f5;
+    --color-white-800: #e5e5e5;
+    --color-white-900: #ffffff;
+    --color-white: var(--color-white-900);
+
+    /* === Black Scale === */
+    --color-black-0: #00000000;
+    --color-black-50: #0000000a;
+    --color-black-100: #0000001a;
+    --color-black-200: #00000029;
+    --color-black-300: #0000003d;
+    --color-black-400: #0000005a;
+    --color-black-500: #00000070;
+    --color-black-600: #0000008a;
+    --color-black-700: #3a3a3a;
+    --color-black-800: #242424;
+    --color-black-900: #000000;
+    --color-black: var(--color-black-900);
+
+    /* === Grey Scale === */
+    --color-grey-100: #d6d6d6;
+    --color-grey-200: #bfbfbf;
+    --color-grey-300: #a9a9a9;
+    --color-grey-400: #909090;
+    --color-grey-500: #707070;
+    --color-grey-600: #505050;
+    --color-grey-700: #3a3a3a;
+    --color-grey-800: #2a2a2a;
+    --color-grey-900: #1a1a1a;
+    --color-grey: var(--color-grey-500);
+
+    /* === Primary (Blue) === */
+    --color-primary-50: #f0f9ff;
+    --color-primary-100: #d5edfc;
+    --color-primary-200: #aad7f8;
+    --color-primary-300: #7fc0f3;
+    --color-primary-400: #55aaef;
+    --color-primary-500: #2093e7;
+    --color-primary-600: #1976c2;
+    --color-primary-700: #155e9d;
+    --color-primary-800: #104878;
+    --color-primary-900: #0b355a;
+    --color-primary-950: #062538;
+    --color-primary: var(var(--color-primary-500));
+
+    /* === Light mode === */
+    --color-bg: var(--color-white);
+    --color-bg2: #e8ebed;
+    --color-bg3: var(--color-white-700);
+    --color-bg4: var(--color-black-600);
+    --color-bg5: #f6f7f9;
+    --color-bg5-blur: #f6f7f999;
+
+    --color-text: var(--color-black-800);
+
+    --color-heading: var(--color-black-900);
+    --color-heading-2: var(--color-black-800);
+    --color-heading-3: var(--color-black-700);
+    --color-heading-4: #2e3441;
+    --color-heading-5: #1d2129;
+    --color-heading-6: var(--color-black-800);
+
+    --color-navbar-text: var(--color-grey-900);
+    --color-navbar-text2: #404040;
+
+    --color-user-info-text: #666;
+    --color-user-info-text-hover: var(--color-black-700);
+
+    --color-text-btn-gradient: var(--color-primary);
+    --color-bg-btn-gradient-icon:
+      linear-gradient(#fbfdff, #fbfdff) padding-box,
+      linear-gradient(#5ebbff 0%, #a174ff 40%) border-box;
+    --color-bg-icon-btn-gradient-icon: #fbfdff;
+    --color-bg-hover-btn-gradient-icon: #e1effe;
+
+    --color-text-lesson-active: var(--color-white);
+
+    --scroll-bar-thumb: rgba(255, 255, 255, 0.15);
+  }
+
   *,
   *::before,
   *::after {
@@ -16,30 +114,65 @@
   }
 
   html {
-    font-family:
-      system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
-      'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    font-family: var(--font-family);
+  }
+
+  /* ? Dark Theme */
+  html.dark {
+    --color-dark: #191d1e;
+    --color-dark2: #272a31;
+    --color-dark3: #323c4a;
+
+    --color-bg: var(--color-dark);
+    --color-bg2: var(--color-dark2);
+    --color-bg3: #1f2324;
+    --color-bg4: #181821;
+    --color-bg5: var(--color-dark);
+    --color-bg5-blur: #191d1e99;
+
+    --color-text: #fffc;
+    --color-text2: #ffffff99;
+
+    --color-heading: var(--color-text);
+    --color-heading-2: var(--color-text);
+    --color-heading-3: var(--color-text);
+    --color-heading-4: #ffffffe6;
+    --color-heading-5: var(--color-text);
+    --color-heading-6: var(--color-text);
+
+    --color-navbar-text: var(--color-text);
+    --color-navbar-text2: var(--color-text2);
+
+    --color-user-info-text: var(--color-text);
+    --color-user-info-text-hover: var(--color-white);
+
+    --color-text-btn-gradient: var(--color-white);
+    --color-bg-btn-gradient-icon: #292d35;
+    --color-bg-icon-btn-gradient-icon: var(--color-bg-btn-gradient-icon);
+    --color-bg-hover-btn-gradient-icon: #2e4a8d;
+
+    --color-text-lesson-active: #808b9a;
+
+    --scroll-bar-thumb: rgba(0, 0, 0, 0.05);
   }
 
   html *::-webkit-scrollbar {
-    border-radius: 0;
-    width: 8px;
-    height: 8px;
+    width: 0;
   }
 
   html *::-webkit-scrollbar-thumb {
-    border-radius: 4px;
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: var(--scroll-bar-thumb);
   }
 
   html *::-webkit-scrollbar-track {
-    border-radius: 0;
-    background-color: rgba(0, 0, 0, 0);
+    background-color: var(--color-black-0);
   }
 
   body {
     font-size: 14px;
-    color: #333;
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    transition: background-color 0.25s ease;
     text-rendering: optimizeSpeed;
     overscroll-behavior: none;
     direction: ltr;
@@ -56,14 +189,26 @@
   }
 
   h1 {
-    color: #000;
+    color: var(--color-heading);
   }
 
   h2 {
-    color: #242424;
+    color: var(--color-heading-2);
   }
 
   h3 {
-    color: #292929;
+    color: var(--color-heading-3);
+  }
+
+  h4 {
+    color: var(--color-heading-4);
+  }
+
+  h5 {
+    color: var(--color-heading-5);
+  }
+
+  h6 {
+    color: var(--color-heading-6);
   }
 }

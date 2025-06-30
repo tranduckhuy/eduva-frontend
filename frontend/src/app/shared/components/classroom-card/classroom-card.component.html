@@ -1,5 +1,5 @@
 <div
-  class="relative flex h-full flex-col rounded-2xl bg-[#00000008] transition-[transform,box-shadow] duration-200 ease-linear hover:-translate-y-1 hover:shadow-subjectCard">
+  class="dark:bg-[#272a31] hover:shadow-classroomCard dark:hover:shadow-classroomCardDark relative flex h-full flex-col rounded-2xl bg-[#00000008] transition-[transform,box-shadow] duration-200 ease-linear hover:-translate-y-1">
   @if (classroom().isRecommend) {
     <div
       class="pointer-events-none absolute left-3 top-3 z-[1] w-[26px] rounded-lg bg-[#0000004d] p-[5px]">
@@ -18,7 +18,8 @@
       class="absolute left-0 top-0 h-full w-full object-right" />
   </a>
   <div class="flex grow flex-col gap-3 px-5 py-4 sm:gap-2 sm:p-[10px]">
-    <h3 class="line-clamp-2 break-words text-base font-semibold text-[#292929]">
+    <h3
+      class="dark:text-[#fffc] line-clamp-2 break-words text-base font-semibold text-[#292929]">
       <a routerLink="/watch-lessons">{{ classroom().title }}</a>
     </h3>
     <p class="text-sm font-semibold text-primary">
@@ -42,13 +43,15 @@
             [alt]="classroom().createdBy"
             class="h-full w-full rounded-[50%] object-cover" />
         </figure>
-        <p class="text-[#666]">{{ classroom().createdBy }}</p>
+        <p class="dark:text-[#fffc] text-[#666]">{{ classroom().createdBy }}</p>
       </div>
-      <div class="flex items-center gap-[6px] text-[#666] lg:gap-1">
+      <div
+        class="dark:text-[#fffc] flex items-center gap-[6px] text-[#666] lg:gap-1">
         <fa-icon [icon]="'circle-play'"></fa-icon>
         <p>{{ classroom().mediaNumbers }}</p>
       </div>
-      <div class="flex items-center gap-[6px] text-[#666] lg:gap-1">
+      <div
+        class="dark:text-[#fffc] flex items-center gap-[6px] text-[#666] lg:gap-1">
         <fa-icon [icon]="'clock'"></fa-icon>
         <p>{{ classroom().duration }}</p>
       </div>

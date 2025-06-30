@@ -1,6 +1,8 @@
+import PrimeUI from 'tailwindcss-primeui';
+
 module.exports = {
   content: ['./src/**/*.{html,ts}'],
-  darkMode: 'dark',
+  darkMode: ['selector', '[class~="dark"]'],
   theme: {
     screens: {
       xxxxxl: { max: '1999.98px' },
@@ -58,7 +60,9 @@ module.exports = {
       },
       boxShadow: {
         filterBox: '0 -4px 32px #0003',
-        subjectCard: '0 4px 8px #0000001a',
+        filterBoxDark: '0 -4px 32px #000',
+        classroomCard: '0 4px 8px #0000001a',
+        classroomCardDark: '0 4px 8px #00000060',
       },
       colors: {
         primary: {
@@ -75,10 +79,15 @@ module.exports = {
           900: '#0b355a',
           950: '#062538',
         },
-        greyText: '#0000008a',
+        dark: {
+          DEFAULT: '#191d1e',
+          300: '#323c4a',
+          400: '#272a31',
+          500: '#191d1e',
+        },
         warningText: '#f33a58',
       },
     },
   },
-  plugins: [{ autoprefixer: {} }],
+  plugins: [{ PrimeUI, autoprefixer: {} }],
 };

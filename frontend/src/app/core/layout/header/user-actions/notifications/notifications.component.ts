@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -13,7 +14,7 @@ import { SubmenuDirective } from '../../../../../shared/directives/submenu/subme
 @Component({
   selector: 'header-notifications',
   standalone: true,
-  imports: [SubmenuDirective, ButtonModule, TooltipModule],
+  imports: [CommonModule, SubmenuDirective, ButtonModule, TooltipModule],
   templateUrl: './notifications.component.html',
   styleUrl: './notifications.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
