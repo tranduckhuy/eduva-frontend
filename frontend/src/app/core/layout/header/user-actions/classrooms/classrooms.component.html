@@ -3,17 +3,17 @@
   (clickOutside)="clickOutside.emit()"
   class="absolute right-0 top-12 z-[10]">
   <div
-    class="animate-fadeInForward rounded-[10px] bg-white shadow-filterBox transition-all duration-300 ease-in-out will-change-[opacity,transform]">
+    class="dark:bg-dark-500 dark:shadow-filterBoxDark animate-fadeInForward rounded-[10px] bg-white shadow-filterBox transition-all duration-300 ease-in-out will-change-[opacity,transform]">
     <!-- ? Subjects -->
     <div class="w-[380px] pb-2">
       <div
-        class="sticky top-0 flex items-center justify-between rounded-tl-[10px] rounded-tr-[10px] bg-white px-5 py-4">
-        <h5 class="text-lg font-semibold text-[#1d2129]">Danh sách lớp học</h5>
+        class="dark:bg-dark-500 sticky top-0 flex items-center justify-between rounded-tl-[10px] rounded-tr-[10px] bg-white px-5 py-4">
+        <h5 class="text-lg font-semibold">Danh sách lớp học</h5>
         <p-button
           label="Xem tất cả"
           variant="text"
           size="small"
-          class="header-btn hover:text-primary-600" />
+          styleClass="!text-primary hover:!text-primary-600 dark:hover:!text-primary hover:!bg-primary-50 dark:hover:!bg-[color-mix(in_srgb,#55aaef,transparent_96%)]" />
       </div>
       <ul class="max-h-[70vh] overflow-y-auto overscroll-contain">
         <li>
@@ -33,7 +33,7 @@
                 [autoHide]="false">
                 JavaScript Pro
               </div>
-              <time class="inline-block text-[12px] text-greyText">
+              <time class="inline-block text-[12px]">
                 Học cách đây 24 ngày trước
               </time>
               <p-progressbar
@@ -62,7 +62,7 @@
                 [autoHide]="false">
                 HTML CSS Pro
               </div>
-              <time class="inline-block text-[12px] text-greyText">
+              <time class="inline-block text-[12px]">
                 Học cách đây 24 ngày trước
               </time>
               <p-progressbar
@@ -91,7 +91,7 @@
                 [autoHide]="false">
                 Làm việc với Terminal & Ubuntu
               </div>
-              <time class="inline-block text-[12px] text-greyText">
+              <time class="inline-block text-[12px]">
                 Học cách đây 24 ngày trước
               </time>
               <p-progressbar
@@ -120,7 +120,7 @@
                 [autoHide]="false">
                 Lập trình JavaScript Nâng Cao
               </div>
-              <time class="inline-block text-[12px] text-greyText">
+              <time class="inline-block text-[12px]">
                 Học cách đây 24 ngày trước
               </time>
               <p-progressbar
@@ -149,7 +149,7 @@
                 [autoHide]="false">
                 Lập Trình JavaScript Cơ Bản
               </div>
-              <time class="inline-block text-[12px] text-greyText">
+              <time class="inline-block text-[12px]">
                 Học cách đây 24 ngày trước
               </time>
               <p-progressbar
@@ -178,7 +178,7 @@
                 [autoHide]="false">
                 Responsive Với Grid System
               </div>
-              <time class="inline-block text-[12px] text-greyText">
+              <time class="inline-block text-[12px]">
                 Học cách đây 24 ngày trước
               </time>
               <p-progressbar
@@ -207,7 +207,7 @@
                 [autoHide]="false">
                 HTML CSS từ Zero đến Hero
               </div>
-              <time class="inline-block text-[12px] text-greyText">
+              <time class="inline-block text-[12px]">
                 Học cách đây 24 ngày trước
               </time>
               <p-progressbar
@@ -236,7 +236,7 @@
                 [autoHide]="false">
                 Kiến Thức Nhập Môn IT
               </div>
-              <time class="inline-block text-[12px] text-greyText">
+              <time class="inline-block text-[12px]">
                 Học cách đây 24 ngày trước
               </time>
               <p-progressbar
@@ -265,7 +265,7 @@
                 [autoHide]="false">
                 Node & ExpressJS
               </div>
-              <time class="inline-block text-[12px] text-greyText">
+              <time class="inline-block text-[12px]">
                 Học cách đây 24 ngày trước
               </time>
               <p-progressbar
@@ -294,7 +294,7 @@
                 [autoHide]="false">
                 Xây Dựng Website với ReactJS
               </div>
-              <time class="inline-block text-[12px] text-greyText">
+              <time class="inline-block text-[12px]">
                 Học cách đây 24 ngày trước
               </time>
               <p-progressbar
