@@ -55,27 +55,24 @@ export class AuthFormResetPasswordComponent {
 
   constructor() {
     this.form = this.fb.group({
-      newPassword: ['', [Validators.required, strongPasswordValidator]],
+      password: ['', [Validators.required, strongPasswordValidator]],
       confirmPassword: [
         '',
         [
           Validators.required,
           (control: any) =>
-            matchPasswordValidator(
-              control,
-              this.form?.get('newPassword')?.value
-            ),
+            matchPasswordValidator(control, this.form?.get('password')?.value),
         ],
       ],
     });
 
-    this.form.get('newPassword')!.valueChanges.subscribe((password: string) => {
+    this.form.get('password')!.valueChanges.subscribe((password: string) => {
       this.passwordLevel.set(this.calcPasswordLevel(password));
     });
   }
 
   get newPassword(): string {
-    return this.form.get('newPassword')?.value ?? '';
+    return this.form.get('password')?.value ?? '';
   }
 
   private calcPasswordLevel(password: string): number | undefined {
