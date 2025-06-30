@@ -1,17 +1,19 @@
-<form action="" autocomplete="off">
+<form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
   <app-form-control
-    label="Tên đăng nhập"
-    type="text"
-    placeholder="Email hoặc Username"
-    [name]="'username'"
+    label="Email"
+    type="email"
+    placeholder="Nhập email của bạn"
+    [submitted]="submitted()"
+    [name]="'email'"
     [required]="true"
-    [(ngModel)]="username" />
+    formControlName="email" />
 
   <app-form-control
     type="password"
     placeholder="Mật khẩu"
     [name]="'password'"
-    [(ngModel)]="password"
+    [submitted]="submitted()"
+    formControlName="password"
     [required]="true" />
 
   <!-- ? Checkbox Remember -->

@@ -1,0 +1,3 @@
+.modal-width {
+  width: min(576px, 100% - 32px);
+}

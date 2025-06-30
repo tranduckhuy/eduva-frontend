@@ -6,15 +6,15 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { AuthModalService } from '../../services/modal/auth-modal/auth-modal.service';
+import { GlobalModalService } from '../../services/global-modal/global-modal.service';
 
 import { AuthModalHeaderComponent } from './auth-modal-header/auth-modal-header.component';
 import { AuthModalFooterComponent } from './auth-modal-footer/auth-modal-footer.component';
 import { AuthFormLoginComponent } from './auth-form-login/auth-form-login.component';
-// import { AuthMethodsComponent } from './auth-methods/auth-methods.component';
-// import { AuthFormRegisterComponent } from './auth-form-register/auth-form-register.component';
+import { AuthFormForgotPasswordComponent } from './auth-form-forgot-password/auth-form-forgot-password.component';
+import { AuthFormResetPasswordComponent } from './auth-form-reset-password/auth-form-reset-password.component';
 
-type ScreenState = 'methods' | 'login' | 'register';
+type ScreenState = 'login' | 'forgot-password' | 'reset-password';
 
 @Component({
   selector: 'app-auth-modal',
@@ -24,37 +24,35 @@ type ScreenState = 'methods' | 'login' | 'register';
     AuthModalHeaderComponent,
     AuthModalFooterComponent,
     AuthFormLoginComponent,
+    AuthFormForgotPasswordComponent,
+    AuthFormResetPasswordComponent,
   ],
-  // AuthMethodsComponent, AuthFormRegisterComponent
   templateUrl: './auth-modal.component.html',
   styleUrl: './auth-modal.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthModalComponent {
-  private readonly authModalService = inject(AuthModalService);
-  isModalOpen = this.authModalService.isOpen;
+  private readonly globalModalService = inject(GlobalModalService);
+  isModalOpen = true;
 
   isLogin = signal<boolean>(true);
-  screenState = signal<ScreenState>('methods');
+  screenState = signal<ScreenState>('login');
 
   closeModal() {
-    this.authModalService.close();
+    this.globalModalService.close();
   }
 
-  // showMethods() {
-  //   this.screenState.set('methods');
-  // }
+  showLogin() {
+    this.isLogin.set(true);
+    this.screenState.set('login');
+  }
 
-  // selectSystemLogin() {
-  //   this.screenState.set(this.isLogin() ? 'login' : 'register');
-  // }
+  showForgotPasswordForm() {
+    this.isLogin.set(false);
+    this.screenState.set('forgot-password');
+  }
 
-  // toggleLoginRegister() {
-  //   this.isLogin.update(v => !v);
-  //   this.showMethods();
-  // }
-
-  // isFormScreen() {
-  //   return this.screenState() === 'login' || this.screenState() === 'register';
-  // }
+  isFormScreen() {
+    return this.screenState() === 'forgot-password';
+  }
 }

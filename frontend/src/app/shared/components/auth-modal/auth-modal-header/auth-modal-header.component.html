@@ -1,17 +1,26 @@
 <div>
   <a href="/" class="flex items-center justify-center">
-    <!-- [alt]="isLogin() ? 'Đăng nhập vào EDUVA' : 'Đăng ký vào EDUVA'" -->
     <img
       src="./images/logo.png"
       alt="Đăng nhập vào EDUVA"
+      [alt]="isLogin() ? 'Đăng nhập vào EDUVA' : 'Quên mật khẩu'"
       class="h-12 w-12 rounded-lg object-contain" />
   </a>
   <h2 class="my-3 text-[28px] font-bold leading-[1.4]">
-    <!-- {{ isLogin() ? 'Đăng nhập vào' : 'Đăng ký tài khoản' }} -->
-    Đăng nhập vào <strong class="system-name">EDUVA</strong>
+    <ng-container *ngIf="isLogin(); else forgotPassword">
+      Đăng nhập vào <strong class="system-name">EDUVA</strong>
+    </ng-container>
+    <ng-template #forgotPassword> Quên mật khẩu? </ng-template>
   </h2>
-  <p class="mx-auto w-[min(400px,90%)] text-warningText">
-    Mỗi người nên sử dụng riêng một tài khoản, tài khoản nhiều người sử dụng
-    chung sẽ bị khóa.
+  <p
+    class="mx-auto w-[min(400px,90%)]"
+    [ngClass]="{
+      'text-warningText': isLogin(),
+    }">
+    {{
+      isLogin()
+        ? 'Mỗi người nên sử dụng riêng một tài khoản, tài khoản nhiều người sử dụng chung sẽ bị khóa.'
+        : 'Nhập email  của bạn và chúng tôi sẽ gửi cho bạn mã khôi phục mật khẩu.'
+    }}
   </p>
 </div>
