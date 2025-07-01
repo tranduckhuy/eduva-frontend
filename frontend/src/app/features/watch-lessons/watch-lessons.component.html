@@ -5,12 +5,15 @@
   [ngClass]="isSidebarOpen() ? 'open' : ''">
   <!-- ? Video Wrapper -->
   <div
-    class="lesson-content dark:bg-[#191d1e] bg-[#f6f7f999] transition-colors duration-[0.25s] ease-in">
+    class="lesson-content bg-[#f6f7f999] transition-colors duration-[0.25s] ease-in dark:bg-[#191d1e]">
     <div class="video-wrapper">
       <!-- ? Video Player -->
       <div class="bg-black">
         <div class="wrap relative">
           <video-player />
+          <!-- <app-pdf-viewer /> -->
+          <!-- <app-doc-viewer /> -->
+          <!-- <app-audio-listener /> -->
         </div>
       </div>
 
@@ -19,10 +22,10 @@
         <!-- ? Video Title & Updated Date -->
         <div class="video-info mt-5">
           <h2
-            class="dark:text-[#fff] text-2xl font-semibold leading-[1.5] tracking-[-0.3px] text-[#45494f]">
+            class="text-2xl font-semibold leading-[1.5] tracking-[-0.3px] text-[#45494f] dark:text-[#fff]">
             Tìm hiểu flex-wrap và align-content
           </h2>
-          <p class="dark:text-[#fffc] mt-1 text-xs font-normal text-[#808b9a]">
+          <p class="mt-1 text-xs font-normal text-[#808b9a] dark:text-[#fffc]">
             Cập nhật tháng 4 năm 2025
           </p>
         </div>
@@ -42,7 +45,7 @@
 
   <!-- ? Sidebar -->
   <div
-    class="lesson-sidebar dark:bg-dark-400 bg-white transition-colors duration-[0.25s] ease-in">
+    class="lesson-sidebar bg-white transition-colors duration-[0.25s] ease-in dark:bg-dark-400">
     <lesson-sidebar
       (openChapterModal)="openChapterModal()"
       [isOpen]="isSidebarOpen()" />
