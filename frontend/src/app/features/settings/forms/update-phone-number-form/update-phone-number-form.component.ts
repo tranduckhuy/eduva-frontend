@@ -1,5 +1,12 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  effect,
+  inject,
+  input,
+} from '@angular/core';
+import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 
 import { FormControlComponent } from '../../../../shared/components/form-control/form-control.component';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
@@ -7,13 +14,22 @@ import { ButtonComponent } from '../../../../shared/components/button/button.com
 @Component({
   selector: 'app-update-phone-number-form',
   standalone: true,
-  imports: [FormsModule, FormControlComponent, ButtonComponent],
+  imports: [ReactiveFormsModule, FormControlComponent, ButtonComponent],
   templateUrl: './update-phone-number-form.component.html',
   styleUrl: './update-phone-number-form.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UpdatePhoneNumberFormComponent {
-  phone = signal<string>('');
+  private readonly fb = inject(FormBuilder);
+
+  phoneNumber = input.required<string>();
+  form = this.fb.group({ phoneNumber: [''] });
+
+  constructor() {
+    effect(() => {
+      this.form.patchValue({ phoneNumber: this.phoneNumber() });
+    });
+  }
 
   onSubmit() {}
 }

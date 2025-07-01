@@ -28,20 +28,21 @@
 
       <div class="gap-1 overflow-hidden rounded-[10px] bg-white">
         <app-profile-card
-          [readonly]="true"
           title="Họ và tên"
-          subtitle="Trọng Huy" />
-        <app-profile-card
+          [readonly]="true"
+          [subtitle]="user()?.fullName" />
+        <!-- <app-profile-card
           [readonly]="true"
           title="Tên người dùng"
-          subtitle="huytrong" />
-        <app-profile-card
+          subtitle="huytrong" /> -->
+        <!-- <app-profile-card
           title="Giới thiệu"
           subtitle=""
-          (click)="openDialog('bio')" />
+          (click)="openDialog('bio')" /> -->
         <app-profile-card
           title="Ảnh đại diện"
-          avatarUrl="https://accounts.fullstack.edu.vn/assets/logo-lV2rGpF0.png"
+          [avatarUrl]="user()?.avatarUrl"
+          [subtitle]="user()?.fullName"
           (click)="openDialog('avatar')" />
       </div>
 
@@ -66,7 +67,9 @@
         </app-dialog>
       } @else if (openedDialog() === 'avatar') {
         <app-dialog (close)="closeDialog()" [width]="450">
-          <app-update-avatar-form />
+          <app-update-avatar-form
+            [avatarUrl]="user()!.avatarUrl"
+            [fullName]="user()!.fullName" />
         </app-dialog>
       }
     </section>
@@ -84,31 +87,29 @@
       <div class="gap-1 overflow-hidden rounded-[10px] bg-white">
         <app-profile-card
           title="Email"
-          subtitle="Chưa cập nhật"
-          (click)="openDialog('email')"
-          close>
+          [subtitle]="user()?.email"
+          (click)="openDialog('email')">
         </app-profile-card>
         <app-profile-card
           title="Số điện thoại"
-          subtitle="0123456789"
-          (click)="openDialog('phone')"
-          close>
+          [subtitle]="user()?.phoneNumber ?? 'Chưa cập nhật'"
+          (click)="openDialog('phone')">
         </app-profile-card>
       </div>
 
       @if (openedDialog() === 'email') {
         <app-dialog
-          (close)="closeDialog()"
           title="Địa chỉ email"
-          desc="Địa chỉ email của bạn. Ví dụ: username@gmail.com.">
-          <app-update-email-form />
+          desc="Địa chỉ email của bạn. Ví dụ: username@gmail.com."
+          (close)="closeDialog()">
+          <app-update-email-form [email]="user()!.email" />
         </app-dialog>
       } @else if (openedDialog() === 'phone') {
         <app-dialog
           (close)="closeDialog()"
           title="Số điện thoại"
           desc="Số điện thoại của bạn sẽ được sử dụng để liên hệ.">
-          <app-update-phone-number-form />
+          <app-update-phone-number-form [phoneNumber]="user()!.phoneNumber" />
         </app-dialog>
       }
     </section>
