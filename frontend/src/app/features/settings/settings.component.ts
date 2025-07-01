@@ -14,6 +14,7 @@ export class SettingsComponent {
   private readonly router = inject(Router);
 
   goBack(): void {
+    window.dispatchEvent(new Event('close-all-submenus'));
     this.router.navigate(['/']);
   }
 }

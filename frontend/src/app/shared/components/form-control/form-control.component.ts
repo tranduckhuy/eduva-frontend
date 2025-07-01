@@ -88,6 +88,42 @@ export class FormControlComponent
     return this.options().filter(opt => opt.label.toLowerCase().includes(term));
   });
 
+  readonly shouldShowError = computed(() => {
+    return (
+      this.control.invalid &&
+      !this.disabled() &&
+      (this.control.touched || this.submitted())
+    );
+  });
+
+  readonly isErrorState = computed(() => {
+    return (
+      this.control.invalid &&
+      !this.disabled() &&
+      (this.control.touched || this.submitted())
+    );
+  });
+
+  readonly isPasswordType = computed(() => this.type() === 'password');
+
+  readonly showWarningIcon = computed(() => {
+    return (
+      this.isErrorState() &&
+      !this.isPasswordType() &&
+      (!this.options() || this.options().length === 0)
+    );
+  });
+
+  readonly showTogglePasswordIcon = computed(() => {
+    return (
+      this.isPasswordType() && (!this.options() || this.options().length === 0)
+    );
+  });
+
+  readonly useRedText = computed(() => {
+    return this.control.invalid && this.control.touched && this.control.dirty;
+  });
+
   get showSearchBox() {
     return this.options().length > 7;
   }

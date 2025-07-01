@@ -1,16 +1,13 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="max-h-[60vh] min-h-[122px] overflow-y-auto pb-[30px]">
     <app-form-control
-      formControlName="phoneNumber"
-      name="phoneNumber"
-      type="tel"
-      label="Số điện thoại"
-      placeholder="Nhập số điện thoại của bạn"
+      formControlName="fullName"
+      name="fullName"
+      type="text"
+      label="Họ và tên"
+      placeholder="Nhập họ và tên của bạn"
       [submitted]="submitted()"
-      [phone]="true"
-      [errorMessages]="{
-        pattern: 'Số điện thoại không đúng định dạng',
-      }">
+      [required]="true">
     </app-form-control>
   </div>
   <footer>

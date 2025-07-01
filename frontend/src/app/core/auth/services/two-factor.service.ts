@@ -12,10 +12,10 @@ import { ToastHandlingService } from '../../../shared/services/core/toast/toast-
 
 import { StatusCode } from '../../../shared/constants/status-code.constant';
 
-// import {
-//   type RequestEnableDisable2FA,
-//   type ConfirmEnableDisable2FA,
-// } from '../../../shared/pages/settings-page/account-settings/models/toggle-2fa-request.model';
+import {
+  type ConfirmEnableDisable2FA,
+  type RequestEnableDisable2FA,
+} from '../../../features/settings/models/toggle-2fa-request.model';
 import { type VerifyOtpRequest } from '../models/request/verify-otp-request.model';
 import { type AuthTokenResponse } from '../models/response/auth-response.model';
 import { type ResendOtpRequest } from '../models/request/resend-otp-request.model';
@@ -37,39 +37,35 @@ export class TwoFactorService {
   private readonly VERIFY_OTP_LOGIN_API_URL = `${this.BASE_API_URL}/auth/verify-otp-login`;
   private readonly RESEND_OTP_LOGIN_API_URL = `${this.BASE_API_URL}/auth/resend-otp`;
 
-  // requestEnableDisable2FA(
-  //   request: RequestEnableDisable2FA,
-  //   isEnable: boolean
-  // ): Observable<void> {
-  //   const url = !isEnable
-  //     ? this.REQUEST_ENABLE_TWO_FACTOR_API_URL
-  //     : this.REQUEST_DISABLE_TWO_FACTOR_API_URL;
+  requestEnableDisable2FA(
+    request: RequestEnableDisable2FA,
+    isEnable: boolean
+  ): Observable<void> {
+    const url = !isEnable
+      ? this.REQUEST_ENABLE_TWO_FACTOR_API_URL
+      : this.REQUEST_DISABLE_TWO_FACTOR_API_URL;
 
-  //   return this.requestService
-  //     .post(url, request, { loadingKey: 'password-modal' })
-  //     .pipe(
-  //       tap(res => this.handleRequest2FAResponse(res, isEnable)),
-  //       map(() => void 0),
-  //       catchError(err => this.handleRequest2FAError(err))
-  //     );
-  // }
+    return this.requestService.post(url, request).pipe(
+      tap(res => this.handleRequest2FAResponse(res, isEnable)),
+      map(() => void 0),
+      catchError(err => this.handleRequest2FAError(err))
+    );
+  }
 
-  // confirmEnableDisable2FA(
-  //   request: ConfirmEnableDisable2FA,
-  //   isEnable: boolean
-  // ): Observable<void> {
-  //   const url = !isEnable
-  //     ? this.CONFIRM_ENABLE_TWO_FACTOR_API_URL
-  //     : this.CONFIRM_DISABLE_TWO_FACTOR_API_URL;
+  confirmEnableDisable2FA(
+    request: ConfirmEnableDisable2FA,
+    isEnable: boolean
+  ): Observable<void> {
+    const url = !isEnable
+      ? this.CONFIRM_ENABLE_TWO_FACTOR_API_URL
+      : this.CONFIRM_DISABLE_TWO_FACTOR_API_URL;
 
-  //   return this.requestService
-  //     .post(url, request, { loadingKey: 'otp-modal' })
-  //     .pipe(
-  //       tap(res => this.handleConfirm2FAResponse(res, isEnable)),
-  //       map(() => void 0),
-  //       catchError(err => this.handleConfirm2FAError(err))
-  //     );
-  // }
+    return this.requestService.post(url, request).pipe(
+      tap(res => this.handleConfirm2FAResponse(res, isEnable)),
+      map(() => void 0),
+      catchError(err => this.handleConfirm2FAError(err))
+    );
+  }
 
   verifyTwoFactor(
     request: VerifyOtpRequest
