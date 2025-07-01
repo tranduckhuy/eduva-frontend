@@ -49,8 +49,14 @@ export class AuthModalComponent implements OnInit {
 
   isModalOpen = true;
 
+  constructor() {}
+
   ngOnInit(): void {
-    if (this.modalData?.isReset) {
+    if (
+      this.modalData?.isReset &&
+      this.modalData?.email &&
+      this.modalData?.token
+    ) {
       this.screenState.set('reset-password');
     }
   }

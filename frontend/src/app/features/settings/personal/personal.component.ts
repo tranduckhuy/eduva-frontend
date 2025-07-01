@@ -1,12 +1,20 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
+import { RouterLink } from '@angular/router';
+
 import { ProfileCardComponent } from '../profile-card/profile-card.component';
 import { DialogComponent } from '../dialog/dialog.component';
 import { UpdateBioFormComponent } from '../forms/update-bio-form/update-bio-form.component';
 import { UpdateAvatarFormComponent } from '../forms/update-avatar-form/update-avatar-form.component';
-import { RouterLink } from '@angular/router';
 import { UpdatePhoneNumberFormComponent } from '../forms/update-phone-number-form/update-phone-number-form.component';
 import { UpdateEmailFormComponent } from '../forms/update-email-form/update-email-form.component';
 import { UpdateSocialFormComponent } from '../forms/update-social-form/update-social-form.component';
+
+import { UserService } from '../../../shared/services/api/user/user.service';
 
 @Component({
   selector: 'app-personal',
@@ -26,6 +34,10 @@ import { UpdateSocialFormComponent } from '../forms/update-social-form/update-so
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PersonalComponent {
+  private readonly userService = inject(UserService);
+
+  user = this.userService.currentUser;
+
   openedDialog = signal<string | null>(null);
 
   openDialog(type: string) {
