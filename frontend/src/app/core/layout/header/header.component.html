@@ -1,16 +1,16 @@
 <header
-  class="dark:bg-dark-500 dark:border-[#323c4a] container sticky left-0 top-0 z-10 border-b-[1px] border-[#e8ebed] bg-white px-7">
+  class="container sticky left-0 top-0 z-10 border-b-[1px] border-[#e8ebed] bg-white px-7 dark:border-[#323c4a] dark:bg-dark-500">
   <div class="flex h-[66px] items-center justify-between sm:gap-3 xs:gap-2">
     <!-- ? Logo -->
     <h1 class="flex items-center gap-4">
-      <a href="/">
+      <a routerLink="/">
         <img
           src="./images/logo.png"
           alt="Học, Học Nữa, Học Mãi"
           class="h-[38px] w-[38px] min-w-[38px] rounded-lg object-contain" />
       </a>
       <a
-        href="/"
+        routerLink="/"
         class="text-[14px] font-bold"
         [class]="!isHidden() ? 'md:hidden' : ''">
         Học, Học Nữa, Học Mãi
@@ -22,7 +22,7 @@
       <div class="flex grow items-center justify-center md:flex-grow-[2]">
         <div class="relative w-[420px] max-w-full sm:w-full">
           <div
-            class="dark:bg-[#272a31] dark:border-[#181d1e] flex h-10 w-full items-center rounded-full border-2 border-[#e8e8e8] bg-white px-4 transition-colors duration-300 ease-in-out focus-within:border-[#444]">
+            class="flex h-10 w-full items-center rounded-full border-2 border-[#e8e8e8] bg-white px-4 transition-colors duration-300 ease-in-out focus-within:border-[#444] dark:border-[#181d1e] dark:bg-[#272a31]">
             <span class="pi pi-search text-md font-semibold"></span>
             <input
               type="text"

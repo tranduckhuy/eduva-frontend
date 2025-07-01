@@ -10,7 +10,7 @@
         <!-- ? User Information -->
         <a routerLink="/profile" class="flex items-center gap-5">
           <div
-            class="avatar-wrapper relative my-[10px] h-[60px] w-[60px] rounded-full p-1">
+            class="avatar-wrapper relative my-[10px] h-[50px] w-[50px] shrink-0 rounded-full p-1">
             <img
               [src]="user()?.avatarUrl"
               [alt]="user()?.fullName"
@@ -22,9 +22,9 @@
           </div>
           <div class="user__info">
             <h5 class="text-base font-semibold">{{ user()?.fullName }}</h5>
-            <span class="mt-2 text-[#757575] dark:text-[#ffffff99]">
+            <!-- <span class="mt-2 text-[#757575] dark:text-[#ffffff99]">
               &#64;15795
-            </span>
+            </span> -->
           </div>
         </a>
         <!-- ? List -->
