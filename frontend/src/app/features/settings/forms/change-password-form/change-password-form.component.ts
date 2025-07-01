@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
   inject,
   output,
   signal,
@@ -66,8 +65,6 @@ export class ChangePasswordFormComponent {
   get passwordLevel(): number | undefined {
     const value = this.form.get('newPassword')?.value ?? '';
     let level = 0;
-
-    if (!value) return;
 
     if (value.length >= 6) level++;
     if (/[a-z]/.test(value)) level++;

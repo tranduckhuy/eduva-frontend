@@ -45,7 +45,7 @@ export class AuthFormOtpVerificationComponent implements OnInit {
   email = input.required<string>();
 
   form = this.fb.group({
-    otpCode: ['', [Validators.required, Validators.pattern(/^[0-9]{6}$/)]],
+    otpCode: ['', [Validators.required, Validators.pattern(/^[\d]{6}$/)]],
   });
 
   isLoadingVerify = this.loadingService.is('otp-verification');
@@ -84,7 +84,7 @@ export class AuthFormOtpVerificationComponent implements OnInit {
 
   onCodeInput(event: Event) {
     const input = event.target as HTMLInputElement;
-    input.value = input.value.replace(/[^0-9]/g, '').slice(0, 6);
+    input.value = input.value.replace(/[\D]/g, '').slice(0, 6);
     this.form.get('otpCode')?.setValue(input.value, { emitEvent: false });
   }
 

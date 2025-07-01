@@ -41,7 +41,7 @@ export class UploadFileService {
         .getPublicUrl(data.path);
 
       return publicData?.publicUrl || null;
-    } catch (err) {
+    } catch {
       this.toastHandlingService.errorGeneral();
       return null;
     }
