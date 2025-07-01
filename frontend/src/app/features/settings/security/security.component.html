@@ -34,7 +34,7 @@
         </app-profile-card>
         <app-profile-card
           title="Xác minh 2 bước"
-          subtitle="Đang tắt"
+          [subtitle]="user()!.is2FAEnabled ? 'Đang bật' : 'Đang tắt'"
           (click)="openDialog('2fa')"
           close>
         </app-profile-card>
@@ -42,14 +42,18 @@
 
       @if (openedDialog() === 'password') {
         <app-dialog
-          (close)="closeDialog()"
           title="Đổi mật khẩu"
-          desc="Mật khẩu của bạn phải có tối thiểu 8 ký tự, bao gồm cả chữ số, chữ cái và ký tự đặc biệt (!$@%...).">
-          <app-change-password-form (close)="closeDialog()" />
+          desc="Mật khẩu của bạn phải có tối thiểu 8 ký tự, bao gồm cả chữ số, chữ cái và ký tự đặc biệt (!$@%...)."
+          (close)="closeDialog()">
+          <app-change-password-form
+            (close)="closeDialog()"
+            (passwordChanged)="closeDialog()" />
         </app-dialog>
       } @else if (openedDialog() === '2fa') {
         <app-dialog (close)="closeDialog()">
-          <app-activate-otp-verify-form />
+          <app-activate-otp-verify-form
+            [enabled]="user()!.is2FAEnabled"
+            (twoFactorChanged)="closeDialog()" />
         </app-dialog>
       }
     </section>

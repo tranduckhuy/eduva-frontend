@@ -15,7 +15,7 @@ import {
 })
 export class AuthModalFooterComponent {
   screenState = input.required<
-    'login' | 'forgot-password' | 'reset-password'
+    'login' | 'forgot-password' | 'reset-password' | 'otp-verification'
   >();
   switchState = output<void>();
 }

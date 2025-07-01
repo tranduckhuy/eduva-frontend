@@ -34,19 +34,29 @@
       <!-- ? Main -->
       <div class="mt-6">
         <div class="mx-auto flex max-w-[360px] flex-col">
-          @if (screenState() === 'login') {
-            <auth-form-login />
-          }
-          <!-- ? Forms -->
-          @if (screenState() === 'forgot-password') {
-            <auth-form-forgot-password
-              (openResetPassword)="showResetPasswordForm()" />
-          }
-          @if (screenState() === 'reset-password' && modalData) {
-            <auth-form-reset-password
-              [email]="modalData.email"
-              [token]="modalData.token"
-              (passwordChanged)="showLogin()" />
+          @switch (screenState()) {
+            @case ('login') {
+              <auth-form-login />
+            }
+
+            @case ('forgot-password') {
+              <auth-form-forgot-password />
+            }
+
+            @case ('reset-password') {
+              @if (modalData) {
+                <auth-form-reset-password
+                  [email]="modalData.email"
+                  [token]="modalData.token"
+                  (passwordChanged)="showLogin()" />
+              }
+            }
+
+            @case ('otp-verification') {
+              @if (modalData) {
+                <auth-form-otp-verification [email]="modalData.email" />
+              }
+            }
           }
         </div>
 
