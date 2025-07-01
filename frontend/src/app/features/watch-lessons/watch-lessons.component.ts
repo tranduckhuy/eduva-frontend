@@ -14,6 +14,9 @@ import { LessonSidebarComponent } from './lesson-sidebar/lesson-sidebar.componen
 import { LessonFooterComponent } from './lesson-footer/lesson-footer.component';
 import { ChapterModalComponent } from './chapter-modal/chapter-modal.component';
 import { CommentModalComponent } from './comment-modal/comment-modal.component';
+// import { PdfViewerComponent } from './pdf-viewer/pdf-viewer.component';
+// import { DocViewerComponent } from './doc-viewer/doc-viewer.component';
+// import { AudioListenerComponent } from './audio-listener/audio-listener.component';
 
 @Component({
   selector: 'app-watch-lessons',
@@ -28,6 +31,9 @@ import { CommentModalComponent } from './comment-modal/comment-modal.component';
     LessonFooterComponent,
     ChapterModalComponent,
     CommentModalComponent,
+    // PdfViewerComponent,
+    // DocViewerComponent,
+    // AudioListenerComponent,
   ],
   templateUrl: './watch-lessons.component.html',
   styleUrl: './watch-lessons.component.css',

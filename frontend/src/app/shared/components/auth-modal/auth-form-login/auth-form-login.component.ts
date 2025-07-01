@@ -12,6 +12,7 @@ import { FormControlComponent } from '../../form-control/form-control.component'
 import { ButtonComponent } from '../../button/button.component';
 
 import { type LoginRequest } from '../../../../core/auth/models/request/login-request.model';
+import { LoadingService } from '../../../services/core/loading/loading.service';
 
 @Component({
   selector: 'auth-form-login',
@@ -24,10 +25,13 @@ import { type LoginRequest } from '../../../../core/auth/models/request/login-re
 export class AuthFormLoginComponent {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
+  private readonly loadingService = inject(LoadingService);
 
   form!: FormGroup;
 
   submitted = signal<boolean>(false);
+
+  loading = this.loadingService.isLoading;
 
   constructor() {
     this.form = this.fb.group({
