@@ -5,7 +5,7 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 
 import { FormControlComponent } from '../../../../shared/components/form-control/form-control.component';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
