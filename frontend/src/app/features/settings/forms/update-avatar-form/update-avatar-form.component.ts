@@ -1,12 +1,21 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  input,
+  signal,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+
 import {
   ImageCropperComponent,
   ImageCroppedEvent,
   ImageTransform,
 } from 'ngx-image-cropper';
+
 import { Slider } from 'primeng/slider';
+
 @Component({
   selector: 'app-update-avatar-form',
   standalone: true,
@@ -16,8 +25,12 @@ import { Slider } from 'primeng/slider';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UpdateAvatarFormComponent {
-  previewAvatar = signal<string | ArrayBuffer | null>(null);
+  private readonly sanitizer = inject(DomSanitizer);
 
+  avatarUrl = input.required<string>();
+  fullName = input.required<string>();
+
+  previewAvatar = signal<string | ArrayBuffer | null>(null);
   imageChangedEvent = signal<Event | null>(null);
   croppedImage = signal<SafeUrl>('');
   transform = signal<ImageTransform>({
@@ -29,8 +42,6 @@ export class UpdateAvatarFormComponent {
     translateH: 0,
     translateV: 0,
   });
-
-  constructor(private readonly sanitizer: DomSanitizer) {}
 
   fileChangeEvent(event: Event): void {
     this.imageChangedEvent.set(event);

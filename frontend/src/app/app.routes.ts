@@ -83,10 +83,21 @@ export const routes: Routes = [
             mod => mod.ProfileComponent
           ),
       },
+      {
+        path: '',
+        loadComponent: () =>
+          import(
+            './shared/pages/errors/errors-layout/errors-layout.component'
+          ).then(mod => mod.ErrorsLayoutComponent),
+        loadChildren: () =>
+          import('./shared/pages/errors/errors.routes').then(
+            mod => mod.errorRoutes
+          ),
+      },
     ],
   },
   {
     path: '**',
-    redirectTo: 'home',
+    redirectTo: '404',
   },
 ];

@@ -9,22 +9,28 @@
   <div class="max-h-[60vh] min-h-[122px] overflow-y-auto pb-[30px]">
     <div class="mt-[10px] w-full overflow-hidden">
       <input
-        hidden=""
         id="avatar"
         type="file"
         accept="image/*"
+        class="hidden"
         (change)="onFileSelected($event)" />
       <label
         class="relative mx-auto my-[30px] block size-[180px] cursor-pointer bg-[#EBF4FE]"
         for="avatar">
         <div
-          class="duration-30 absolute z-[-100] size-[180px] rounded-full bg-transparent outline outline-1 outline-black/60 transition-all"></div>
+          class="duration-30 absolute z-[2] size-[180px] rounded-full outline outline-1 outline-gray-300 transition-all">
+          <img
+            [src]="avatarUrl()"
+            [alt]="fullName()"
+            class="size-full rounded object-contain" />
+        </div>
       </label>
       <label
         class="flex items-center gap-4 rounded-[10px] bg-white px-5 py-4 transition duration-150 hover:cursor-pointer hover:bg-[#f2f2f2]"
         for="avatar">
-        <i class="fa-solid fa-plus"></i>Tải ảnh mới lên</label
-      >
+        <i class="fa-solid fa-plus"></i>
+        Tải ảnh mới lên
+      </label>
     </div>
   </div>
 } @else {

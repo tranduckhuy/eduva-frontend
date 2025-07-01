@@ -34,8 +34,8 @@ export const roleGuard: CanActivateFn = activatedRoute => {
   if (hasExpectedRole) return true;
 
   // ? If the user does NOT have the required role(s),
-  // ? redirect them to their role-specific dashboard
-  router.navigate(['/home']);
+  // ? redirect them to their unauthorized page
+  router.navigate(['/403']);
 
   return false;
 };

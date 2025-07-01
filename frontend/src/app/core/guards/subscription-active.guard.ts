@@ -22,7 +22,7 @@ export const subscriptionActiveGuard: CanActivateFn = activatedRoute => {
 
   if (isProtectedUser && !isSubscriptionActive) {
     globalModalService.open(AuthModalComponent);
-    router.navigate(['/home']);
+    router.navigate(['/403']);
     return false;
   }
 

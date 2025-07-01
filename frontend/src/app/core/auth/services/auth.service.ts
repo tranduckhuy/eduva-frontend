@@ -136,16 +136,17 @@ export class AuthService {
         return;
       }
 
-      const firstRole = user?.roles?.[0];
+      const userRoles = user?.roles;
 
-      if (firstRole === UserRoles.STUDENT) {
-        this.isLoggedInSignal.set(true);
+      if (!userRoles.includes(UserRoles.STUDENT)) {
+        this.clearSession();
         this.globalModalService.close();
+        this.router.navigateByUrl('/403');
+        return;
       }
 
-      this.clearSession();
+      this.isLoggedInSignal.set(true);
       this.globalModalService.close();
-      this.router.navigateByUrl('/unauthorized', { replaceUrl: true });
     });
   }
 
