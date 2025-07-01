@@ -11,7 +11,7 @@
       "
       class="h-12 w-12 rounded-lg object-contain" />
   </a>
-  <h2 class="my-3 text-[28px] font-bold leading-[1.4]">
+  <h2 class="my-3 text-[28px] font-bold leading-[1.4] dark:text-[#242424]">
     @if (screenState() === 'login') {
       Đăng nhập vào <strong class="system-name">EDUVA</strong>
     } @else if (screenState() === 'forgot-password') {
@@ -21,7 +21,7 @@
     }
   </h2>
   <p
-    class="mx-auto w-[min(400px,90%)]"
+    class="mx-auto w-[min(400px,90%)] dark:text-[#242424]"
     [ngClass]="{
       'text-warningText': screenState() === 'login',
     }">

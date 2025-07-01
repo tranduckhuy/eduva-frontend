@@ -25,13 +25,17 @@
       class="remember-input hidden" />
     <label
       for="remember"
-      class="remember-label relative ml-1 flex select-none items-center gap-2 font-medium opacity-70">
+      class="remember-label relative ml-1 flex select-none items-center gap-2 font-medium opacity-70 dark:text-[#242424]">
       <span for="remember">Ghi nhớ đăng nhập</span>
     </label>
   </div>
 
   <!-- ? Submit Button -->
   <div class="mt-5">
-    <app-button [text]="'Đăng nhập'" [type]="'rounded'" />
+    <app-button
+      [text]="'Đăng nhập'"
+      buttonType="submit"
+      [loading]="loading()"
+      [variant]="'rounded'" />
   </div>
 </form>

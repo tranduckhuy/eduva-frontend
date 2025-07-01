@@ -41,7 +41,9 @@ interface ResetModalData {
 })
 export class AuthModalComponent implements OnInit {
   private readonly globalModalService = inject(GlobalModalService);
-  readonly modalData = inject(MODAL_DATA) as ResetModalData;
+  readonly modalData = inject(MODAL_DATA, {
+    optional: true,
+  }) as ResetModalData | null;
 
   screenState = signal<ScreenState>('login');
 

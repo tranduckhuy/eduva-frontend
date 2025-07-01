@@ -47,3 +47,51 @@
   color: #fff;
   border: 3px solid #2093e7;
 }
+
+.spinner {
+  position: relative;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+  box-sizing: border-box;
+  color: inherit;
+  top: -1px;
+  width: 20px;
+  height: 20px;
+}
+
+.spinner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: currentColor;
+  border-right-color: currentColor;
+  border-bottom-color: currentColor;
+  border-width: 2px;
+  border-top-color: #ecf0f1;
+  border-right-color: #ecf0f1;
+  border-bottom-color: #ecf0f1;
+}
+
+/* Special handling for outline variants */
+button[class*='outline'] .spinner::before {
+  border-top-color: currentColor;
+  border-right-color: currentColor;
+  border-bottom-color: currentColor;
+}
+
+/* Animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

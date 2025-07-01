@@ -1,12 +1,15 @@
 <button
   class="btn"
   [type]="buttonType()"
-  [disabled]="disabled()"
+  [disabled]="disabled() || loading()"
   [ngClass]="{
-    'btn--primary': typeList.includes('primary'),
-    'btn--rounded': typeList.includes('rounded'),
-    'btn--text': typeList.includes('text'),
-    'btn--outline': typeList.includes('outline'),
+    'btn--primary': variantList.includes('primary'),
+    'btn--rounded': variantList.includes('rounded'),
+    'btn--text': variantList.includes('text'),
+    'btn--outline': variantList.includes('outline'),
   }">
+  <ng-container *ngIf="loading()">
+    <span class="spinner mr-[6px]"></span>
+  </ng-container>
   {{ text() }}
 </button>
