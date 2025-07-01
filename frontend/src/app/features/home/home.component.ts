@@ -48,7 +48,7 @@ export class HomeComponent implements OnInit {
 
       if (email && token) {
         this.globalModalService.open(AuthModalComponent, {
-          isReset: true,
+          screenState: 'reset',
           email,
           token,
         });

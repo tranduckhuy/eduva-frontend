@@ -12,6 +12,7 @@ import { ButtonModule } from 'primeng/button';
 
 import { customEmailValidator } from '../../../utils/form-validators';
 
+import { LoadingService } from '../../../services/core/loading/loading.service';
 import { PasswordService } from '../../../../core/auth/services/password.service';
 
 import { FormControlComponent } from '../../form-control/form-control.component';
@@ -35,11 +36,12 @@ import { type EmailLinkRequest } from '../../../../core/auth/models/request/emai
 })
 export class AuthFormForgotPasswordComponent {
   private readonly fb = inject(FormBuilder);
+  private readonly loadingService = inject(LoadingService);
   private readonly passwordService = inject(PasswordService);
 
   form!: FormGroup;
 
-  readonly openResetPassword = output();
+  isLoading = this.loadingService.isLoading;
 
   submitted = signal<boolean>(false);
 

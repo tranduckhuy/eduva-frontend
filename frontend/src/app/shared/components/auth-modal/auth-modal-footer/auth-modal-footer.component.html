@@ -1,13 +1,5 @@
 <!-- ? Links -->
 <div class="mx-auto mt-8">
-  <!-- <p>
-    {{ isLogin() ? 'Bạn chưa có tài khoản?' : 'Bạn đã có tài khoản?' }}
-    <span
-      class="cursor-pointer select-none font-semibold text-primary underline"
-      (click)="switchState.emit()">
-      {{ isLogin() ? 'Đăng ký' : 'Đăng nhập' }}
-    </span>
-  </p> -->
   @if (screenState() === 'login') {
     <button
       (click)="switchState.emit()"

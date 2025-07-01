@@ -75,7 +75,9 @@ export class TwoFactorService {
     request: VerifyOtpRequest
   ): Observable<AuthTokenResponse | null> {
     return this.requestService
-      .post<AuthTokenResponse>(this.VERIFY_OTP_LOGIN_API_URL, request)
+      .post<AuthTokenResponse>(this.VERIFY_OTP_LOGIN_API_URL, request, {
+        loadingKey: 'otp-verification',
+      })
       .pipe(
         tap(res => this.handleVerify2FAResponse(res, res.data)),
         map(res => this.extractAuthDataFromResponse(res)),
@@ -85,7 +87,9 @@ export class TwoFactorService {
 
   resendOtp(request: ResendOtpRequest): Observable<void> {
     return this.requestService
-      .post(this.RESEND_OTP_LOGIN_API_URL, request)
+      .post(this.RESEND_OTP_LOGIN_API_URL, request, {
+        loadingKey: 'resend-otp',
+      })
       .pipe(
         tap(res => this.handleResendOtpResponse(res)),
         map(() => void 0),

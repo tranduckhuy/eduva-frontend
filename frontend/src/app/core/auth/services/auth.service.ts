@@ -16,6 +16,8 @@ import { GlobalModalService } from '../../../shared/services/layout/global-modal
 import { StatusCode } from '../../../shared/constants/status-code.constant';
 import { UserRoles } from '../../../shared/constants/user-roles.constant';
 
+import { AuthModalComponent } from '../../../shared/components/auth-modal/auth-modal.component';
+
 import { type LoginRequest } from '../models/request/login-request.model';
 import { type RefreshTokenRequest } from '../models/request/refresh-token-request.model';
 import { type AuthTokenResponse } from '../models/response/auth-response.model';
@@ -51,13 +53,24 @@ export class AuthService {
       })
       .pipe(
         map(res => {
-          if (res.statusCode === StatusCode.SUCCESS && res.data) {
-            this.handleLoginSuccess(res.data);
-            return res.data;
+          if (!res.statusCode || !res.data) {
+            this.toastHandlingService.errorGeneral();
+            return null;
           }
 
-          this.toastHandlingService.errorGeneral();
-          return null;
+          switch (res.statusCode) {
+            case StatusCode.SUCCESS:
+              this.handleLoginSuccess(res.data);
+              return res.data;
+
+            case StatusCode.REQUIRES_OTP_VERIFICATION:
+              this.handleRequiresOtpVerification(res.data.email);
+              return res.data;
+
+            default:
+              this.toastHandlingService.errorGeneral();
+              return null;
+          }
         }),
         catchError(err => {
           this.handleLoginError(err, request.email);
@@ -177,15 +190,17 @@ export class AuthService {
         );
         break;
 
-      case StatusCode.REQUIRES_OTP_VERIFICATION:
-        this.router.navigate(['/auth/otp-confirmation'], {
-          queryParams: { email },
-        });
-        break;
-
       default:
         this.toastHandlingService.errorGeneral();
     }
+  }
+
+  private handleRequiresOtpVerification(email: string) {
+    this.globalModalService.close();
+    this.globalModalService.open(AuthModalComponent, {
+      screenState: 'otp',
+      email,
+    });
   }
 
   private resendConfirmEmail(email: string): void {
