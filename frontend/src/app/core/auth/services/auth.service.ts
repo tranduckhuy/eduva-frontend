@@ -153,6 +153,7 @@ export class AuthService {
 
       if (!userRoles.includes(UserRoles.STUDENT)) {
         this.clearSession();
+        this.isLoggedInSignal.set(false);
         this.globalModalService.close();
         this.router.navigateByUrl('/403');
         return;
