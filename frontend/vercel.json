@@ -1,6 +1,6 @@
 {
   "buildCommand": "npm run build",
-  "outputDirectory": "dist/eduva-admin",
+  "outputDirectory": "dist/eduva-student",
   "rewrites": [
     {
       "source": "/(.*)",
