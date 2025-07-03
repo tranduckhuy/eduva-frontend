@@ -10,4 +10,5 @@ export interface Folder {
   order: number;
   createdAt: string;
   lastModifiedAt: string;
+  countLessonMaterial: number;
 }

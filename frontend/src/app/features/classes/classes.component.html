@@ -1,0 +1,21 @@
+<div class="e-container relative mb-[50px]">
+  <div
+    class="e-row e-g-4 e-row-cols-5 classrooms__list e-row-cols-xxl-3 e-row-cols-md-2 e-row-cols-sm-1">
+    @if (isLoadingGetClasses()) {
+      @for (_ of skeletonItems; track $index) {
+        <app-class-card-skeleton />
+      }
+    } @else {
+      @for (classroom of classes(); track classroom.id) {
+        <div>
+          <classroom-card [classroom]="classroom" />
+        </div>
+      }
+    }
+  </div>
+  <p-paginator
+    (onPageChange)="onPageChange($event)"
+    [first]="first()"
+    [rows]="rows()"
+    [totalRecords]="totalClasses()" />
+</div>

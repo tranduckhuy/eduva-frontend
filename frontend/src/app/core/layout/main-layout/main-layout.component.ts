@@ -24,12 +24,11 @@ import { GlobalModalHostComponent } from '../../../shared/components/global-moda
   template: `
     <app-header />
 
-    <main
-      class="flex min-h-[100vh] sm:h-auto sm:flex-col-reverse sm:items-center">
+    <main class="flex sm:h-auto sm:flex-col-reverse sm:items-center">
       <app-navbar />
 
       <div
-        class="mt-[18px] w-[calc(100%-100px)] px-7 sm:w-full sm:grow sm:px-4 sm:pb-20">
+        class="my-[18px] w-[calc(100%-100px)] px-7 sm:w-full sm:grow sm:px-4 sm:pb-20">
         <router-outlet />
       </div>
     </main>
