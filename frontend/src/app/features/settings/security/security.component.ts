@@ -1,9 +1,17 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
+import { RouterLink } from '@angular/router';
+
+import { UserService } from '../../../shared/services/api/user/user.service';
+
 import { ProfileCardComponent } from '../profile-card/profile-card.component';
 import { DialogComponent } from '../dialog/dialog.component';
 import { ChangePasswordFormComponent } from '../forms/change-password-form/change-password-form.component';
 import { ActivateOtpVerifyFormComponent } from '../forms/activate-otp-verify-form/activate-otp-verify-form.component';
-import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-security',
@@ -20,6 +28,10 @@ import { RouterLink } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SecurityComponent {
+  private readonly userService = inject(UserService);
+
+  user = this.userService.currentUser;
+
   openedDialog = signal<string | null>(null);
 
   openDialog(type: string) {

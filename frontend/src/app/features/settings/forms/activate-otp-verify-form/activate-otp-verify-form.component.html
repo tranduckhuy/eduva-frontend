@@ -1,22 +1,31 @@
-<form (ngSubmit)="onSubmit()">
-  @if (!isEmailValid()) {
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  @if (!isPasswordValid()) {
     <header class="mt-[10px]">
-      <h2 class="text-2xl font-semibold dark:text-[#242424]">Xác nhận email</h2>
+      <h2 class="text-2xl font-semibold dark:text-[#242424]">
+        Xác minh mật khẩu
+      </h2>
       <p class="mt-2 text-[15px] opacity-90">
-        Nhập email của bạn để nhận mã xác minh. Mã này sẽ được sử dụng để kích
-        hoạt xác minh 2 bước cho tài khoản của bạn.
+        Để chắc chắn rằng bạn là chủ sở hữu tài khoản, vui lòng nhập mật khẩu
+        hiện tại của bạn
       </p>
     </header>
     <div class="max-h-[60vh] min-h-[122px] overflow-y-auto pb-[30px]">
       <app-form-control
-        label="Địa chỉ email"
-        type="email"
-        placeholder="Nhập địa chỉ email của bạn"
-        [name]="'email'"
-        [email]="true"
-        [required]="true"
-        [(ngModel)]="email">
+        formControlName="currentPassword"
+        name="currentPassword"
+        type="password"
+        label="Mật khẩu hiện tại"
+        placeholder="Nhập mật khẩu hiện tại của bạn"
+        [required]="true">
       </app-form-control>
+      <div class="mb-4 ml-[5px] mt-[10px]">
+        <button
+          type="button"
+          class="text-[15px] font-medium text-primary underline"
+          (click)="openForgotPassword()">
+          Bạn quên mật khẩu ư?
+        </button>
+      </div>
     </div>
   } @else {
     <header class="mt-[10px]">
@@ -29,10 +38,12 @@
     <div class="max-h-[60vh] overflow-y-auto pb-[20px]">
       <div class="mt-5 flex w-full items-center justify-center overflow-hidden">
         <p-inputotp
-          name="otp"
-          [(ngModel)]="otp"
-          [integerOnly]="true"
-          size="large" />
+          formControlName="otpCode"
+          name="otpCode"
+          size="large"
+          [invalid]="form.get('otpCode')?.invalid ?? false"
+          [length]="6"
+          [integerOnly]="true" />
       </div>
     </div>
     <div class="mt-[10px] text-center">
@@ -43,8 +54,16 @@
     </div>
   }
   <footer>
-    <div [class.mt-5]="isEmailValid()">
-      <app-button [text]="'Xác nhận'" [variant]="'rounded'" />
+    <div [class.mt-5]="isPasswordValid()">
+      <app-button
+        text="Xác nhận"
+        buttonType="submit"
+        variant="rounded"
+        [loading]="isLoading()" />
     </div>
   </footer>
 </form>
+
+@if (isForgotPassword()) {
+  <app-forget-password-form (close)="closeForgotPassword()" />
+}

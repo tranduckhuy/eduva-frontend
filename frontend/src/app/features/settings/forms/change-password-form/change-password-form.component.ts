@@ -1,23 +1,31 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
+  inject,
+  output,
   signal,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
+
+import { LoadingService } from '../../../../shared/services/core/loading/loading.service';
+import { UserService } from '../../../../shared/services/api/user/user.service';
+import { PasswordService } from '../../../../core/auth/services/password.service';
+
+import { isFormFieldMismatch } from '../../../../shared/utils/util-functions';
 
 import { ForgetPasswordFormComponent } from '../forget-password-form/forget-password-form.component';
 import { FormControlComponent } from '../../../../shared/components/form-control/form-control.component';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
+import { ChangePasswordRequest } from '../../../../shared/models/api/request/command/change-password-request.model';
 
 @Component({
   selector: 'app-change-password-form',
   standalone: true,
   imports: [
-    FormsModule,
-    FormControlComponent,
     CommonModule,
+    ReactiveFormsModule,
+    FormControlComponent,
     ForgetPasswordFormComponent,
     ButtonComponent,
   ],
@@ -26,41 +34,77 @@ import { ButtonComponent } from '../../../../shared/components/button/button.com
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChangePasswordFormComponent {
-  currentPassword = signal<string>('');
-  newPassword = signal<string>('');
-  confirmPassword = signal<string>('');
-  isChangingPassword = signal<boolean>(false);
+  private readonly fb = inject(FormBuilder);
+  private readonly loadingService = inject(LoadingService);
+  private readonly userService = inject(UserService);
+  private readonly passwordService = inject(PasswordService);
 
-  readonly passwordLevel = computed(() => {
+  passwordChanged = output<void>();
+
+  form: FormGroup;
+
+  isLoading = this.loadingService.is('change-password-form');
+  readonly user = this.userService.currentUser;
+
+  submitted = signal<boolean>(false);
+  isForgotPassword = signal<boolean>(false);
+
+  constructor() {
+    this.form = this.fb.group({
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: '',
+      logoutBehavior: 0,
+    });
+  }
+
+  get passwordMisMatch() {
+    return isFormFieldMismatch(this.form);
+  }
+
+  get passwordLevel(): number | undefined {
+    const value = this.form.get('newPassword')?.value ?? '';
     let level = 0;
 
-    if (this.newPassword().length >= 6) {
-      level++;
-    }
-    if (/[a-z]/.test(this.newPassword())) {
-      level++;
-    }
-    if (/[A-Z]/.test(this.newPassword())) {
-      level++;
-    }
-    if (/\d/.test(this.newPassword())) {
-      level++;
-    }
-    if (/[!@#$%^&*(),.?":{}|<>]/.test(this.newPassword())) {
-      level++;
-    }
-    if (this.newPassword()) {
-      return level;
-    } else return;
-  });
+    if (value.length >= 6) level++;
+    if (/[a-z]/.test(value)) level++;
+    if (/[A-Z]/.test(value)) level++;
+    if (/\d/.test(value)) level++;
+    if (/[!@#$%^&*(),.?":{}|<>]/.test(value)) level++;
 
-  onSubmit() {}
+    return level;
+  }
+
+  onSubmit() {
+    this.submitted.set(true);
+    this.form.markAllAsTouched();
+
+    if (this.form.invalid) return;
+
+    const request: ChangePasswordRequest = this.form.value;
+    this.passwordService.changePassword(request).subscribe({
+      next: () => {
+        this.isForgotPassword.set(false);
+        this.passwordChanged.emit();
+      },
+      error: () => {
+        this.form.reset({
+          currentPassword: '',
+          newPassword: '',
+          confirmPassword: '',
+          logoutBehavior: 0,
+        });
+        this.form.markAsUntouched();
+        this.submitted.set(false);
+      },
+    });
+  }
 
   openForgotPassword() {
-    this.isChangingPassword.set(true);
+    this.isForgotPassword.set(true);
   }
 
   closeForgotPassword() {
-    this.isChangingPassword.set(false);
+    this.isForgotPassword.set(false);
   }
 }

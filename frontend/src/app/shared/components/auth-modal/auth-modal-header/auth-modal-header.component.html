@@ -12,12 +12,22 @@
       class="h-12 w-12 rounded-lg object-contain" />
   </a>
   <h2 class="my-3 text-[28px] font-bold leading-[1.4] dark:text-[#242424]">
-    @if (screenState() === 'login') {
-      Đăng nhập vào <strong class="system-name">EDUVA</strong>
-    } @else if (screenState() === 'forgot-password') {
-      Quên mật khẩu?
-    } @else {
-      Đặt lại mật khẩu
+    @switch (screenState()) {
+      @case ('forgot-password') {
+        Quên mật khẩu?
+      }
+
+      @case ('reset-password') {
+        Đặt lại mật khẩu
+      }
+
+      @case ('otp-verification') {
+        Xác minh 2 bước
+      }
+
+      @default {
+        Đăng nhập vào <strong class="system-name">EDUVA</strong>
+      }
     }
   </h2>
   <p
@@ -25,12 +35,6 @@
     [ngClass]="{
       'text-warningText': screenState() === 'login',
     }">
-    {{
-      screenState() === 'login'
-        ? 'Mỗi người nên sử dụng riêng một tài khoản, tài khoản nhiều người sử dụng chung sẽ bị khóa.'
-        : screenState() === 'forgot-password'
-          ? 'Nhập địa chỉ email của bạn và chúng tôi sẽ gửi mã khôi phục mật khẩu gồm 6 chữ số đến hộp thư của bạn.'
-          : 'Đặt mật khẩu mới cho tài khoản của bạn để có thể tiếp tục truy cập các khóa học.'
-    }}
+    {{ subHeading() }}
   </p>
 </div>

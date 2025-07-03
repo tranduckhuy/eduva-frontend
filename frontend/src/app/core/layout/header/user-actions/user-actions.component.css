@@ -1,8 +1,7 @@
 /* ? Not Logged In */
 .actions__btn ::ng-deep .p-button {
   color: #fff;
-  background-color: #2093e7;
-  background-image: linear-gradient(to right bottom, #4dbfe9, #2093e7 50%);
+  background-color: #0093fc;
   border-color: transparent;
   white-space: nowrap;
   transition: opacity 0.2s linear;
@@ -10,8 +9,7 @@
 
 .actions__btn ::ng-deep .p-button:hover {
   color: #fff;
-  background-color: #2093e7;
-  background-image: linear-gradient(to right bottom, #4dbfe9, #2093e7 50%);
+  background-color: #0093fc;
   border-color: transparent;
   opacity: 0.8;
 }

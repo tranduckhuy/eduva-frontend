@@ -18,23 +18,23 @@ import { ButtonComponent } from '../../../../shared/components/button/button.com
 import { type UpdateProfileRequest } from '../../models/update-profile-request.model';
 
 @Component({
-  selector: 'app-update-phone-number-form',
+  selector: 'app-update-name-form',
   standalone: true,
   imports: [ReactiveFormsModule, FormControlComponent, ButtonComponent],
-  templateUrl: './update-phone-number-form.component.html',
-  styleUrl: './update-phone-number-form.component.css',
+  templateUrl: './update-name-form.component.html',
+  styleUrl: './update-name-form.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UpdatePhoneNumberFormComponent {
+export class UpdateNameFormComponent {
   private readonly fb = inject(FormBuilder);
   private readonly userService = inject(UserService);
   private readonly loadingService = inject(LoadingService);
 
-  phoneNumber = input.required<string>();
+  fullName = input.required<string>();
 
-  phoneNumberChanged = output<void>();
+  nameChanged = output<void>();
 
-  form = this.fb.group({ phoneNumber: [''] });
+  form = this.fb.group({ fullName: [''] });
 
   isLoading = this.loadingService.isLoading;
 
@@ -42,7 +42,7 @@ export class UpdatePhoneNumberFormComponent {
 
   constructor() {
     effect(() => {
-      this.form.patchValue({ phoneNumber: this.phoneNumber() });
+      this.form.patchValue({ fullName: this.fullName() });
     });
   }
 
@@ -53,14 +53,12 @@ export class UpdatePhoneNumberFormComponent {
     if (this.form.invalid) return;
 
     const payload: UpdateProfileRequest = {
-      phoneNumber: this.form.get('phoneNumber')?.value ?? '',
+      fullName: this.form.get('fullName')?.value ?? '',
     };
     this.userService.updateUserProfile(payload).subscribe(user => {
       if (user) {
-        this.userService.updateCurrentUserPartial({
-          phoneNumber: user.phoneNumber,
-        });
-        this.phoneNumberChanged.emit();
+        this.userService.updateCurrentUserPartial({ fullName: user.fullName });
+        this.nameChanged.emit();
       }
     });
   }

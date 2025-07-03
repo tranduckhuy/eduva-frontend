@@ -1,4 +1,4 @@
-@if (!previewAvatar()) {
+@if (!isPreviewAvatar()) {
   <header class="mt-[10px]">
     <h2 class="font- text-2xl dark:text-[#242424]">Ảnh đại diện</h2>
     <p class="mt-2 text-[15px] opacity-90">
@@ -22,7 +22,7 @@
           <img
             [src]="avatarUrl()"
             [alt]="fullName()"
-            class="size-full rounded object-contain" />
+            class="size-full rounded-full object-contain" />
         </div>
       </label>
       <label
@@ -48,22 +48,16 @@
   <div class="max-h-[60vh] min-h-[122px] overflow-y-auto pb-[30px]">
     <div class="mt-[10px] w-full overflow-hidden">
       <div class="mx-auto h-auto w-full">
-        <!-- 
-          (imageLoaded)="imageLoaded($event)"
-          (cropperReady)="cropperReady()"
-          (loadImageFailed)="loadImageFailed()"
-        -->
         <image-cropper
           class="custom-cropper flex size-full items-center justify-center"
-          [imageChangedEvent]="imageChangedEvent()"
-          [maintainAspectRatio]="true"
           [aspectRatio]="1 / 1"
           [resizeToWidth]="512"
+          [onlyScaleDown]="true"
+          [maintainAspectRatio]="true"
           [roundCropper]="true"
-          (imageCropped)="imageCropped($event)"
           [(transform)]="transform"
-          (transformChange)="transformChange($event)"
-          [onlyScaleDown]="true"></image-cropper>
+          [imageChangedEvent]="imageChangedEvent()"
+          (imageCropped)="imageCropped($event)" />
       </div>
 
       <div class="flex items-center justify-center gap-1">
@@ -90,9 +84,11 @@
     </div>
   </div>
   <footer>
-    <button
-      class="mt-5 block w-full cursor-pointer whitespace-nowrap rounded-full border-none bg-[#1dbfaf] bg-[linear-gradient(70.06deg,_#2cccff_-5%,_#22dfbf_106%)] px-5 py-3 text-base font-semibold text-white transition-opacity duration-[250] hover:opacity-80">
-      Lưu lại
-    </button>
+    <p-button
+      styleClass="mt-5 block w-full cursor-pointer whitespace-nowrap !border-none !bg-[#1dbfaf] !bg-[linear-gradient(70.06deg,_#2cccff_-5%,_#22dfbf_106%)] px-5 py-3 text-base font-semibold text-white !transition-opacity !duration-[250] hover:!opacity-80"
+      label="Lưu lại"
+      [rounded]="true"
+      [loading]="isLoading()"
+      (onClick)="saveAvatar()" />
   </footer>
 }

@@ -21,25 +21,14 @@
       class="relative flex overflow-hidden rounded-[44px] border-[1.5px] bg-white"
       [ngClass]="{
         'h-[44px]': !isTextarea(),
-        'border-[#f33a58]':
-          control.invalid && (control.touched || submitted()) && !disabled(),
-        'focus-within:border-[#f33a58]':
-          control.invalid && (control.touched || submitted()) && !disabled(),
-        'border-gray-200': !(
-          control.invalid &&
-          (control.touched || submitted()) &&
-          !disabled()
-        ),
-        'focus-within:border-primary':
-          !control.invalid || (!control.touched && !submitted() && !disabled()),
+        'border-[#f33a58]': isErrorState(),
+        'focus-within:border-[#f33a58]': isErrorState(),
+        'border-gray-200': !isErrorState(),
+        'focus-within:border-primary': !isErrorState(),
         'bg-[#e1e6f2]': readOnly() === true,
         'select-none': disabled(),
       }"
-      [style.backgroundColor]="
-        control.invalid && (control.touched || submitted()) && !disabled()
-          ? '#ff00001a'
-          : ''
-      ">
+      [style.backgroundColor]="isErrorState() ? '#ff00001a' : ''">
       @if (options() && options().length > 0) {
         <div class="custom-options-container relative w-full">
           @if (showSearchBox) {
@@ -68,25 +57,19 @@
         </div>
       } @else if (isTextarea()) {
         <textarea
-          [readOnly]="readOnly()"
           class="flex max-h-[300px] min-h-[120px] w-full resize-y overflow-y-auto border-none bg-transparent py-3 pl-4 pr-[42px] leading-normal outline-none placeholder:text-black/60"
-          [class.text-[#f33a58]]="
-            control.invalid && control.touched && control.dirty
-          "
+          [readOnly]="readOnly()"
+          [class.text-[#f33a58]]="useRedText()"
           [placeholder]="placeholder()"
           [formControl]="control"
           [rows]="rows()"
           (blur)="handleTouched()"></textarea>
       } @else {
         <input
-          [readOnly]="readOnly() || disabled()"
           class="flex w-full items-center border-none bg-transparent py-3 pl-4 pr-[42px] leading-none outline-none placeholder:text-black/60"
-          [class.text-[#f33a58]]="
-            control.invalid && control.touched && control.dirty
-          "
+          [readOnly]="readOnly() || disabled()"
           [ngClass]="{
-            'text-[#f33a58]':
-              control.invalid && control.touched && control.dirty,
+            'text-[#f33a58]': useRedText(),
             '!select-none !bg-[#16182329] pr-[140px]': disabled(),
           }"
           [type]="inputType"
@@ -94,20 +77,12 @@
           [formControl]="control"
           (blur)="handleTouched()" />
       }
-      @if (
-        control.invalid &&
-        (control.touched || submitted()) &&
-        type() !== 'password' &&
-        (!options() || options().length === 0)
-      ) {
+      @if (showWarningIcon()) {
         <div class="absolute right-[14px] top-1/2 -translate-y-1/2">
           <i
-            class="fa-solid fa-triangle-exclamation animate-shake text-base text-[#f33a58]">
-          </i>
+            class="fa-solid fa-triangle-exclamation animate-shake text-base text-[#f33a58]"></i>
         </div>
-      } @else if (
-        type() === 'password' && (!options() || options().length === 0)
-      ) {
+      } @else if (showTogglePasswordIcon()) {
         @if (isShowPassword()) {
           <i
             tabindex="-1"
@@ -132,10 +107,7 @@
       }
     </div>
 
-    @if (
-      (control.invalid && control.touched && !disabled()) ||
-      (control.invalid && submitted() && !disabled())
-    ) {
+    @if (shouldShowError()) {
       <div class="mt-2 font-medium leading-normal text-[#f33a58]">
         {{ errorMessage }}
       </div>
