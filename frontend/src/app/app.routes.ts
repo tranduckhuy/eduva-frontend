@@ -27,7 +27,7 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'classroom-detail',
+        path: 'classes/:classId',
         canActivate: [authGuard, roleGuard, subscriptionActiveGuard],
         data: {
           roles: [UserRoles.STUDENT],
@@ -35,6 +35,17 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/classroom-detail/classroom-detail.component').then(
             mod => mod.ClassroomDetailComponent
+          ),
+      },
+      {
+        path: 'classes',
+        canActivate: [authGuard, roleGuard, subscriptionActiveGuard],
+        data: {
+          roles: [UserRoles.STUDENT],
+        },
+        loadComponent: () =>
+          import('./features/classes/classes.component').then(
+            mod => mod.ClassesComponent
           ),
       },
     ],
@@ -47,7 +58,7 @@ export const routes: Routes = [
       ),
     children: [
       {
-        path: 'watch-lessons',
+        path: 'learn/:materialId',
         canActivate: [authGuard, roleGuard, subscriptionActiveGuard],
         data: {
           roles: [UserRoles.STUDENT],
@@ -72,6 +83,7 @@ export const routes: Routes = [
             mod => mod.settingsRoutes
           ),
       },
+
       {
         path: 'profile',
         canActivate: [authGuard, roleGuard, subscriptionActiveGuard],

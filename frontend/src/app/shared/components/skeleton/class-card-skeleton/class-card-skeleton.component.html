@@ -1,0 +1,27 @@
+<div
+  class="e-col relative flex flex-col rounded-2xl bg-[#00000008] transition-[transform,box-shadow] duration-200 ease-linear hover:-translate-y-1 hover:shadow-classroomCard dark:bg-[#272a31] dark:hover:shadow-classroomCardDark">
+  <p-skeleton
+    class="relative block w-full overflow-hidden rounded-tl-2xl rounded-tr-2xl"
+    [height]="'110px'">
+  </p-skeleton>
+
+  <div class="flex grow flex-col gap-3 px-5 py-4 sm:gap-2 sm:p-[10px]">
+    <p-skeleton width="80%" height="24px" borderRadius="8px" />
+    <p-skeleton width="70%" height="16px" borderRadius="8px" />
+
+    <div
+      class="mt-[14px] flex items-center justify-between gap-[6px] sm:mt-[10px]">
+      <div class="flex flex-1 items-center gap-[6px] lg:gap-1 md:hidden">
+        <p-skeleton size="24px" shape="circle" />
+        <p-skeleton class="w-full" height="14px" borderRadius="8px" />
+      </div>
+      <div class="flex flex-1 items-center gap-[6px] lg:gap-1 md:hidden">
+        <p-skeleton
+          width="100%"
+          height="14px"
+          borderRadius="8px"
+          class="w-full" />
+      </div>
+    </div>
+  </div>
+</div>

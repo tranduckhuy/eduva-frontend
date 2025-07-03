@@ -1,4 +1,53 @@
 <div
+  class="relative flex h-full flex-col rounded-2xl bg-[#00000008] transition-[transform,box-shadow] duration-200 ease-linear hover:-translate-y-1 hover:shadow-classroomCard dark:bg-[#272a31] dark:hover:shadow-classroomCardDark">
+  <a
+    [routerLink]="['/classes', classroom().classId]"
+    class="relative block w-full overflow-hidden rounded-tl-2xl rounded-tr-2xl object-cover pt-[40%]">
+    <img
+      [src]="
+        classroom().backgroundImageUrl ||
+        'https://www.gstatic.com/classroom/themes/WorldStudies_thumb.jpg'
+      "
+      [alt]=""
+      class="absolute left-0 top-0 h-full w-full object-right" />
+  </a>
+  <div class="flex grow flex-col gap-3 px-5 py-4 sm:gap-2 sm:p-[10px]">
+    <h3
+      class="line-clamp-2 break-words text-base font-semibold text-[#292929] dark:text-[#fffc]">
+      <a [routerLink]="['/watch-lessons', classroom().classId]">{{
+        classroom().className
+      }}</a>
+    </h3>
+    <p class="text-sm font-semibold text-primary">
+      {{ classroom().schoolName }}
+    </p>
+
+    <div
+      class="mt-[18px] flex items-center justify-between gap-[6px] sm:mt-[10px]">
+      <div class="flex items-center gap-[6px] lg:gap-1">
+        <figure class="h-[18px] w-[18px] rounded-[50%]">
+          <img
+            [src]="classroom().teacherAvatarUrl"
+            [alt]="classroom().teacherName"
+            class="h-full w-full rounded-[50%] object-cover" />
+        </figure>
+        <p
+          class="line-clamp-1 text-[#666] dark:text-[#fffc]"
+          tooltipPosition="top"
+          pTooltip="{{ classroom().teacherName }}">
+          {{ classroom().teacherName }}
+        </p>
+      </div>
+      <div
+        class="flex items-center gap-[6px] text-[#666] lg:gap-1 dark:text-[#fffc]">
+        <fa-icon [icon]="'circle-play'"></fa-icon>
+        <p>{{ classroom().countLessonMaterial }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- <div
   class="dark:bg-[#272a31] hover:shadow-classroomCard dark:hover:shadow-classroomCardDark relative flex h-full flex-col rounded-2xl bg-[#00000008] transition-[transform,box-shadow] duration-200 ease-linear hover:-translate-y-1">
   @if (classroom().isRecommend) {
     <div
@@ -24,8 +73,8 @@
     </h3>
     <p class="text-sm font-semibold text-primary">
       Khối {{ classroom().grade }}
-    </p>
-    <!-- @if (withProgress()) {
+    </p> -->
+<!-- @if (withProgress()) {
       <div
         class="relative mt-2 h-2 w-full overflow-hidden rounded bg-[#ddd]"
         tooltipPosition="top"
@@ -35,7 +84,7 @@
           [style.width.%]="classroom().progress"></div>
       </div>
     } -->
-    <div class="mt-[18px] flex items-center justify-between sm:mt-[10px]">
+<!-- <div class="mt-[18px] flex items-center justify-between sm:mt-[10px]">
       <div class="flex items-center gap-[6px] lg:gap-1 md:hidden">
         <figure class="h-[18px] w-[18px] rounded-[50%]">
           <img
@@ -57,4 +106,4 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->

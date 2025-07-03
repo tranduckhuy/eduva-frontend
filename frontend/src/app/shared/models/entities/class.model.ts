@@ -3,14 +3,18 @@ import { EntityStatus } from '../enum/entity-status.enum';
 export interface ClassModel {
   id: string;
   schoolId: number;
-  name: string;
+  className: string;
+  name?: string;
   classCode: string;
-  teacherId: string;
+  classId: string;
+  studentId: string;
   teacherName: string;
+  studentName: string;
   schoolName: string;
   backgroundImageUrl: string;
   teacherAvatarUrl: string;
-  createdAt: string;
-  lastModifiedAt: string;
-  status: EntityStatus;
+  studentAvatarUrl: string;
+  enrolledAt: string;
+  classStatus: EntityStatus;
+  countLessonMaterial: number;
 }
