@@ -1,19 +1,35 @@
 <home-carousel />
 
-<div class="px-8 pb-[75px] md:px-0">
-  @for (section of classroomSections(); track $index) {
+@if (currentUser() && isLoggedIn()) {
+  <div class="px-8 pb-[75px] md:px-0">
     <div class="mt-[50px]">
       <div class="classrooms">
-        <h2 class="classrooms__header">{{ section.title }}</h2>
-        <div
-          class="classrooms__list grid grid-cols-4 gap-x-6 gap-y-10 xl:grid-cols-3 xl:gap-x-4 xl:gap-y-6 lg:gap-x-3 md:grid-cols-2">
-          @for (classroom of section.classrooms; track $index) {
-            <div>
-              <classroom-card [classroom]="classroom" />
-            </div>
-          }
+        <div class="flex items-center justify-between">
+          <h2 class="classrooms__header">Lớp học của tôi</h2>
+          <a
+            routerLink="/classes"
+            class="mr-1 select-none py-2 pl-2 text-[15px] font-semibold text-primary transition duration-200 hover:underline"
+            >Xem tất cả<i class="fa-solid fa-chevron-right ml-1 text-sm"></i>
+          </a>
         </div>
+        @if (isLoadingGetClasses()) {
+          <div
+            class="classrooms__list grid grid-cols-4 gap-x-6 gap-y-10 xl:grid-cols-3 xl:gap-x-4 xl:gap-y-6 lg:gap-x-3 md:grid-cols-2">
+            @for (_ of skeletonItems; track $index) {
+              <app-class-card-skeleton />
+            }
+          </div>
+        } @else {
+          <div
+            class="classrooms__list grid grid-cols-4 gap-x-6 gap-y-10 xl:grid-cols-3 xl:gap-x-4 xl:gap-y-6 lg:gap-x-3 md:grid-cols-2">
+            @for (classroom of classes(); track classroom.id) {
+              <div>
+                <classroom-card [classroom]="classroom" />
+              </div>
+            }
+          </div>
+        }
       </div>
     </div>
-  }
-</div>
+  </div>
+}

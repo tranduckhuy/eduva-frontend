@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-type ButtonType = 'primary' | 'rounded' | 'text' | 'outline';
+type ButtonVariant = 'primary' | 'rounded' | 'text' | 'outline';
 
 @Component({
   selector: 'app-button',
@@ -13,10 +13,13 @@ type ButtonType = 'primary' | 'rounded' | 'text' | 'outline';
 })
 export class ButtonComponent {
   text = input.required<string>();
-  type = input.required<ButtonType | ButtonType[]>();
+  variant = input.required<ButtonVariant | ButtonVariant[]>();
+  buttonType = input<string>('button');
+  disabled = input<boolean>(false);
+  loading = input<boolean>(false);
 
-  get typeList(): ButtonType[] {
-    const value = this.type();
+  get variantList(): ButtonVariant[] {
+    const value = this.variant();
     return Array.isArray(value) ? value : [value];
   }
 }

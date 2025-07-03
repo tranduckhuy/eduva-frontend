@@ -1,17 +1,40 @@
 <div>
   <a href="/" class="flex items-center justify-center">
-    <!-- [alt]="isLogin() ? 'Đăng nhập vào EDUVA' : 'Đăng ký vào EDUVA'" -->
     <img
       src="./images/logo.png"
-      alt="Đăng nhập vào EDUVA"
+      [alt]="
+        screenState() === 'login'
+          ? 'Đăng nhập vào EDUVA'
+          : screenState() === 'forgot-password'
+            ? 'Quên mật khẩu'
+            : 'Đặt lại mật khẩu'
+      "
       class="h-12 w-12 rounded-lg object-contain" />
   </a>
-  <h2 class="my-3 text-[28px] font-bold leading-[1.4]">
-    <!-- {{ isLogin() ? 'Đăng nhập vào' : 'Đăng ký tài khoản' }} -->
-    Đăng nhập vào <strong class="system-name">EDUVA</strong>
+  <h2 class="my-3 text-[28px] font-bold leading-[1.4] dark:text-[#242424]">
+    @switch (screenState()) {
+      @case ('forgot-password') {
+        Quên mật khẩu?
+      }
+
+      @case ('reset-password') {
+        Đặt lại mật khẩu
+      }
+
+      @case ('otp-verification') {
+        Xác minh 2 bước
+      }
+
+      @default {
+        Đăng nhập vào <strong class="system-name">EDUVA</strong>
+      }
+    }
   </h2>
-  <p class="mx-auto w-[min(400px,90%)] text-warningText">
-    Mỗi người nên sử dụng riêng một tài khoản, tài khoản nhiều người sử dụng
-    chung sẽ bị khóa.
+  <p
+    class="mx-auto w-[min(400px,90%)] dark:text-[#242424]"
+    [ngClass]="{
+      'text-warningText': screenState() === 'login',
+    }">
+    {{ subHeading() }}
   </p>
 </div>

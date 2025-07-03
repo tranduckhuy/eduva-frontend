@@ -1,5 +1,11 @@
 import { Routes } from '@angular/router';
 
+import { authGuard } from './core/guards/auth.guard';
+import { roleGuard } from './core/guards/role.guard';
+import { subscriptionActiveGuard } from './core/guards/subscription-active.guard';
+
+import { UserRoles } from './shared/constants/user-roles.constant';
+
 export const routes: Routes = [
   {
     path: '',
@@ -10,16 +16,36 @@ export const routes: Routes = [
     children: [
       {
         path: '',
+        pathMatch: 'full',
+        redirectTo: 'home',
+      },
+      {
+        path: 'home',
         loadComponent: () =>
           import('./features/home/home.component').then(
             mod => mod.HomeComponent
           ),
       },
       {
-        path: 'classroom-detail',
+        path: 'classes/:classId',
+        canActivate: [authGuard, roleGuard, subscriptionActiveGuard],
+        data: {
+          roles: [UserRoles.STUDENT],
+        },
         loadComponent: () =>
           import('./features/classroom-detail/classroom-detail.component').then(
             mod => mod.ClassroomDetailComponent
+          ),
+      },
+      {
+        path: 'classes',
+        canActivate: [authGuard, roleGuard, subscriptionActiveGuard],
+        data: {
+          roles: [UserRoles.STUDENT],
+        },
+        loadComponent: () =>
+          import('./features/classes/classes.component').then(
+            mod => mod.ClassesComponent
           ),
       },
     ],
@@ -32,7 +58,11 @@ export const routes: Routes = [
       ),
     children: [
       {
-        path: 'watch-lessons',
+        path: 'learn/:materialId',
+        canActivate: [authGuard, roleGuard, subscriptionActiveGuard],
+        data: {
+          roles: [UserRoles.STUDENT],
+        },
         loadComponent: () =>
           import('./features/watch-lessons/watch-lessons.component').then(
             mod => mod.WatchLessonsComponent
@@ -40,6 +70,10 @@ export const routes: Routes = [
       },
       {
         path: 'settings',
+        canActivate: [authGuard, roleGuard, subscriptionActiveGuard],
+        data: {
+          roles: [UserRoles.STUDENT],
+        },
         loadComponent: () =>
           import('./features/settings/settings.component').then(
             mod => mod.SettingsComponent
@@ -49,22 +83,33 @@ export const routes: Routes = [
             mod => mod.settingsRoutes
           ),
       },
+
       {
         path: 'profile',
+        canActivate: [authGuard, roleGuard, subscriptionActiveGuard],
+        data: {
+          roles: [UserRoles.STUDENT],
+        },
         loadComponent: () =>
           import('./features/profile/profile.component').then(
             mod => mod.ProfileComponent
           ),
       },
-      // {
-      //   path: '**', // Not-Found
-      // },
-      // {
-      //   path: 'internal-error',
-      // },
-      // {
-      //   path: 'coming-soon',
-      // },
+      {
+        path: '',
+        loadComponent: () =>
+          import(
+            './shared/pages/errors/errors-layout/errors-layout.component'
+          ).then(mod => mod.ErrorsLayoutComponent),
+        loadChildren: () =>
+          import('./shared/pages/errors/errors.routes').then(
+            mod => mod.errorRoutes
+          ),
+      },
     ],
+  },
+  {
+    path: '**',
+    redirectTo: '404',
   },
 ];

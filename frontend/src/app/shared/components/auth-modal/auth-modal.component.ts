@@ -1,20 +1,34 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  OnInit,
   inject,
   signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { AuthModalService } from '../../services/modal/auth-modal/auth-modal.service';
+import { GlobalModalService } from '../../services/layout/global-modal/global-modal.service';
+
+import { MODAL_DATA } from '../../tokens/injection/modal-data.token';
 
 import { AuthModalHeaderComponent } from './auth-modal-header/auth-modal-header.component';
 import { AuthModalFooterComponent } from './auth-modal-footer/auth-modal-footer.component';
 import { AuthFormLoginComponent } from './auth-form-login/auth-form-login.component';
-// import { AuthMethodsComponent } from './auth-methods/auth-methods.component';
-// import { AuthFormRegisterComponent } from './auth-form-register/auth-form-register.component';
+import { AuthFormForgotPasswordComponent } from './auth-form-forgot-password/auth-form-forgot-password.component';
+import { AuthFormResetPasswordComponent } from './auth-form-reset-password/auth-form-reset-password.component';
+import { AuthFormOtpVerificationComponent } from './auth-form-otp-verification/auth-form-otp-verification.component';
 
-type ScreenState = 'methods' | 'login' | 'register';
+type ScreenState =
+  | 'login'
+  | 'forgot-password'
+  | 'reset-password'
+  | 'otp-verification';
+
+interface AuthModalData {
+  screenState: 'reset' | 'otp';
+  email: string;
+  token: string;
+}
 
 @Component({
   selector: 'app-auth-modal',
@@ -24,37 +38,61 @@ type ScreenState = 'methods' | 'login' | 'register';
     AuthModalHeaderComponent,
     AuthModalFooterComponent,
     AuthFormLoginComponent,
+    AuthFormForgotPasswordComponent,
+    AuthFormResetPasswordComponent,
+    AuthFormOtpVerificationComponent,
   ],
-  // AuthMethodsComponent, AuthFormRegisterComponent
   templateUrl: './auth-modal.component.html',
   styleUrl: './auth-modal.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AuthModalComponent {
-  private readonly authModalService = inject(AuthModalService);
-  isModalOpen = this.authModalService.isOpen;
+export class AuthModalComponent implements OnInit {
+  private readonly globalModalService = inject(GlobalModalService);
+  readonly modalData = inject(MODAL_DATA, {
+    optional: true,
+  }) as AuthModalData | null;
 
-  isLogin = signal<boolean>(true);
-  screenState = signal<ScreenState>('methods');
+  screenState = signal<ScreenState>('login');
 
-  closeModal() {
-    this.authModalService.close();
+  isModalOpen = true;
+
+  constructor() {}
+
+  ngOnInit(): void {
+    if (
+      this.modalData?.email &&
+      this.modalData?.token &&
+      this.modalData?.screenState === 'reset'
+    ) {
+      this.screenState.set('reset-password');
+    }
+
+    if (this.modalData?.screenState === 'otp' && this.modalData?.email) {
+      this.screenState.set('otp-verification');
+    }
   }
 
-  // showMethods() {
-  //   this.screenState.set('methods');
-  // }
+  closeModal() {
+    this.globalModalService.close();
+  }
 
-  // selectSystemLogin() {
-  //   this.screenState.set(this.isLogin() ? 'login' : 'register');
-  // }
+  showLogin() {
+    this.screenState.set('login');
+  }
 
-  // toggleLoginRegister() {
-  //   this.isLogin.update(v => !v);
-  //   this.showMethods();
-  // }
+  showForgotPasswordForm() {
+    this.screenState.set('forgot-password');
+  }
 
-  // isFormScreen() {
-  //   return this.screenState() === 'login' || this.screenState() === 'register';
-  // }
+  showResetPasswordForm() {
+    this.screenState.set('reset-password');
+  }
+
+  isFormScreen() {
+    return (
+      this.screenState() === 'forgot-password' ||
+      this.screenState() === 'reset-password' ||
+      this.screenState() === 'otp-verification'
+    );
+  }
 }

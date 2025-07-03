@@ -1,0 +1,33 @@
+.actions__btn ::ng-deep .p-button {
+  background-color: #0093fc;
+  border-color: transparent;
+  white-space: nowrap;
+  transition: opacity 0.2s linear;
+  position: absolute;
+  top: 9px;
+  right: 2px;
+  height: 42px;
+  bottom: 0;
+  min-width: 124px;
+  font-size: 14px;
+}
+
+.actions__btn ::ng-deep .p-button[disabled] {
+  color: #757575;
+  background-color: #ccc;
+  cursor: not-allowed;
+  background-image: unset;
+  opacity: 1;
+}
+
+.actions__btn ::ng-deep .p-button[disabled]:hover {
+  background-color: #ccc;
+  cursor: not-allowed;
+  background-image: unset;
+  opacity: 1;
+}
+
+.actions__btn ::ng-deep .p-button:hover {
+  background-color: #0093fc;
+  border-color: transparent;
+}

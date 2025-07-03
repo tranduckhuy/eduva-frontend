@@ -1,7 +1,8 @@
 import { RouterOutlet } from '@angular/router';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
-import { PageTitleService } from './shared/services/page-title/page-title.service';
+import { PageTitleService } from './shared/services/core/page-title/page-title.service';
+import { ThemeService } from './shared/services/core/theme/theme.service';
 
 import { TailwindIndicatorComponent } from './shared/components/tailwind-indicator/tailwind-indicator.component';
 import { NetworkStateComponent } from './shared/components/network-state/network-state.component';
@@ -13,10 +14,11 @@ import { NetworkStateComponent } from './shared/components/network-state/network
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   private readonly pageTitleService = inject(PageTitleService);
 
-  ngOnInit(): void {
+  constructor() {
+    inject(ThemeService);
     this.pageTitleService.init();
   }
 }

@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "frontend": {
+    "eduva-student": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -21,7 +21,7 @@
             "customWebpackConfig": {
               "path": "./custom-webpack.config.ts"
             },
-            "outputPath": "dist/frontend",
+            "outputPath": "dist/eduva-student",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [],
@@ -30,12 +30,18 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/ngx-extended-pdf-viewer/assets/",
+                "output": "/assets/"
               }
             ],
             "styles": [
               "node_modules/@fortawesome/fontawesome-svg-core/styles.css",
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "node_modules/@videogular/ngx-videogular/fonts/videogular.css",
+              "node_modules/plyr/dist/plyr.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -45,8 +51,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
+                  "maximumWarning": "1.2MB",
+                  "maximumError": "1.5MB"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -85,42 +91,19 @@
           "builder": "@angular-builders/custom-webpack:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "frontend:build:production"
+              "buildTarget": "eduva-student:build:production"
             },
             "development": {
-              "buildTarget": "frontend:build:development"
+              "buildTarget": "eduva-student:build:development"
             },
             "staging": {
-              "buildTarget": "frontend:build:staging"
+              "buildTarget": "eduva-student:build:staging"
             }
           },
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
-        },
-        "test": {
-          "builder": "@angular-builders/custom-webpack:karma",
-          "options": {
-            "customWebpackConfig": {
-              "path": "./custom-webpack.config.ts"
-            },
-            "polyfills": [],
-            "tsConfig": "tsconfig.spec.json",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
-            ],
-            "styles": [
-              "node_modules/@fortawesome/fontawesome-svg-core/styles.css",
-              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-              "node_modules/ckeditor5/dist/ckeditor5.css",
-              "src/styles.css"
-            ],
-            "scripts": []
-          }
         }
       }
     }

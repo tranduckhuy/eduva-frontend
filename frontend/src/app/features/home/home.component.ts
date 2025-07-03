@@ -1,171 +1,107 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  inject,
+  effect,
+  untracked,
+} from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
+import { AuthService } from '../../core/auth/services/auth.service';
+import { UserService } from '../../shared/services/api/user/user.service';
+import { EntityStatus } from '../../shared/models/enum/entity-status.enum';
+import { ClassService } from '../../shared/services/api/class/class.service';
+import { LoadingService } from '../../shared/services/core/loading/loading.service';
+import { AuthModalComponent } from '../../shared/components/auth-modal/auth-modal.component';
+import { GlobalModalService } from '../../shared/services/layout/global-modal/global-modal.service';
 import { HomeCarouselComponent } from '../../shared/components/home-carousel/home-carousel.component';
 import { ClassroomCardComponent } from '../../shared/components/classroom-card/classroom-card.component';
-
-type Classroom = {
-  title: string;
-  grade: string;
-  createdBy: string;
-  mediaNumbers: string;
-  duration: string;
-  classroomImage: string;
-  creatorAvatar: string;
-  isRecommend?: boolean;
-};
-
-type ClassroomSection = {
-  title: string;
-  classrooms: Classroom[];
-};
+import { GetStudentClassesEnrolledRequest } from '../../shared/models/api/request/query/get-student-classes-enrolled-request.model';
+import { ClassCardSkeletonComponent } from '../../shared/components/skeleton/class-card-skeleton/class-card-skeleton.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [HomeCarouselComponent, ClassroomCardComponent],
+  imports: [
+    HomeCarouselComponent,
+    ClassroomCardComponent,
+    ClassCardSkeletonComponent,
+    RouterLink,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent {
-  classroomSections = signal<ClassroomSection[]>([
-    {
-      title: 'Lớp học của tôi',
-      classrooms: [
-        {
-          title: '12_A3_NgoaiNgu_2324',
-          grade: '12',
-          createdBy: 'Sơn Đặng',
-          mediaNumbers: '590',
-          duration: '116h50p',
-          classroomImage:
-            'https://www.gstatic.com/classroom/themes/WorldStudies_thumb.jpg',
-          creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
-          isRecommend: true,
-        },
-        {
-          title: '11_A2_LichSu_2425',
-          grade: '11',
-          createdBy: 'Sơn Đặng',
-          mediaNumbers: '231',
-          duration: '42h32p',
-          classroomImage:
-            'https://gstatic.com/classroom/themes/WorldHistory_thumb.jpg',
-          creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
-          isRecommend: true,
-        },
-        {
-          title: '10_A11_DiaLy_2526',
-          grade: '10',
-          createdBy: 'Sơn Đặng',
-          mediaNumbers: '27',
-          duration: '6h18p',
-          classroomImage:
-            'https://www.gstatic.com/classroom/themes/SocialStudies_thumb.jpg',
-          creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
-          isRecommend: true,
-        },
-        {
-          title: '11_A7_TamLy_2526',
-          grade: '11',
-          createdBy: 'Sơn Đặng',
-          mediaNumbers: '27',
-          duration: '6h18p',
-          classroomImage:
-            'https://gstatic.com/classroom/themes/Psychology_thumb.jpg',
-          creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
-          isRecommend: true,
-        },
-        {
-          title: '11_A11_VatLy_2526',
-          grade: '11',
-          createdBy: 'Sơn Đặng',
-          mediaNumbers: '27',
-          duration: '6h18p',
-          classroomImage:
-            'https://www.gstatic.com/classroom/themes/Physics_thumb.jpg',
-          creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
-          isRecommend: true,
-        },
-        {
-          title: '12_A11_NguVan_2526',
-          grade: '12',
-          createdBy: 'Sơn Đặng',
-          mediaNumbers: '27',
-          duration: '6h18p',
-          classroomImage:
-            'https://www.gstatic.com/classroom/themes/English_thumb.jpg',
-          creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
-          isRecommend: true,
-        },
-      ],
-    },
-    {
-      title: 'Lớp học của tôi',
-      classrooms: [
-        {
-          title: '10_A5_DiaLy_2324',
-          grade: '10',
-          createdBy: 'Sơn Đặng',
-          mediaNumbers: '9',
-          duration: '3h12p',
-          classroomImage:
-            'https://www.gstatic.com/classroom/themes/Geography_thumb.jpg',
-          creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
-        },
-        {
-          title: '10_A4_TinHoc_2324',
-          grade: '10',
-          createdBy: 'Sơn Đặng',
-          mediaNumbers: '9',
-          duration: '3h12p',
-          classroomImage:
-            'https://www.gstatic.com/classroom/themes/img_code_thumb.jpg',
-          creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
-        },
-        {
-          title: '11_A6_HinhHoc_2223',
-          grade: '11',
-          createdBy: 'Sơn Đặng',
-          mediaNumbers: '117',
-          duration: '29h5p',
-          classroomImage:
-            'https://www.gstatic.com/classroom/themes/Geometry_thumb.jpg',
-          creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
-          isRecommend: true,
-        },
-        {
-          title: '12_A3_SinhHoc_2223',
-          grade: '12',
-          createdBy: 'Sơn Đặng',
-          mediaNumbers: '34',
-          duration: '6h31p',
-          classroomImage:
-            'https://gstatic.com/classroom/themes/Biology_thumb.jpg',
-          creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
-        },
-        {
-          title: '11_A2_DaiSo_2122',
-          grade: '11',
-          createdBy: 'Sơn Đặng',
-          mediaNumbers: '112',
-          duration: '24h15p',
-          classroomImage: 'https://gstatic.com/classroom/themes/Math_thumb.jpg',
-          creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
-          isRecommend: true,
-        },
-        {
-          title: '12_A1_HoaHoc_2223',
-          grade: '12',
-          createdBy: 'Sơn Đặng',
-          mediaNumbers: '19',
-          duration: '8h41p',
-          classroomImage:
-            'https://gstatic.com/classroom/themes/Chemistry_thumb.jpg',
-          creatorAvatar: 'https://fullstack.edu.vn/images/founder.jpeg',
-          isRecommend: true,
-        },
-      ],
-    },
-  ]);
+export class HomeComponent implements OnInit {
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly globalModalService = inject(GlobalModalService);
+  private readonly classService = inject(ClassService);
+  private readonly loadingService = inject(LoadingService);
+  private readonly userService = inject(UserService);
+  private readonly authService = inject(AuthService);
+
+  // Signals from service
+  isLoadingGetClasses = this.loadingService.is('get-classes');
+  currentUser = this.userService.currentUser;
+  classes = this.classService.classes;
+  isLoggedIn = this.authService.isLoggedIn;
+
+  skeletonItems = Array(7).fill(null);
+
+  constructor() {
+    // React to authentication state changes
+    effect(
+      () => {
+        const isLoggedIn = this.isLoggedIn();
+        const user = untracked(() => this.currentUser());
+
+        if (isLoggedIn && user) {
+          untracked(() => {
+            this.fetchClassesForUser(user.id, user.school!.id.toString());
+          });
+        } else {
+          untracked(() => this.classService.clearClasses());
+        }
+      },
+      { allowSignalWrites: true }
+    );
+  }
+
+  ngOnInit(): void {
+    this.activatedRoute.queryParamMap.subscribe(params => {
+      const email = params.get('email');
+      const token = params.get('token');
+
+      if (email && token) {
+        this.globalModalService.open(AuthModalComponent, {
+          screenState: 'reset',
+          email,
+          token,
+        });
+      }
+    });
+
+    // Initial fetch if user is already logged in
+    if (this.currentUser()) {
+      this.fetchClassesForUser(
+        this.currentUser()!.id,
+        this.currentUser()!.school!.id.toString()
+      );
+    }
+  }
+
+  private fetchClassesForUser(studentId: string, schoolId: string): void {
+    const getStudentClassesEnrolledRequest: GetStudentClassesEnrolledRequest = {
+      classStatus: EntityStatus.Active,
+      studentId,
+      schoolId: +schoolId,
+      sortBy: 'createdAt',
+      sortDirection: 'desc',
+    };
+
+    this.classService
+      .getStudentClassesEnrolled(getStudentClassesEnrolledRequest)
+      .subscribe();
+  }
 }

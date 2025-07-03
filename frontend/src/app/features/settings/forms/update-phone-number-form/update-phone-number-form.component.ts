@@ -1,19 +1,67 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
+import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
+
+import { UserService } from '../../../../shared/services/api/user/user.service';
+import { LoadingService } from '../../../../shared/services/core/loading/loading.service';
 
 import { FormControlComponent } from '../../../../shared/components/form-control/form-control.component';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
 
+import { type UpdateProfileRequest } from '../../models/update-profile-request.model';
+
 @Component({
   selector: 'app-update-phone-number-form',
   standalone: true,
-  imports: [FormsModule, FormControlComponent, ButtonComponent],
+  imports: [ReactiveFormsModule, FormControlComponent, ButtonComponent],
   templateUrl: './update-phone-number-form.component.html',
   styleUrl: './update-phone-number-form.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UpdatePhoneNumberFormComponent {
-  phone = signal<string>('');
+  private readonly fb = inject(FormBuilder);
+  private readonly userService = inject(UserService);
+  private readonly loadingService = inject(LoadingService);
 
-  onSubmit() {}
+  phoneNumber = input.required<string>();
+
+  phoneNumberChanged = output<void>();
+
+  form = this.fb.group({ phoneNumber: [''] });
+
+  isLoading = this.loadingService.isLoading;
+
+  submitted = signal<boolean>(false);
+
+  constructor() {
+    effect(() => {
+      this.form.patchValue({ phoneNumber: this.phoneNumber() });
+    });
+  }
+
+  onSubmit() {
+    this.submitted.set(true);
+    this.form.markAllAsTouched();
+
+    if (this.form.invalid) return;
+
+    const payload: UpdateProfileRequest = {
+      phoneNumber: this.form.get('phoneNumber')?.value ?? '',
+    };
+    this.userService.updateUserProfile(payload).subscribe(user => {
+      if (user) {
+        this.userService.updateCurrentUserPartial({
+          phoneNumber: user.phoneNumber,
+        });
+        this.phoneNumberChanged.emit();
+      }
+    });
+  }
 }

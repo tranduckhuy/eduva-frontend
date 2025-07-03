@@ -24,17 +24,12 @@
     center;
 }
 
-.animation-scale {
-  animation: scaleUp 0.3s linear;
+.auth-modal-width {
+  width: calc(100vw - 32px);
+  max-width: 576px;
 }
 
-@keyframes scaleUp {
-  0% {
-    opacity: 0;
-    scale: 0;
-  }
-  100% {
-    opacity: 1;
-    scale: 1;
-  }
+.auth-modal-height {
+  height: calc(100vh - 32px);
+  max-height: 660px;
 }

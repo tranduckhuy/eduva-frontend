@@ -7,11 +7,13 @@
   <div
     class="flex h-full flex-col justify-center gap-[1px]"
     [class]="avatarUrl() && '!gap-[10px]'">
-    <h4 class="shrink-0 text-base font-semibold">{{ title() }}</h4>
+    <h4 class="shrink-0 text-base font-semibold dark:text-[#242424]">
+      {{ title() }}
+    </h4>
     @if (avatarUrl()) {
       <img
-        src="https://accounts.fullstack.edu.vn/assets/logo-lV2rGpF0.png"
-        alt="avatar"
+        [src]="avatarUrl()"
+        [alt]="subtitle()"
         class="size-[50px] rounded-full object-cover" />
     } @else {
       <span

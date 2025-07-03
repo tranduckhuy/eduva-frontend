@@ -1,0 +1,23 @@
+<div class="mb-2">
+  <div
+    class="flex cursor-pointer select-none items-center justify-between rounded-md border border-[#ebebeb] bg-[#f5f5f5] px-8 py-4"
+    (click)="toggleCollapse()">
+    <h5
+      class="flex select-none items-center gap-4 text-base font-semibold text-[##333]">
+      <span
+        class="pi text-primary"
+        [class.pi-plus]="isCollapsed()"
+        [class.pi-minus]="!isCollapsed()"></span>
+      {{ folder().name }}
+    </h5>
+    <p>{{ folder().countLessonMaterial }} bài học</p>
+  </div>
+  <div [class.hidden]="isCollapsed()">
+    @for (material of materials(); track $index) {
+      <curriculum-lesson-item
+        [material]="material"
+        [classId]="classId()"
+        [folderId]="folder().id" />
+    }
+  </div>
+</div>

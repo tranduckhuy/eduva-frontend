@@ -1,72 +1,69 @@
 <div
-  class="fixed inset-0 z-[996] flex items-center justify-center"
-  [class.pointer-events-none]="!isModalOpen()">
-  <!-- ? Overlay -->
+  class="auth-modal-height auth-modal-width relative z-[998] overflow-y-auto rounded-2xl bg-white transition-all duration-300 ease-in-out">
   <div
-    class="absolute inset-0 z-[997] select-none bg-[#0006] transition-all duration-300 ease-in-out"
-    [ngClass]="{
-      'opacity-0': !isModalOpen(),
-      'opacity-100': isModalOpen(),
-    }"
-    (click)="closeModal()"></div>
+    class="modal-background pointer-events-none sticky left-0 right-0 top-0 z-[1] min-h-full rounded-2xl opacity-[0.08]"></div>
 
-  <!-- ? Modal Content -->
-
-  <div
-    class="relative z-[998] h-[min(660px,100%-32px)] w-[min(576px,100%-32px)] overflow-y-auto rounded-2xl bg-white transition-all duration-300 ease-in-out"
-    [ngClass]="{
-      'scale-0 opacity-0': !isModalOpen(),
-      'scale-1 opacity-100': isModalOpen(),
-    }">
+  <div class="absolute left-0 top-0 z-[2]">
+    <!-- ? Back/Close -->
     <div
-      class="modal-background pointer-events-none sticky left-0 right-0 top-0 z-[1] min-h-full rounded-2xl opacity-[0.08]"></div>
+      class="sticky left-0 top-0 z-[10] flex w-full items-center justify-between p-5">
+      <button
+        class="flex w-full cursor-pointer items-center gap-1 rounded-full text-base text-[#333] transition-opacity duration-200 ease-in-out hover:opacity-100"
+        [ngClass]="{
+          'opacity-0': !isFormScreen(),
+          'pointer-events-none': !isFormScreen(),
+          'opacity-70': isFormScreen(),
+        }"
+        (click)="showLogin()">
+        <span class="pi pi-angle-left"></span>
+        <span>Quay lại</span>
+      </button>
+      <button
+        class="ml-auto flex size-10 cursor-pointer items-center justify-center rounded-full bg-[#16182308] text-[#333]"
+        (click)="closeModal()">
+        <span class="pi pi-times"></span>
+      </button>
+    </div>
 
-    <div class="absolute left-0 top-0 z-[2]">
-      <!-- ? Back/Close -->
-      <div
-        class="sticky left-0 top-0 z-[10] flex w-full items-center justify-between p-5">
-        <!-- <button
-          class="flex w-full cursor-pointer items-center gap-1 rounded-full text-base text-[#333] transition-opacity duration-200 ease-in-out hover:opacity-100"
-          [ngClass]="{
-            'opacity-0': !isFormScreen(),
-            'pointer-events-none': !isFormScreen(),
-            'opacity-70': isFormScreen(),
-          }"
-          (click)="showMethods()">
-          <span class="pi pi-angle-left"></span>
-          <span>Quay lại</span>
-        </button> -->
-        <button
-          class="flex size-10 cursor-pointer items-center justify-center rounded-full bg-[#16182308] text-[#333]"
-          (click)="closeModal()">
-          <span class="pi pi-times"></span>
-        </button>
-      </div>
+    <!-- ? Content -->
+    <div class="flex flex-col items-center text-center">
+      <!-- ? Header -->
 
-      <!-- ? Content -->
-      <div class="flex flex-col items-center text-center">
-        <!-- ? Header -->
-        <!-- [isLogin]="isLogin()" -->
-        <auth-modal-header />
+      <auth-modal-header [screenState]="screenState()" />
 
-        <!-- ? Main -->
-        <div class="mt-6">
-          <div class="mx-auto flex max-w-[360px] flex-col">
-            <auth-form-login />
-            <!-- ? Methods -->
-            <!-- @if (screenState() === 'methods') {
-              <auth-methods (systemLoginSelected)="selectSystemLogin()" />
-            } -->
-            <!-- ? Forms -->
-            <!-- @if (screenState() === 'register') {
-              <auth-form-register />
-            } -->
-          </div>
+      <!-- ? Main -->
+      <div class="mt-6">
+        <div class="mx-auto flex max-w-[360px] flex-col">
+          @switch (screenState()) {
+            @case ('login') {
+              <auth-form-login />
+            }
 
-          <!-- ? Footer -->
-          <!-- (switchState)="toggleLoginRegister()", [isLogin]="isLogin()" -->
-          <auth-modal-footer />
+            @case ('forgot-password') {
+              <auth-form-forgot-password />
+            }
+
+            @case ('reset-password') {
+              @if (modalData) {
+                <auth-form-reset-password
+                  [email]="modalData.email"
+                  [token]="modalData.token"
+                  (passwordChanged)="showLogin()" />
+              }
+            }
+
+            @case ('otp-verification') {
+              @if (modalData) {
+                <auth-form-otp-verification [email]="modalData.email" />
+              }
+            }
+          }
         </div>
+
+        <!-- ? Footer -->
+        <auth-modal-footer
+          (switchState)="showForgotPasswordForm()"
+          [screenState]="screenState()" />
       </div>
     </div>
   </div>

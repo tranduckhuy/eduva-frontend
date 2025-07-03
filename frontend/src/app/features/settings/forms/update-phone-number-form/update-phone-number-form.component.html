@@ -1,18 +1,23 @@
-<form (ngSubmit)="onSubmit()">
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="max-h-[60vh] min-h-[122px] overflow-y-auto pb-[30px]">
     <app-form-control
-      label="Số điện thoại"
+      formControlName="phoneNumber"
+      name="phoneNumber"
       type="tel"
+      label="Số điện thoại"
       placeholder="Nhập số điện thoại của bạn"
-      [name]="'phone'"
+      [submitted]="submitted()"
       [phone]="true"
-      [(ngModel)]="phone"
       [errorMessages]="{
         pattern: 'Số điện thoại không đúng định dạng',
       }">
     </app-form-control>
   </div>
   <footer>
-    <app-button [text]="'Lưu lại'" [type]="'rounded'" />
+    <app-button
+      text="Lưu lại"
+      buttonType="submit"
+      variant="rounded"
+      [loading]="isLoading()" />
   </footer>
 </form>

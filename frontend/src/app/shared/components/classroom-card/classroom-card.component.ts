@@ -14,18 +14,7 @@ import {
 import { faClock, faCirclePlay } from '@fortawesome/free-solid-svg-icons';
 
 import { TooltipModule } from 'primeng/tooltip';
-
-type Classroom = {
-  title: string;
-  grade: string;
-  createdBy: string;
-  mediaNumbers: string;
-  duration: string;
-  classroomImage: string;
-  creatorAvatar: string;
-  isRecommend?: boolean;
-  progress?: number;
-};
+import { ClassModel } from '../../models/entities/class.model';
 
 @Component({
   selector: 'classroom-card',
@@ -38,7 +27,7 @@ type Classroom = {
 export class ClassroomCardComponent {
   libIcon = inject(FaIconLibrary);
 
-  classroom = input.required<Classroom>();
+  classroom = input.required<ClassModel>();
   withProgress = input<boolean>(false);
 
   constructor() {

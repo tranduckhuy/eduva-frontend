@@ -22,10 +22,16 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background:
-    linear-gradient(#fbfdff, #fbfdff) padding-box,
-    linear-gradient(#5ebbff 0%, #a174ff 40%) border-box;
+  background: var(--color-bg-btn-gradient-icon);
   border: 1px solid transparent;
+}
+
+.btn--icon .icon {
+  background: var(--color-bg-icon-btn-gradient-icon);
+}
+
+.btn--icon:hover .icon {
+  background-color: var(--color-bg-hover-btn-gradient-icon);
 }
 
 /* Outline variant: gradient border, neutral bg */
@@ -36,9 +42,9 @@
   border: 3px solid transparent;
   border-radius: 8px;
   background:
-    linear-gradient(#f6f7f9, #f6f7f9) padding-box,
+    linear-gradient(var(--color-bg5), var(--color-bg5)) padding-box,
     linear-gradient(141.34deg, #5ebbff 0%, #a174ff 91.11%) border-box;
-  color: #0093fc;
+  color: var(--color-text-btn-gradient);
 }
 
 .btn--outline:hover {
@@ -54,12 +60,12 @@
   border: 3px solid transparent;
   border-radius: 8px;
   background-color: transparent;
-  color: #0093fc;
+  color: var(--color-text-btn-gradient);
 }
 
 .btn--text:hover {
   background:
-    linear-gradient(#f6f7f9) padding-box,
+    linear-gradient(var(--color-bg5)) padding-box,
     linear-gradient(141.34deg, #5ebbff 0%, #a174ff 91.11%) border-box;
 }
 

@@ -1,5 +1,5 @@
 <main
-  class="min-h-[100dvh] px-[14px] py-[84px] text-black before:absolute before:inset-0 before:-z-10 before:bg-white md:fixed md:inset-0 md:overflow-y-auto md:px-5 md:py-0">
+  class="min-h-[100dvh] px-[14px] py-[84px] text-black before:absolute before:inset-0 before:-z-10 before:bg-white md:fixed md:inset-0 md:overflow-y-auto md:px-5 md:py-0 dark:text-[#242424]">
   <!-- Mobile + Tablet -->
   <div class="background hidden h-full md:block"></div>
   <div class="hidden md:block">
@@ -10,9 +10,9 @@
     </a>
   </div>
   <!--  -->
-  <h1 class="text-2xl font-semibold">Thông tin cá nhân</h1>
+  <h1 class="text-2xl font-semibold dark:text-[#242424]">Thông tin cá nhân</h1>
 
-  <p class="my-[10px] font-[15px] opacity-90">
+  <p class="my-[10px] font-[15px] opacity-90 dark:text-[#242424]">
     Quản lý thông tin cá nhân của bạn.
   </p>
 
@@ -20,7 +20,9 @@
     <!-- Basic Information -->
     <section class="flex flex-col gap-4">
       <div class="flex flex-col gap-2">
-        <h2 class="text-[17px] font-semibold">Thông tin cơ bản</h2>
+        <h2 class="text-[17px] font-semibold dark:text-[#242424]">
+          Thông tin cơ bản
+        </h2>
         <p class="opacity-70">
           Quản lý tên hiển thị, tên người dùng, bio và avatar của bạn.
         </p>
@@ -28,45 +30,31 @@
 
       <div class="gap-1 overflow-hidden rounded-[10px] bg-white">
         <app-profile-card
-          [readonly]="true"
           title="Họ và tên"
-          subtitle="Trọng Huy" />
-        <app-profile-card
-          [readonly]="true"
-          title="Tên người dùng"
-          subtitle="huytrong" />
-        <app-profile-card
-          title="Giới thiệu"
-          subtitle=""
-          (click)="openDialog('bio')" />
+          [subtitle]="user()?.fullName"
+          (click)="openDialog('name')" />
         <app-profile-card
           title="Ảnh đại diện"
-          avatarUrl="https://accounts.fullstack.edu.vn/assets/logo-lV2rGpF0.png"
+          [avatarUrl]="user()?.avatarUrl"
+          [subtitle]="user()?.fullName"
           (click)="openDialog('avatar')" />
       </div>
 
       @if (openedDialog() === 'name') {
         <app-dialog
-          (close)="closeDialog()"
           title="Cập nhật tên của bạn"
-          desc="Tên sẽ được hiển thị trên trang cá nhân, trong các bình luận và bài viết của bạn.">
-        </app-dialog>
-      } @else if (openedDialog() === 'username') {
-        <app-dialog
-          (close)="closeDialog()"
-          title="Chỉnh sửa tên người dùng"
-          desc="URL trang cá nhân F8 của bạn sẽ bị thay đổi, bạn cũng sẽ không sử dụng được tên người dùng cũ để đăng nhập vào hệ thống F8 nữa.">
-        </app-dialog>
-      } @else if (openedDialog() === 'bio') {
-        <app-dialog
-          (close)="closeDialog()"
-          title="Chỉnh sửa phần giới thiệu"
-          desc="Phần giới thiệu (tiểu sử) được hiển thị tại trang cá nhân của bạn, giúp mọi người hiểu rõ hơn về bạn.">
-          <app-update-bio-form />
+          desc="Tên sẽ được hiển thị trên trang cá nhân, trong các bình luận và bài viết của bạn."
+          (close)="closeDialog()">
+          <app-update-name-form
+            [fullName]="user()!.fullName"
+            (nameChanged)="closeDialog()" />
         </app-dialog>
       } @else if (openedDialog() === 'avatar') {
-        <app-dialog (close)="closeDialog()" [width]="450">
-          <app-update-avatar-form />
+        <app-dialog [width]="450" (close)="closeDialog()">
+          <app-update-avatar-form
+            [avatarUrl]="user()!.avatarUrl"
+            [fullName]="user()!.fullName"
+            (avatarChanged)="onAvatarChange($event)" />
         </app-dialog>
       }
     </section>
@@ -75,7 +63,9 @@
     <!-- Contact -->
     <section class="mt-10 flex flex-col gap-4">
       <div class="flex flex-col gap-2">
-        <h2 class="text-[17px] font-semibold">Thông tin liên hệ</h2>
+        <h2 class="text-[17px] font-semibold dark:text-[#242424]">
+          Thông tin liên hệ
+        </h2>
         <p class="opacity-70">
           Quản lý danh sách các thông tin liên hệ của bạn.
         </p>
@@ -84,95 +74,26 @@
       <div class="gap-1 overflow-hidden rounded-[10px] bg-white">
         <app-profile-card
           title="Email"
-          subtitle="Chưa cập nhật"
-          (click)="openDialog('email')"
-          close>
+          [readonly]="true"
+          [subtitle]="user()?.email">
         </app-profile-card>
         <app-profile-card
           title="Số điện thoại"
-          subtitle="0123456789"
-          (click)="openDialog('phone')"
-          close>
+          [subtitle]="user()?.phoneNumber ?? 'Chưa cập nhật'"
+          (click)="openDialog('phone')">
         </app-profile-card>
       </div>
 
-      @if (openedDialog() === 'email') {
-        <app-dialog
-          (close)="closeDialog()"
-          title="Địa chỉ email"
-          desc="Địa chỉ email của bạn. Ví dụ: username@gmail.com.">
-          <app-update-email-form />
-        </app-dialog>
-      } @else if (openedDialog() === 'phone') {
+      @if (openedDialog() === 'phone') {
         <app-dialog
           (close)="closeDialog()"
           title="Số điện thoại"
           desc="Số điện thoại của bạn sẽ được sử dụng để liên hệ.">
-          <app-update-phone-number-form />
+          <app-update-phone-number-form
+            [phoneNumber]="user()!.phoneNumber"
+            (phoneNumberChanged)="closeDialog()" />
         </app-dialog>
       }
     </section>
-    <!--  -->
-
-    <!-- Socials -->
-    <!-- <section class="mt-10 flex flex-col gap-4">
-      <div class="flex flex-col gap-2">
-        <h2 class="text-[17px] font-semibold">Thông tin mạng xã hội</h2>
-        <p class="opacity-70">
-          Quản lý liên kết tới các trang mạng xã hội của bạn.
-        </p>
-      </div>
-
-      <div class="gap-1 overflow-hidden rounded-[10px] bg-white">
-        <app-profile-card
-          title="Facebook"
-          subtitle="Chưa cập nhật"
-          (click)="openDialog('facebook')">
-        </app-profile-card>
-        <app-profile-card
-          title="Instagram"
-          subtitle="Chưa cập nhật"
-          (click)="openDialog('instagram')">
-        </app-profile-card>
-        <app-profile-card
-          title="Tiktok"
-          subtitle="Chưa cập nhật"
-          (click)="openDialog('tiktok')">
-        </app-profile-card>
-      </div>
-
-      @if (openedDialog() === 'facebook') {
-        <app-dialog
-          (close)="closeDialog()"
-          title="Trang cá nhân Facebook"
-          desc="Địa chỉ Facebook sẽ được hiển thị trên trang cá nhân của bạn. Ví dụ: https://facebook.com/username.">
-          <app-update-social-form
-            label="Facebook"
-            placeholder="Nhập đường dẫn Facebook của bạn"
-            name="facebook" />
-        </app-dialog>
-      } @else if (openedDialog() === 'instagram') {
-        <app-dialog
-          (close)="closeDialog()"
-          title="Instagram"
-          desc="Địa chỉ Instagram sẽ được hiển thị trên trang cá nhân của bạn. Ví dụ: https://instagram.com/username.">
-          <app-update-social-form
-            label="Instagram"
-            placeholder="Nhập đường dẫn Instagram của bạn"
-            name="instagram" />
-        </app-dialog>
-      } @else if (openedDialog() === 'tiktok') {
-        <app-dialog
-          (close)="closeDialog()"
-          title="Tiktok"
-          desc="Địa chỉ tiktok sẽ được hiển thị trên trang cá nhân của bạn. Ví dụ: https://tiktok.com/username.">
-          <app-update-social-form
-            label="Tiktok"
-            placeholder="Nhập đường dẫn Tiktok của bạn"
-            name="tiktok" />
-        </app-dialog>
-      }
-    </section> -->
-    <!--  -->
   </div>
 </main>

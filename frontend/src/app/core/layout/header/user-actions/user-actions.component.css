@@ -1,15 +1,15 @@
 /* ? Not Logged In */
 .actions__btn ::ng-deep .p-button {
-  background-color: #2093e7;
-  background-image: linear-gradient(to right bottom, #4dbfe9, #2093e7 50%);
+  color: #fff;
+  background-color: #0093fc;
   border-color: transparent;
   white-space: nowrap;
   transition: opacity 0.2s linear;
 }
 
 .actions__btn ::ng-deep .p-button:hover {
-  background-color: #2093e7;
-  background-image: linear-gradient(to right bottom, #4dbfe9, #2093e7 50%);
+  color: #fff;
+  background-color: #0093fc;
   border-color: transparent;
   opacity: 0.8;
 }
@@ -21,7 +21,7 @@
 
 .notify__btn ::ng-deep .p-button {
   border-color: transparent;
-  color: #707070;
+  color: var(--color-grey);
   background: transparent;
 }
 
@@ -31,6 +31,6 @@
 
 .notify__btn ::ng-deep .p-button:hover {
   border-color: transparent;
-  color: #707070;
+  color: var(--color-text);
   background: transparent;
 }
