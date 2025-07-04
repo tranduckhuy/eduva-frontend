@@ -5,14 +5,11 @@ import {
   ViewChild,
   input,
   effect,
-  DestroyRef,
-  inject,
   afterNextRender,
   computed,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import Plyr from 'plyr';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-audio-listener',
@@ -24,7 +21,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 })
 export class AudioListenerComponent {
   @ViewChild('audioPlayer') audioPlayer!: ElementRef<HTMLAudioElement>;
-  private destroyRef = inject(DestroyRef);
 
   readonly materialSourceUrl = input<string>();
   player!: Plyr;

@@ -79,8 +79,8 @@ export class WatchLessonsComponent implements OnInit {
   currentFolder = signal<Folder | undefined>(undefined);
 
   // Track loading state to prevent loops
-  private isInitialLoad = signal<boolean>(true);
-  private lastLoadedMaterialId = signal<string | null>(null);
+  private readonly isInitialLoad = signal<boolean>(true);
+  private readonly lastLoadedMaterialId = signal<string | null>(null);
 
   // Effect to watch for materialId changes
   private readonly materialIdEffect = effect(
@@ -100,8 +100,8 @@ export class WatchLessonsComponent implements OnInit {
     this.activatedRoute.queryParams
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(params => {
-        this.classId.set(params['classId'] || '');
-        this.folderId.set(params['folderId'] || '');
+        this.classId.set(params['classId'] ?? '');
+        this.folderId.set(params['folderId'] ?? '');
 
         // Only load on initial route params if we haven't loaded yet
         if (this.isInitialLoad()) {
