@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { Observable, catchError, map, of, tap } from 'rxjs';
+import { Observable, catchError, map, of, tap, throwError } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 
@@ -45,11 +45,13 @@ export class TwoFactorService {
       ? this.REQUEST_ENABLE_TWO_FACTOR_API_URL
       : this.REQUEST_DISABLE_TWO_FACTOR_API_URL;
 
-    return this.requestService.post(url, request).pipe(
-      tap(res => this.handleRequest2FAResponse(res, isEnable)),
-      map(() => void 0),
-      catchError(err => this.handleRequest2FAError(err))
-    );
+    return this.requestService
+      .post(url, request, { bypassAuthError: true })
+      .pipe(
+        tap(res => this.handleRequest2FAResponse(res, isEnable)),
+        map(() => void 0),
+        catchError(err => this.handleRequest2FAError(err))
+      );
   }
 
   confirmEnableDisable2FA(
@@ -60,11 +62,13 @@ export class TwoFactorService {
       ? this.CONFIRM_ENABLE_TWO_FACTOR_API_URL
       : this.CONFIRM_DISABLE_TWO_FACTOR_API_URL;
 
-    return this.requestService.post(url, request).pipe(
-      tap(res => this.handleConfirm2FAResponse(res, isEnable)),
-      map(() => void 0),
-      catchError(err => this.handleConfirm2FAError(err))
-    );
+    return this.requestService
+      .post(url, request, { bypassAuthError: true })
+      .pipe(
+        tap(res => this.handleConfirm2FAResponse(res, isEnable)),
+        map(() => void 0),
+        catchError(err => this.handleConfirm2FAError(err))
+      );
   }
 
   verifyTwoFactor(
@@ -72,6 +76,8 @@ export class TwoFactorService {
   ): Observable<AuthTokenResponse | null> {
     return this.requestService
       .post<AuthTokenResponse>(this.VERIFY_OTP_LOGIN_API_URL, request, {
+        bypassAuth: true,
+        bypassAuthError: true,
         loadingKey: 'otp-verification',
       })
       .pipe(
@@ -121,7 +127,7 @@ export class TwoFactorService {
     } else {
       this.toastHandlingService.errorGeneral();
     }
-    return of(void 0);
+    return throwError(() => err);
   }
 
   private handleConfirm2FAResponse(res: any, isEnable: boolean): void {
@@ -142,7 +148,7 @@ export class TwoFactorService {
 
   private handleConfirm2FAError(err: HttpErrorResponse): Observable<void> {
     this.handleOtpInvalidError(err);
-    return of(void 0);
+    return throwError(() => err);
   }
 
   private handleVerify2FAResponse(res: any, data?: AuthTokenResponse): void {
