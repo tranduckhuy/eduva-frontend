@@ -1,13 +1,14 @@
 <div
+  id="video-wrapper"
   class="video-player relative box-border block overflow-hidden pt-[56.25%] text-sm text-white"
   [class.paused]="isPaused()">
   <vg-player
     (onPlayerReady)="onPlayerReady($event)"
     class="absolute left-0 top-0 h-full w-full">
     <video
-      #video
+      #videoPlayer
       id="video-player"
-      [vgMedia]="$any(video)"
+      [vgMedia]="$any(videoPlayer)"
       [preload]="preload()"
       crossorigin>
       <source [src]="materialSourceUrl()" type="video/mp4" />
