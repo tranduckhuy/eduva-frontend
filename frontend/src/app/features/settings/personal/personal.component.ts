@@ -8,13 +8,12 @@ import { RouterLink } from '@angular/router';
 
 import { ProfileCardComponent } from '../profile-card/profile-card.component';
 import { DialogComponent } from '../dialog/dialog.component';
-import { UpdateBioFormComponent } from '../forms/update-bio-form/update-bio-form.component';
+import { UpdateNameFormComponent } from '../forms/update-name-form/update-name-form.component';
 import { UpdateAvatarFormComponent } from '../forms/update-avatar-form/update-avatar-form.component';
 import { UpdatePhoneNumberFormComponent } from '../forms/update-phone-number-form/update-phone-number-form.component';
-import { UpdateEmailFormComponent } from '../forms/update-email-form/update-email-form.component';
-import { UpdateSocialFormComponent } from '../forms/update-social-form/update-social-form.component';
 
 import { UserService } from '../../../shared/services/api/user/user.service';
+import { UpdateProfileRequest } from '../models/update-profile-request.model';
 
 @Component({
   selector: 'app-personal',
@@ -23,11 +22,9 @@ import { UserService } from '../../../shared/services/api/user/user.service';
     RouterLink,
     ProfileCardComponent,
     DialogComponent,
-    UpdateBioFormComponent,
     UpdateAvatarFormComponent,
-    UpdateEmailFormComponent,
     UpdatePhoneNumberFormComponent,
-    UpdateSocialFormComponent,
+    UpdateNameFormComponent,
   ],
   templateUrl: './personal.component.html',
   styleUrl: './personal.component.css',
@@ -46,5 +43,20 @@ export class PersonalComponent {
 
   closeDialog() {
     this.openedDialog.set(null);
+  }
+
+  onAvatarChange(avatarUrl: string) {
+    const payload: UpdateProfileRequest = {
+      avatarUrl,
+    };
+
+    this.userService.updateUserProfile(payload).subscribe(user => {
+      if (user) {
+        this.userService.updateCurrentUserPartial({
+          avatarUrl: user.avatarUrl,
+        });
+        this.closeDialog();
+      }
+    });
   }
 }

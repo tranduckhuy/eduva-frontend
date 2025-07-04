@@ -31,16 +31,8 @@
       <div class="gap-1 overflow-hidden rounded-[10px] bg-white">
         <app-profile-card
           title="Họ và tên"
-          [readonly]="true"
-          [subtitle]="user()?.fullName" />
-        <!-- <app-profile-card
-          [readonly]="true"
-          title="Tên người dùng"
-          subtitle="huytrong" /> -->
-        <!-- <app-profile-card
-          title="Giới thiệu"
-          subtitle=""
-          (click)="openDialog('bio')" /> -->
+          [subtitle]="user()?.fullName"
+          (click)="openDialog('name')" />
         <app-profile-card
           title="Ảnh đại diện"
           [avatarUrl]="user()?.avatarUrl"
@@ -50,28 +42,19 @@
 
       @if (openedDialog() === 'name') {
         <app-dialog
-          (close)="closeDialog()"
           title="Cập nhật tên của bạn"
-          desc="Tên sẽ được hiển thị trên trang cá nhân, trong các bình luận và bài viết của bạn.">
-        </app-dialog>
-      } @else if (openedDialog() === 'username') {
-        <app-dialog
-          (close)="closeDialog()"
-          title="Chỉnh sửa tên người dùng"
-          desc="URL trang cá nhân F8 của bạn sẽ bị thay đổi, bạn cũng sẽ không sử dụng được tên người dùng cũ để đăng nhập vào hệ thống F8 nữa.">
-        </app-dialog>
-      } @else if (openedDialog() === 'bio') {
-        <app-dialog
-          (close)="closeDialog()"
-          title="Chỉnh sửa phần giới thiệu"
-          desc="Phần giới thiệu (tiểu sử) được hiển thị tại trang cá nhân của bạn, giúp mọi người hiểu rõ hơn về bạn.">
-          <app-update-bio-form />
+          desc="Tên sẽ được hiển thị trên trang cá nhân, trong các bình luận và bài viết của bạn."
+          (close)="closeDialog()">
+          <app-update-name-form
+            [fullName]="user()!.fullName"
+            (nameChanged)="closeDialog()" />
         </app-dialog>
       } @else if (openedDialog() === 'avatar') {
-        <app-dialog (close)="closeDialog()" [width]="450">
+        <app-dialog [width]="450" (close)="closeDialog()">
           <app-update-avatar-form
             [avatarUrl]="user()!.avatarUrl"
-            [fullName]="user()!.fullName" />
+            [fullName]="user()!.fullName"
+            (avatarChanged)="onAvatarChange($event)" />
         </app-dialog>
       }
     </section>
@@ -91,8 +74,8 @@
       <div class="gap-1 overflow-hidden rounded-[10px] bg-white">
         <app-profile-card
           title="Email"
-          [subtitle]="user()?.email"
-          (click)="openDialog('email')">
+          [readonly]="true"
+          [subtitle]="user()?.email">
         </app-profile-card>
         <app-profile-card
           title="Số điện thoại"
@@ -101,83 +84,16 @@
         </app-profile-card>
       </div>
 
-      @if (openedDialog() === 'email') {
-        <app-dialog
-          title="Địa chỉ email"
-          desc="Địa chỉ email của bạn. Ví dụ: username@gmail.com."
-          (close)="closeDialog()">
-          <app-update-email-form [email]="user()!.email" />
-        </app-dialog>
-      } @else if (openedDialog() === 'phone') {
+      @if (openedDialog() === 'phone') {
         <app-dialog
           (close)="closeDialog()"
           title="Số điện thoại"
           desc="Số điện thoại của bạn sẽ được sử dụng để liên hệ.">
-          <app-update-phone-number-form [phoneNumber]="user()!.phoneNumber" />
+          <app-update-phone-number-form
+            [phoneNumber]="user()!.phoneNumber"
+            (phoneNumberChanged)="closeDialog()" />
         </app-dialog>
       }
     </section>
-    <!--  -->
-
-    <!-- Socials -->
-    <!-- <section class="mt-10 flex flex-col gap-4">
-      <div class="flex flex-col gap-2">
-        <h2 class="text-[17px] font-semibold">Thông tin mạng xã hội</h2>
-        <p class="opacity-70">
-          Quản lý liên kết tới các trang mạng xã hội của bạn.
-        </p>
-      </div>
-
-      <div class="gap-1 overflow-hidden rounded-[10px] bg-white">
-        <app-profile-card
-          title="Facebook"
-          subtitle="Chưa cập nhật"
-          (click)="openDialog('facebook')">
-        </app-profile-card>
-        <app-profile-card
-          title="Instagram"
-          subtitle="Chưa cập nhật"
-          (click)="openDialog('instagram')">
-        </app-profile-card>
-        <app-profile-card
-          title="Tiktok"
-          subtitle="Chưa cập nhật"
-          (click)="openDialog('tiktok')">
-        </app-profile-card>
-      </div>
-
-      @if (openedDialog() === 'facebook') {
-        <app-dialog
-          (close)="closeDialog()"
-          title="Trang cá nhân Facebook"
-          desc="Địa chỉ Facebook sẽ được hiển thị trên trang cá nhân của bạn. Ví dụ: https://facebook.com/username.">
-          <app-update-social-form
-            label="Facebook"
-            placeholder="Nhập đường dẫn Facebook của bạn"
-            name="facebook" />
-        </app-dialog>
-      } @else if (openedDialog() === 'instagram') {
-        <app-dialog
-          (close)="closeDialog()"
-          title="Instagram"
-          desc="Địa chỉ Instagram sẽ được hiển thị trên trang cá nhân của bạn. Ví dụ: https://instagram.com/username.">
-          <app-update-social-form
-            label="Instagram"
-            placeholder="Nhập đường dẫn Instagram của bạn"
-            name="instagram" />
-        </app-dialog>
-      } @else if (openedDialog() === 'tiktok') {
-        <app-dialog
-          (close)="closeDialog()"
-          title="Tiktok"
-          desc="Địa chỉ tiktok sẽ được hiển thị trên trang cá nhân của bạn. Ví dụ: https://tiktok.com/username.">
-          <app-update-social-form
-            label="Tiktok"
-            placeholder="Nhập đường dẫn Tiktok của bạn"
-            name="tiktok" />
-        </app-dialog>
-      }
-    </section> -->
-    <!--  -->
   </div>
 </main>

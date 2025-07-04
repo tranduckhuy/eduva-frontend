@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { Observable, catchError, map, of, tap } from 'rxjs';
+import { Observable, catchError, map, of, tap, throwError } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 
@@ -12,7 +12,7 @@ import { StatusCode } from '../../../shared/constants/status-code.constant';
 
 import { type EmailLinkRequest } from '../models/request/email-link-request.model';
 import { type ResetPasswordRequest } from '../models/request/reset-password-request.model';
-// import { type ChangePasswordRequest } from '../../../shared/models/api/request/command/change-password-request.model';
+import { type ChangePasswordRequest } from '../../../shared/models/api/request/command/change-password-request.model';
 
 @Injectable({
   providedIn: 'root',
@@ -45,17 +45,17 @@ export class PasswordService {
     );
   }
 
-  // changePassword(request: ChangePasswordRequest): Observable<void> {
-  //   return this.requestService
-  //     .post(this.CHANGE_PASSWORD_API_URL, request, {
-  //       loadingKey: 'change-password-form',
-  //     })
-  //     .pipe(
-  //       tap(res => this.handleChangePasswordResponse(res)),
-  //       map(() => void 0),
-  //       catchError(err => this.handleChangePasswordError(err))
-  //     );
-  // }
+  changePassword(request: ChangePasswordRequest): Observable<void> {
+    return this.requestService
+      .post(this.CHANGE_PASSWORD_API_URL, request, {
+        loadingKey: 'change-password-form',
+      })
+      .pipe(
+        tap(res => this.handleChangePasswordResponse(res)),
+        map(() => void 0),
+        catchError(err => this.handleChangePasswordError(err))
+      );
+  }
 
   // ---------------------------
   //  Private Helper Functions
@@ -139,6 +139,6 @@ export class PasswordService {
       default:
         this.toastHandlingService.errorGeneral();
     }
-    return of(void 0);
+    return throwError(() => err);
   }
 }

@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, ChangeDetectionStrategy, input } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+
 import {
   NgxExtendedPdfViewerModule,
   NgxExtendedPdfViewerService,

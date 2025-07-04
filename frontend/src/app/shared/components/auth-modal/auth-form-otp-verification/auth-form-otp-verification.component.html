@@ -1,0 +1,37 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" autocomplete="off">
+  <div class="relative">
+    <app-form-control
+      formControlName="otpCode"
+      name="otpCode"
+      type="tel"
+      placeholder="Nhập mã xác nhận"
+      [required]="true"
+      [maxLength]="6"
+      [pattern]="'^[0-9]{6}$'"
+      [submitted]="submitted()"
+      (input)="onCodeInput($event)">
+    </app-form-control>
+    <p-button
+      size="small"
+      class="actions__btn"
+      [rounded]="true"
+      [label]="isSentCode() ? 'Gửi lại mã (' + countdown() + 's)' : 'Gửi mã'"
+      [disabled]="isSentCode()"
+      [loading]="isLoadingResend()"
+      (onClick)="onResendCode()" />
+  </div>
+  @if (isSentCode()) {
+    <div class="my-2 ml-2 text-left text-sm font-medium italic text-[#02875a]">
+      Đã gửi mã! Kiểm tra email của bạn để lấy mã.
+    </div>
+  }
+  <!-- ? Submit Button -->
+  <div class="mt-5">
+    <app-button
+      text="Xác nhận"
+      buttonType="submit"
+      variant="rounded"
+      [loading]="isLoadingVerify()"
+      [disabled]="!!form.get('otpCode')?.invalid" />
+  </div>
+</form>
