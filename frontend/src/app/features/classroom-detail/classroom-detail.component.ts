@@ -4,7 +4,6 @@ import {
   inject,
   input,
   OnInit,
-  signal,
 } from '@angular/core';
 
 import { FolderComponent } from './folder/folder.component';

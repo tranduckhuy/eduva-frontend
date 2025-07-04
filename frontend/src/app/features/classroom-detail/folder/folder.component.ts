@@ -10,10 +10,6 @@ import { LessonItemComponent } from './lesson-item/lesson-item.component';
 import { Folder } from '../../../shared/models/entities/folder.model';
 import { GetLessonMaterialsRequest } from '../../../shared/models/api/request/query/get-lesson-materials-request.model';
 import { UserService } from '../../../shared/services/api/user/user.service';
-import {
-  LessonMaterialStatus,
-  LessonMaterialVisibility,
-} from '../../../shared/models/enum/lesson-material.enum';
 import { LessonMaterialsService } from '../../../shared/services/api/lesson-materials/lesson-materials.service';
 import { LoadingService } from '../../../shared/services/core/loading/loading.service';
 import { LessonMaterial } from '../../../shared/models/entities/lesson-material.model';
@@ -38,7 +34,7 @@ export class FolderComponent {
   isLoadingGetMaterials = this.loadingService.is('get-materials');
 
   readonly classId = input.required<string>();
-  folder = input.required<Folder>();
+  readonly folder = input.required<Folder>();
 
   isCollapsed = signal<boolean>(true);
 
@@ -55,15 +51,13 @@ export class FolderComponent {
     const getLessonMaterialsRequest: GetLessonMaterialsRequest = {
       classId: this.classId(),
       folderId: this.folder().id,
-      lessonStatus: LessonMaterialStatus.Approved,
-      visibility: LessonMaterialVisibility.School,
     };
 
     this.materialService
       .getLessonMaterials(getLessonMaterialsRequest)
       .subscribe({
         next: res => {
-          this.materials.set(res!.data);
+          this.materials.set(res || []);
         },
         error: _ => {
           this.toastHandlingService.errorGeneral();

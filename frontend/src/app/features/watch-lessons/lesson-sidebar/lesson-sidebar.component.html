@@ -1,10 +1,10 @@
-<div class="flex h-full w-full flex-col pb-[50px]">
+<div class="flex h-full w-full flex-col pb-[116px]">
   <div class="flex items-center p-4">
     <!-- ? Search Input -->
     <div
-      class="dark:bg-dark-300 flex flex-1 items-center rounded-lg bg-[#eef4fc] px-4">
+      class="flex flex-1 items-center rounded-lg bg-[#eef4fc] px-4 dark:bg-dark-300">
       <span
-        class="pi pi-search dark:text-[#fffc] relative top-[2px] text-[#808b9a]"
+        class="pi pi-search relative top-[2px] text-[#808b9a] dark:text-[#fffc]"
         style="font-size: 14px"></span>
       <input
         type="text"
@@ -12,16 +12,16 @@
         placeholder="Tìm theo tên bài học" />
     </div>
     <!-- ? Chapter List -->
-    <div
+    <!-- <div
       class="ml-4 flex cursor-pointer select-none flex-col items-center justify-center text-[10px]"
       (click)="onOpenChapterModalClick()">
       <img src="./images/icons/book.svg" alt="Danh sách chương" />
       <span class="mt-[6px] text-[#0093fc]">Danh sách chương</span>
-    </div>
+    </div> -->
   </div>
 
   <!-- ? Lesson Tracker -->
   <div class="lesson-tracker flex-1 overflow-y-auto overscroll-contain">
-    <sidebar-tracks />
+    <sidebar-tracks [materialId]="materialId()" />
   </div>
 </div>
