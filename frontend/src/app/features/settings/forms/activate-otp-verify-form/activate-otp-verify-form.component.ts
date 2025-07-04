@@ -76,7 +76,10 @@ export class ActivateOtpVerifyFormComponent {
       };
       this.twoFactorService
         .requestEnableDisable2FA(request, this.enabled())
-        .subscribe(() => this.isPasswordValid.set(true));
+        .subscribe({
+          next: () => this.isPasswordValid.set(true),
+          error: () => this.form.reset(),
+        });
     } else {
       if (!otpCode) return;
 
@@ -85,7 +88,10 @@ export class ActivateOtpVerifyFormComponent {
       };
       this.twoFactorService
         .confirmEnableDisable2FA(request, this.enabled())
-        .subscribe(() => this.twoFactorChanged.emit());
+        .subscribe({
+          next: () => this.twoFactorChanged.emit(),
+          error: () => this.form.reset(),
+        });
     }
   }
 

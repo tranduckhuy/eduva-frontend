@@ -9,6 +9,8 @@ import { JwtService } from '../auth/services/jwt.service';
 import { UserService } from '../../shared/services/api/user/user.service';
 import { GlobalModalService } from '../../shared/services/layout/global-modal/global-modal.service';
 
+import { BYPASS_AUTH_ERROR } from '../../shared/tokens/context/http-context.token';
+
 import { AuthModalComponent } from '../../shared/components/auth-modal/auth-modal.component';
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
@@ -18,8 +20,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const globalModalService = inject(GlobalModalService);
   const confirmationService = inject(ConfirmationService);
 
-  const excludedUrls = ['/auth/login', '/auth/refresh-token'];
-  const shouldSkipToast = excludedUrls.some(url => req.url.includes(url));
+  const isByPass = req.context.get(BYPASS_AUTH_ERROR);
 
   const handleServerError = () => router.navigateByUrl('/500');
 
@@ -49,9 +50,9 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
       if (isServerError) {
         handleServerError();
-      } else if (isAuthError && !shouldSkipToast) {
+      } else if (isAuthError && !isByPass) {
         handleUnauthorized();
-      } else if (isForbidden && !shouldSkipToast) {
+      } else if (isForbidden && !isByPass) {
         handleForbidden();
       }
 
