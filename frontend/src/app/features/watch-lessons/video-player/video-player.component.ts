@@ -4,9 +4,9 @@ import {
   HostListener,
   computed,
   ElementRef,
+  viewChild,
   inject,
   signal,
-  ViewChild,
   input,
   effect,
 } from '@angular/core';
@@ -48,9 +48,9 @@ type VideoQuality = '1440' | '1080' | '720' | '360' | 'auto';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VideoPlayerComponent {
-  @ViewChild('video') videoRef!: ElementRef<HTMLVideoElement>;
-  @ViewChild('progressBar') progressBarRef!: ElementRef<HTMLDivElement>;
-  @ViewChild('volumeBar') volumeBarRef!: ElementRef<HTMLDivElement>;
+  videoPlayerRef = viewChild<ElementRef>('videoPlayer');
+  progressBarRef = viewChild<ElementRef>('progressBar');
+  volumeBarRef = viewChild<ElementRef>('volumeBar');
 
   readonly materialSourceUrl = input.required<string>();
 
@@ -205,19 +205,51 @@ export class VideoPlayerComponent {
   }
 
   seekTo(event: MouseEvent) {
-    const rect = this.progressBarRef.nativeElement.getBoundingClientRect();
+    const rect = this.progressBarRef()?.nativeElement.getBoundingClientRect();
     const ratio = (event.clientX - rect.left) / rect.width;
     const media = this.vgApi.getDefaultMedia();
-    media.currentTime = ratio * media.duration;
+
+    const seekTime = ratio * media.duration;
+    const isPlaying = !this.getVideoElement().paused;
+    const currentTime = media.currentTime;
+
+    const diff = Math.abs(currentTime - seekTime);
+
+    if (isPlaying && diff > 0.3) {
+      media.pause();
+      media.currentTime = seekTime;
+
+      setTimeout(() => media.play(), 100);
+    } else {
+      media.currentTime = seekTime;
+    }
+
     this.playedProgress.set(ratio * 100);
   }
 
   startSeekDrag(event: MouseEvent) {
-    this.startDrag(event, this.progressBarRef, ratio => {
-      const media = this.vgApi.getDefaultMedia();
-      media.currentTime = ratio * media.duration;
+    const media = this.vgApi.getDefaultMedia();
+    const isPlaying = !this.getVideoElement().paused;
+
+    if (isPlaying) {
+      media.pause();
+    }
+
+    this.startDrag(event, this.progressBarRef()!, ratio => {
+      const seekTime = ratio * media.duration;
+      const currentTime = media.currentTime;
+      const diff = Math.abs(currentTime - seekTime);
+
+      if (diff > 0.3) {
+        media.currentTime = seekTime;
+      }
+
       this.playedProgress.set(ratio * 100);
     });
+
+    if (isPlaying) {
+      setTimeout(() => media.play(), 100);
+    }
   }
 
   updateVolume(level: number) {
@@ -237,13 +269,13 @@ export class VideoPlayerComponent {
   }
 
   startVolumeDrag(event: MouseEvent) {
-    this.startDrag(event, this.volumeBarRef, ratio => {
+    this.startDrag(event, this.volumeBarRef()!, ratio => {
       this.updateVolume(ratio);
     });
   }
 
   toggleFullscreen() {
-    const videoEl = document.getElementById('video-player');
+    const videoEl = document.getElementById('video-wrapper');
     if (!document.fullscreenElement) {
       videoEl?.requestFullscreen();
     } else {
@@ -294,7 +326,7 @@ export class VideoPlayerComponent {
   onQualityChange(q: string) {
     this.selectedQuality.set(q as VideoQuality);
 
-    const videoEl = this.videoRef.nativeElement;
+    const videoEl = this.videoPlayerRef()?.nativeElement;
     const currentTime = videoEl.currentTime;
     const wasPaused = videoEl.paused;
 
@@ -379,7 +411,7 @@ export class VideoPlayerComponent {
     this.isLoading.set(true);
     this.hasStarted.set(false);
 
-    const video = this.videoRef?.nativeElement;
+    const video = this.videoPlayerRef()?.nativeElement;
     if (!video) return;
 
     // Reset video state
@@ -395,11 +427,9 @@ export class VideoPlayerComponent {
           this.hasStarted.set(true);
           this.isPaused.set(false);
         })
-        .catch(error => {
+        .catch(() => {
           this.isLoading.set(false);
           this.isPaused.set(true);
-          console.error('Autoplay was prevented:', error);
-          // Show play button to let user start playback
         });
     }
   }
