@@ -12,13 +12,15 @@ import { ButtonOutlineGradientComponent } from '../../../shared/components/butto
 @Component({
   selector: 'lesson-footer',
   standalone: true,
-  imports: [TooltipModule, ButtonOutlineGradientComponent],
+  imports: [TooltipModule, ButtonOutlineGradientComponent, TooltipModule],
   templateUrl: './lesson-footer.component.html',
   styleUrl: './lesson-footer.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LessonFooterComponent {
   isSidebarOpen = input.required<boolean>();
+  currentFolderName = input.required<string | undefined>();
+  currentFolderIndex = input.required<number | undefined>();
 
   toggleSidebar = output<void>();
   openCommentModal = output<void>();

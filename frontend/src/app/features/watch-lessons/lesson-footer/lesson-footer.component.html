@@ -27,8 +27,11 @@
   <div
     class="flex h-full cursor-pointer select-none items-center justify-end pr-3"
     (click)="onToggleSidebarClick()">
-    <span class="current-lesson dark:text-[#fffc] mr-4 text-[#45494f]">
-      60. Hoàn thành bài học
+    <span
+      [pTooltip]="currentFolderName()"
+      tooltipPosition="top"
+      class="current-lesson mr-4 line-clamp-1 max-w-[300px] text-[#45494f] md:max-w-[150px] dark:text-[#fffc]">
+      {{ currentFolderIndex() }}. {{ currentFolderName() }}
     </span>
     <app-button-outline-gradient
       [variant]="'icon'"

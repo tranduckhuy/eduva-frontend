@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input } from '@angular/core';
 
 import {
   NgxExtendedPdfViewerModule,
@@ -17,4 +17,6 @@ import {
 })
 export class PdfViewerComponent {
   constructor(private readonly pdfService: NgxExtendedPdfViewerService) {}
+
+  readonly materialSourceUrl = input.required<string>();
 }

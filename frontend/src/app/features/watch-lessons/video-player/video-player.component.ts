@@ -7,6 +7,8 @@ import {
   inject,
   signal,
   ViewChild,
+  input,
+  effect,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -50,12 +52,14 @@ export class VideoPlayerComponent {
   @ViewChild('progressBar') progressBarRef!: ElementRef<HTMLDivElement>;
   @ViewChild('volumeBar') volumeBarRef!: ElementRef<HTMLDivElement>;
 
+  readonly materialSourceUrl = input.required<string>();
+
   private vgApi = inject(VgApiService);
   private readonly iconLibrary = inject(FaIconLibrary);
   private hideControlsTimeout!: ReturnType<typeof setTimeout>;
 
   // ? State Video Management
-  preload = signal<string>('metadata');
+  preload = signal<string>('auto');
   currentTime = signal<number>(0);
   duration = signal<number>(0);
   isPaused = signal<boolean>(true);
@@ -98,6 +102,15 @@ export class VideoPlayerComponent {
       faGear,
       faExpand,
       faClosedCaptioning
+    );
+    effect(
+      () => {
+        const url = this.materialSourceUrl();
+        if (url) {
+          this.loadAndPlayVideo(url);
+        }
+      },
+      { allowSignalWrites: true }
     );
   }
 
@@ -360,5 +373,34 @@ export class VideoPlayerComponent {
     return (
       ['INPUT', 'TEXTAREA'].includes(target.tagName) || target.isContentEditable
     );
+  }
+
+  private loadAndPlayVideo(url: string) {
+    this.isLoading.set(true);
+    this.hasStarted.set(false);
+
+    const video = this.videoRef?.nativeElement;
+    if (!video) return;
+
+    // Reset video state
+    video.src = url;
+    video.load();
+
+    const playPromise = video.play();
+
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          this.isLoading.set(false);
+          this.hasStarted.set(true);
+          this.isPaused.set(false);
+        })
+        .catch(error => {
+          this.isLoading.set(false);
+          this.isPaused.set(true);
+          console.error('Autoplay was prevented:', error);
+          // Show play button to let user start playback
+        });
+    }
   }
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 
 @Component({
@@ -10,4 +10,6 @@ import { NgxDocViewerModule } from 'ngx-doc-viewer';
   styleUrl: './doc-viewer.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DocViewerComponent {}
+export class DocViewerComponent {
+  readonly materialSourceUrl = input.required<string>();
+}

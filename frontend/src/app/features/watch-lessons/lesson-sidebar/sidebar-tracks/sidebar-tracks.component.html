@@ -1,17 +1,8 @@
 <div>
-  <sidebar-track [trackId]="'1'" />
-  <sidebar-track [trackId]="'2'" />
-  <sidebar-track [trackId]="'3'" />
-  <sidebar-track [trackId]="'4'" />
-  <sidebar-track [trackId]="'5'" />
-  <sidebar-track [trackId]="'6'" />
-  <sidebar-track [trackId]="'7'" />
-  <sidebar-track [trackId]="'8'" />
-  <sidebar-track [trackId]="'9'" />
-  <sidebar-track [trackId]="'10'" />
-  <sidebar-track [trackId]="'11'" />
-  <sidebar-track [trackId]="'12'" />
-  <sidebar-track [trackId]="'13'" />
-  <sidebar-track [trackId]="'14'" />
-  <sidebar-track [trackId]="'15'" />
+  @for (folder of folders(); track folder.id) {
+    <sidebar-track
+      [folder]="folder"
+      [index]="$index"
+      [materialId]="materialId()" />
+  }
 </div>

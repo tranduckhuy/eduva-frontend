@@ -23,10 +23,10 @@
                 width="70%"
                 borderRadius="8px" />
             } @else {
-              <h2 class="text-[32px] font-bold text-black">
+              <h2 class="text-[32px] font-bold">
                 {{ classDetail()?.name }}
               </h2>
-              <p class="mt-4 leading-4 text-[#000c]">
+              <p class="mt-4 leading-4 text-[#000c] dark:text-[#fffc]">
                 Xây dựng ứng dụng đưa ra cảnh báo khi người dùng sờ tay lên mặt.
                 Chúng ta sẽ sử dụng thư viện ReactJS & Tensoflow để hoàn thiện
                 ứng dụng này.
@@ -36,7 +36,7 @@
 
           <!-- ? Classroom Contents -->
           <div>
-            <h3 class="text-xl font-bold text-black">Danh sách bài học</h3>
+            <h3 class="text-xl font-bold">Danh sách bài học</h3>
             <div class="mt-4 flex items-center justify-between">
               <ul class="flex items-center">
                 <!-- <li>
@@ -70,7 +70,8 @@
                     <strong>{{ classDetail()?.countLessonMaterial }}</strong>
                     bài học
                   </li>
-                  <li class="mx-2 size-1 rounded-full bg-black"></li>
+                  <li
+                    class="mx-2 size-1 rounded-full bg-black dark:bg-[#fffc]"></li>
                   <li>
                     Thời lượng
                     <strong>01 giờ 34 phút</strong>
@@ -100,7 +101,8 @@
         </article>
       </div>
       <div class="e-col-3 e-col-xxxxxl-4">
-        <div class="sticky top-24 mb-16 ml-6 bg-white pb-5">
+        <div
+          class="sticky top-24 mb-16 ml-6 rounded-2xl bg-white pb-5 dark:bg-[#272a31]">
           @if (isLoadingGetClass() || isLoadingGetFolders()) {
             <app-watch-lesson-card-skeleton />
           } @else {
