@@ -5,8 +5,3 @@
   cursor: default;
   pointer-events: none;
 }
-
-.active .icon {
-  color: #fff;
-  text-shadow: 1px 0 0 currentColor;
-}

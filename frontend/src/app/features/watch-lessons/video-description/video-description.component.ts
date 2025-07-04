@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'video-description',
@@ -8,4 +8,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrl: './video-description.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class VideoDescriptionComponent {}
+export class VideoDescriptionComponent {
+  readonly description = input.required<string>();
+}

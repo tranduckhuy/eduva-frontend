@@ -16,4 +16,6 @@ import {
 })
 export class PdfViewerComponent {
   constructor(private readonly pdfService: NgxExtendedPdfViewerService) {}
+
+  readonly materialSourceUrl = input.required<string>();
 }

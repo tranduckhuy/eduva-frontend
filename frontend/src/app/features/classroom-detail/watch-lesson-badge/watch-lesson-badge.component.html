@@ -22,28 +22,30 @@
     </button>
     <ul>
       <li class="item">
-        <fa-icon [icon]="'gauge-high'"></fa-icon>
-        <span>Trình độ cơ bản</span>
+        <fa-icon [icon]="'gauge-high'" class="dark:text-[#ffffffcc]"></fa-icon>
+        <span class="dark:text-[#ffffffcc]">Trình độ cơ bản</span>
       </li>
       <li class="item">
-        <fa-icon [icon]="'film'"></fa-icon>
-        <span>
+        <fa-icon [icon]="'film'" class="dark:text-[#ffffffcc]"></fa-icon>
+        <span class="dark:text-[#ffffffcc]">
           Tổng số
           <strong>{{ classDetail().countLessonMaterial }}</strong>
           <!-- <strong>{{ 10 }}</strong> -->
           bài học
         </span>
       </li>
-      <li class="item">
-        <fa-icon [icon]="'clock'"></fa-icon>
-        <span>
+      <li class="item dark:text-[#ffffffcc]">
+        <fa-icon [icon]="'clock'" class="dark:text-[#ffffffcc]"></fa-icon>
+        <span class="dark:text-[#ffffffcc]">
           Thời lượng
           <strong>01 giờ 34 phút</strong>
         </span>
       </li>
       <li class="item">
-        <fa-icon [icon]="'battery-full'"></fa-icon>
-        <span>Học mọi lúc mọi nơi</span>
+        <fa-icon
+          [icon]="'battery-full'"
+          class="dark:text-[#ffffffcc]"></fa-icon>
+        <span class="dark:text-[#ffffffcc]">Học mọi lúc mọi nơi</span>
       </li>
     </ul>
   </div>
