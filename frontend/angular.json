@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "frontend-student": {
+    "eduva-student": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -21,7 +21,7 @@
             "customWebpackConfig": {
               "path": "./custom-webpack.config.ts"
             },
-            "outputPath": "dist/frontend-student",
+            "outputPath": "dist/eduva-student",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [],
@@ -91,42 +91,19 @@
           "builder": "@angular-builders/custom-webpack:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "frontend-student:build:production"
+              "buildTarget": "eduva-student:build:production"
             },
             "development": {
-              "buildTarget": "frontend-student:build:development"
+              "buildTarget": "eduva-student:build:development"
             },
             "staging": {
-              "buildTarget": "frontend-student:build:staging"
+              "buildTarget": "eduva-student:build:staging"
             }
           },
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
-        },
-        "test": {
-          "builder": "@angular-builders/custom-webpack:karma",
-          "options": {
-            "customWebpackConfig": {
-              "path": "./custom-webpack.config.ts"
-            },
-            "polyfills": [],
-            "tsConfig": "tsconfig.spec.json",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
-            ],
-            "styles": [
-              "node_modules/@fortawesome/fontawesome-svg-core/styles.css",
-              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-              "node_modules/ckeditor5/dist/ckeditor5.css",
-              "src/styles.css"
-            ],
-            "scripts": []
-          }
         }
       }
     }

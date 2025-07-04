@@ -6,6 +6,7 @@
       type="tel"
       label="Số điện thoại"
       placeholder="Nhập số điện thoại của bạn"
+      [submitted]="submitted()"
       [phone]="true"
       [errorMessages]="{
         pattern: 'Số điện thoại không đúng định dạng',
@@ -13,6 +14,10 @@
     </app-form-control>
   </div>
   <footer>
-    <app-button [text]="'Lưu lại'" buttonType="submit" [variant]="'rounded'" />
+    <app-button
+      text="Lưu lại"
+      buttonType="submit"
+      variant="rounded"
+      [loading]="isLoading()" />
   </footer>
 </form>

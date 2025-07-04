@@ -31,7 +31,7 @@ export class AuthFormLoginComponent {
 
   submitted = signal<boolean>(false);
 
-  loading = this.loadingService.isLoading;
+  isLoading = this.loadingService.isLoading;
 
   constructor() {
     this.form = this.fb.group({

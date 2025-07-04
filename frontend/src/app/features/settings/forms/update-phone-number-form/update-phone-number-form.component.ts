@@ -4,11 +4,18 @@ import {
   effect,
   inject,
   input,
+  output,
+  signal,
 } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 
+import { UserService } from '../../../../shared/services/api/user/user.service';
+import { LoadingService } from '../../../../shared/services/core/loading/loading.service';
+
 import { FormControlComponent } from '../../../../shared/components/form-control/form-control.component';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
+
+import { type UpdateProfileRequest } from '../../models/update-profile-request.model';
 
 @Component({
   selector: 'app-update-phone-number-form',
@@ -20,9 +27,18 @@ import { ButtonComponent } from '../../../../shared/components/button/button.com
 })
 export class UpdatePhoneNumberFormComponent {
   private readonly fb = inject(FormBuilder);
+  private readonly userService = inject(UserService);
+  private readonly loadingService = inject(LoadingService);
 
   phoneNumber = input.required<string>();
+
+  phoneNumberChanged = output<void>();
+
   form = this.fb.group({ phoneNumber: [''] });
+
+  isLoading = this.loadingService.isLoading;
+
+  submitted = signal<boolean>(false);
 
   constructor() {
     effect(() => {
@@ -30,5 +46,22 @@ export class UpdatePhoneNumberFormComponent {
     });
   }
 
-  onSubmit() {}
+  onSubmit() {
+    this.submitted.set(true);
+    this.form.markAllAsTouched();
+
+    if (this.form.invalid) return;
+
+    const payload: UpdateProfileRequest = {
+      phoneNumber: this.form.get('phoneNumber')?.value ?? '',
+    };
+    this.userService.updateUserProfile(payload).subscribe(user => {
+      if (user) {
+        this.userService.updateCurrentUserPartial({
+          phoneNumber: user.phoneNumber,
+        });
+        this.phoneNumberChanged.emit();
+      }
+    });
+  }
 }

@@ -1,0 +1,20 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="max-h-[60vh] min-h-[122px] overflow-y-auto pb-[30px]">
+    <app-form-control
+      formControlName="fullName"
+      name="fullName"
+      type="text"
+      label="Họ và tên"
+      placeholder="Nhập họ và tên của bạn"
+      [submitted]="submitted()"
+      [required]="true">
+    </app-form-control>
+  </div>
+  <footer>
+    <app-button
+      text="Lưu lại"
+      buttonType="submit"
+      variant="rounded"
+      [loading]="isLoading()" />
+  </footer>
+</form>

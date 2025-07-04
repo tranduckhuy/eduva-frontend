@@ -1,31 +1,99 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
+import {
+  ReactiveFormsModule,
+  FormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 
 import { InputOtp } from 'primeng/inputotp';
 
+import { TwoFactorService } from '../../../../core/auth/services/two-factor.service';
+import { LoadingService } from '../../../../shared/services/core/loading/loading.service';
+
 import { FormControlComponent } from '../../../../shared/components/form-control/form-control.component';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
+import { ForgetPasswordFormComponent } from '../forget-password-form/forget-password-form.component';
+import {
+  ConfirmEnableDisable2FA,
+  RequestEnableDisable2FA,
+} from '../../models/toggle-2fa-request.model';
 
 @Component({
   selector: 'app-activate-otp-verify-form',
   standalone: true,
-  imports: [FormsModule, InputOtp, FormControlComponent, ButtonComponent],
+  imports: [
+    ReactiveFormsModule,
+    FormsModule,
+    InputOtp,
+    FormControlComponent,
+    ButtonComponent,
+    ForgetPasswordFormComponent,
+  ],
   templateUrl: './activate-otp-verify-form.component.html',
   styleUrl: './activate-otp-verify-form.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ActivateOtpVerifyFormComponent {
-  email = signal('');
-  isEmailValid = signal(false);
-  otp = signal<number | null>(null);
+  private readonly fb = inject(FormBuilder);
+  private readonly twoFactorService = inject(TwoFactorService);
+  private readonly loadingService = inject(LoadingService);
+
+  enabled = input.required<boolean>();
+
+  twoFactorChanged = output<void>();
+
+  form: FormGroup;
+
+  isLoading = this.loadingService.isLoading;
+
+  isPasswordValid = signal(false);
+  isForgotPassword = signal<boolean>(false);
+
+  constructor() {
+    this.form = this.fb.group({
+      currentPassword: ['', Validators.required],
+      otpCode: '',
+    });
+  }
 
   onSubmit() {
-    this.isEmailValid.set(true);
-    if (this.isEmailValid()) {
-      // Handle form submission logic here
-      console.log('Form submitted with email:', this.email());
+    const { currentPassword, otpCode } = this.form.value;
+
+    if (!this.isPasswordValid()) {
+      if (!currentPassword) return;
+
+      const request: RequestEnableDisable2FA = {
+        currentPassword,
+      };
+      this.twoFactorService
+        .requestEnableDisable2FA(request, this.enabled())
+        .subscribe(() => this.isPasswordValid.set(true));
     } else {
-      console.error('Invalid email address');
+      if (!otpCode) return;
+
+      const request: ConfirmEnableDisable2FA = {
+        otpCode,
+      };
+      this.twoFactorService
+        .confirmEnableDisable2FA(request, this.enabled())
+        .subscribe(() => this.twoFactorChanged.emit());
     }
+  }
+
+  openForgotPassword() {
+    this.isForgotPassword.set(true);
+  }
+
+  closeForgotPassword() {
+    this.isForgotPassword.set(false);
   }
 }

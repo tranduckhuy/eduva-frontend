@@ -1,6 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
 
-import { EMPTY, Observable, catchError, map, of, tap } from 'rxjs';
+import { Observable, catchError, map, of, tap } from 'rxjs';
 
 import { environment } from '../../../../../environments/environment';
 import { RequestService } from '../../core/request/request.service';
@@ -9,7 +9,7 @@ import { ToastHandlingService } from '../../core/toast/toast-handling.service';
 import { StatusCode } from '../../../constants/status-code.constant';
 
 import { type User } from '../../../models/entities/user.model';
-import { type BaseResponse } from '../../../models/api/base-response.model';
+import { type UpdateProfileRequest } from '../../../../features/settings/models/update-profile-request.model';
 
 @Injectable({
   providedIn: 'root',
@@ -51,15 +51,15 @@ export class UserService {
     );
   }
 
-  // updateUserProfile(request: UpdateProfileRequest): Observable<User | null> {
-  //   return this.requestService
-  //     .put<User>(this.USER_PROFILE_API_URL, request)
-  //     .pipe(
-  //       tap(res => this.handleUpdateProfileSideEffect(res)),
-  //       map(res => this.extractUserFromResponse(res)),
-  //       catchError(() => this.handleErrorResponse())
-  //     );
-  // }
+  updateUserProfile(request: UpdateProfileRequest): Observable<User | null> {
+    return this.requestService
+      .put<User>(this.USER_PROFILE_API_URL, request)
+      .pipe(
+        tap(res => this.handleUpdateProfileSideEffect(res)),
+        map(res => this.extractUserFromResponse(res)),
+        catchError(() => this.handleErrorResponse())
+      );
+  }
 
   updateCurrentUserPartial(update: Partial<User>): void {
     const current = this.currentUserSignal();
@@ -145,63 +145,5 @@ export class UserService {
     } else {
       sessionStorage.removeItem(this.SESSION_STORAGE_KEY);
     }
-  }
-
-  /**
-   * Handles common request patterns with success/error handling
-   */
-  private handleRequest<T>(
-    request$: Observable<BaseResponse<T>>,
-    options: {
-      successHandler?: (data: T) => void;
-      errorHandler?: () => void;
-    } = {}
-  ): Observable<T | null> {
-    return request$.pipe(
-      map(res => {
-        if (res.statusCode === StatusCode.SUCCESS && res.data !== undefined) {
-          options.successHandler?.(res.data);
-          return res.data;
-        }
-        options.errorHandler?.();
-        this.toastHandlingService.errorGeneral();
-        return null;
-      }),
-      catchError(() => {
-        this.toastHandlingService.errorGeneral();
-        return EMPTY;
-      })
-    );
-  }
-
-  /**
-   * Handles modification requests (activate/archive) with common patterns
-   */
-  private handleModificationRequest(
-    request$: Observable<BaseResponse<void>>,
-    successMessage: string
-  ): Observable<void> {
-    return request$.pipe(
-      map(res => {
-        if (res.statusCode === StatusCode.SUCCESS) {
-          this.toastHandlingService.success('Thành công', successMessage);
-        } else {
-          this.toastHandlingService.errorGeneral();
-        }
-      }),
-      catchError(() => {
-        this.toastHandlingService.errorGeneral();
-        return EMPTY;
-      })
-    );
-  }
-
-  private resetUsers(): void {
-    this.usersSignal.set([]);
-    this.totalUsersSignal.set(0);
-  }
-
-  private resetUser(): void {
-    this.userDetailSignal.set(null);
   }
 }
