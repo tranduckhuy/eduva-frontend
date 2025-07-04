@@ -23,10 +23,6 @@ import { FolderManagementService } from '../../../shared/services/api/folder/fol
 import { LessonProgressService } from '../../../shared/services/api/local-lesson-progress/local-lesson-progress.service';
 import { Folder } from '../../../shared/models/entities/folder.model';
 import { LessonMaterialsService } from '../../../shared/services/api/lesson-materials/lesson-materials.service';
-import {
-  LessonMaterialStatus,
-  LessonMaterialVisibility,
-} from '../../../shared/models/enum/lesson-material.enum';
 import { GetLessonMaterialsRequest } from '../../../shared/models/api/request/query/get-lesson-materials-request.model';
 import { LoadingService } from '../../../shared/services/core/loading/loading.service';
 import { ToastHandlingService } from '../../../shared/services/core/toast/toast-handling.service';
@@ -91,14 +87,12 @@ export class WatchLessonBadgeComponent {
         const getLessonMaterialsRequest: GetLessonMaterialsRequest = {
           classId: this.classDetail().id,
           folderId: folderHasLesson?.id,
-          lessonStatus: LessonMaterialStatus.Approved,
-          visibility: LessonMaterialVisibility.School,
         };
         this.materialService
           .getLessonMaterials(getLessonMaterialsRequest)
           .subscribe({
             next: res => {
-              this.router.navigate(['/learn', res?.data[0].id], {
+              this.router.navigate(['/learn', res![0].id], {
                 queryParams: {
                   classId: this.classDetail().id,
                   folderId: folderHasLesson?.id,

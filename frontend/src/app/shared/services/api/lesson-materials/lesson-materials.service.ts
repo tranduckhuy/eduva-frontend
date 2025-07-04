@@ -1,5 +1,4 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Observable, catchError, map, of, tap } from 'rxjs';
 
 import { environment } from '../../../../../environments/environment';
@@ -10,7 +9,6 @@ import { StatusCode } from '../../../constants/status-code.constant';
 
 import { type LessonMaterial } from '../../../models/entities/lesson-material.model';
 import { type GetLessonMaterialsRequest } from '../../../models/api/request/query/get-lesson-materials-request.model';
-import { type GetLessonMaterialsResponse } from '../../../models/api/response/query/get-lesson-materials-response.model';
 
 @Injectable({
   providedIn: 'root',
@@ -28,16 +26,17 @@ export class LessonMaterialsService {
   private readonly lessonMaterialSignal = signal<LessonMaterial | null>(null);
   lessonMaterial = this.lessonMaterialSignal.asReadonly();
 
-  private readonly totalRecordsSignal = signal<number>(0);
-  totalRecords = this.totalRecordsSignal.asReadonly();
-
   getLessonMaterials(
     request: GetLessonMaterialsRequest
-  ): Observable<GetLessonMaterialsResponse | null> {
+  ): Observable<LessonMaterial[] | null> {
     return this.requestService
-      .get<GetLessonMaterialsResponse>(this.LESSON_MATERIALS_API_URL, request, {
-        loadingKey: 'get-materials',
-      })
+      .get<Observable<LessonMaterial[] | null>>(
+        `${this.LESSON_MATERIALS_API_URL}/all`,
+        request,
+        {
+          loadingKey: 'get-materials',
+        }
+      )
       .pipe(
         tap(res => this.handleGetResponse(res)),
         map(res => this.extractLessonMaterialsFromResponse(res)),
@@ -69,7 +68,6 @@ export class LessonMaterialsService {
     if (res.statusCode === StatusCode.SUCCESS && res.data) {
       const lessonMaterials = res.data;
       this.lessonMaterialsSignal.set(lessonMaterials.data ?? []);
-      this.totalRecordsSignal.set(lessonMaterials.count ?? 0);
     } else {
       this.toastHandlingService.errorGeneral();
     }
@@ -77,7 +75,7 @@ export class LessonMaterialsService {
 
   private extractLessonMaterialsFromResponse(
     res: any
-  ): GetLessonMaterialsResponse | null {
+  ): LessonMaterial[] | null {
     if (res.statusCode === StatusCode.SUCCESS && res.data) {
       return res.data;
     }

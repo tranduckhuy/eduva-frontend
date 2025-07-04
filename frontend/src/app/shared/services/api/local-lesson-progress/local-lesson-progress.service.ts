@@ -10,7 +10,7 @@ export class LessonProgressService {
   private readonly key = 'lastLessons';
 
   private getData(): Record<string, LastLesson> {
-    return JSON.parse(localStorage.getItem(this.key) || '{}');
+    return JSON.parse(localStorage.getItem(this.key) ?? '{}');
   }
 
   private setData(data: Record<string, LastLesson>): void {
