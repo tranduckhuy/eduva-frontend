@@ -58,7 +58,7 @@ export class HomeComponent implements OnInit {
 
         if (isLoggedIn && user) {
           untracked(() => {
-            this.fetchClassesForUser(user.id, user.school!.id.toString());
+            this.fetchClassesForUser(user.id, user.school!.id);
           });
         } else {
           untracked(() => this.classService.clearClasses());
@@ -83,15 +83,15 @@ export class HomeComponent implements OnInit {
     });
 
     // Initial fetch if user is already logged in
-    if (this.currentUser()) {
+    if (this.currentUser() && this.isLoggedIn()) {
       this.fetchClassesForUser(
         this.currentUser()!.id,
-        this.currentUser()!.school!.id.toString()
+        this.currentUser()!.school!.id
       );
     }
   }
 
-  private fetchClassesForUser(studentId: string, schoolId: string): void {
+  private fetchClassesForUser(studentId: string, schoolId: number): void {
     const getStudentClassesEnrolledRequest: GetStudentClassesEnrolledRequest = {
       classStatus: EntityStatus.Active,
       studentId,

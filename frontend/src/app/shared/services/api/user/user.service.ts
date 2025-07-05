@@ -122,6 +122,7 @@ export class UserService {
     return {
       ...current,
       ...updated,
+      school: current.school,
       roles: updated.roles?.length ? updated.roles : current.roles,
       isEmailConfirmed: updated.isEmailConfirmed ?? current.isEmailConfirmed,
       userSubscriptionResponse:
