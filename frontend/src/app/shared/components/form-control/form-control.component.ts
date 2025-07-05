@@ -1,4 +1,3 @@
-// Updated FormControlComponent using @signal input() and output() APIs
 import {
   ChangeDetectionStrategy,
   Component,
@@ -28,6 +27,7 @@ import {
   minWordCountValidator,
   customEmailValidator,
 } from '../../utils/form-validators';
+import { VIETNAM_PHONE_REGEX } from '../../constants/common.constant';
 
 @Component({
   selector: 'app-form-control',
@@ -86,42 +86,6 @@ export class FormControlComponent
   filteredOptions = computed(() => {
     const term = this.searchTerm().toLowerCase();
     return this.options().filter(opt => opt.label.toLowerCase().includes(term));
-  });
-
-  readonly shouldShowError = computed(() => {
-    return (
-      this.control.invalid &&
-      !this.disabled() &&
-      (this.control.touched || this.submitted())
-    );
-  });
-
-  readonly isErrorState = computed(() => {
-    return (
-      this.control.invalid &&
-      !this.disabled() &&
-      (this.control.touched || this.submitted())
-    );
-  });
-
-  readonly isPasswordType = computed(() => this.type() === 'password');
-
-  readonly showWarningIcon = computed(() => {
-    return (
-      this.isErrorState() &&
-      !this.isPasswordType() &&
-      (!this.options() || this.options().length === 0)
-    );
-  });
-
-  readonly showTogglePasswordIcon = computed(() => {
-    return (
-      this.isPasswordType() && (!this.options() || this.options().length === 0)
-    );
-  });
-
-  readonly useRedText = computed(() => {
-    return this.control.invalid && this.control.touched && this.control.dirty;
   });
 
   get showSearchBox() {
@@ -193,13 +157,21 @@ export class FormControlComponent
     this.isShowPassword.set(!this.isShowPassword());
   }
 
+  resetControl(value = '') {
+    this.control.reset(value, {
+      emitEvent: false,
+    });
+    this.control.markAsPristine();
+    this.control.markAsUntouched();
+  }
+
   private onChange: (value: any) => void = () => {};
   private onTouched: () => void = () => {};
 
   private buildValidators() {
     const validators = [];
     if (this.required()) validators.push(Validators.required);
-    if (this.phone()) validators.push(Validators.pattern(/^0\d{9,10}$/));
+    if (this.phone()) validators.push(Validators.pattern(VIETNAM_PHONE_REGEX));
     else if (this.pattern())
       validators.push(Validators.pattern(this.pattern()!));
     if (this.email()) validators.push(customEmailValidator);

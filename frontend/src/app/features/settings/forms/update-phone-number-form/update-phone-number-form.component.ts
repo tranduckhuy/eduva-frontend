@@ -7,10 +7,12 @@ import {
   output,
   signal,
 } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
 import { UserService } from '../../../../shared/services/api/user/user.service';
 import { LoadingService } from '../../../../shared/services/core/loading/loading.service';
+
+import { VIETNAM_PHONE_REGEX } from '../../../../shared/constants/common.constant';
 
 import { FormControlComponent } from '../../../../shared/components/form-control/form-control.component';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
@@ -34,7 +36,9 @@ export class UpdatePhoneNumberFormComponent {
 
   phoneNumberChanged = output<void>();
 
-  form = this.fb.group({ phoneNumber: [''] });
+  form = this.fb.group({
+    phoneNumber: ['', Validators.pattern(VIETNAM_PHONE_REGEX)],
+  });
 
   isLoading = this.loadingService.isLoading;
 
@@ -49,6 +53,8 @@ export class UpdatePhoneNumberFormComponent {
   onSubmit() {
     this.submitted.set(true);
     this.form.markAllAsTouched();
+
+    console.log(this.form.errors, this.form.get('phoneNumber')?.errors);
 
     if (this.form.invalid) return;
 

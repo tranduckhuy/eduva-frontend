@@ -1,10 +1,12 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   inject,
   input,
   output,
   signal,
+  viewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
@@ -31,6 +33,8 @@ import { MAX_IMPORT_FILE_SIZE } from '../../../../shared/constants/common.consta
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UpdateAvatarFormComponent {
+  private readonly avatarInputRef = viewChild<ElementRef>('avatarInput');
+
   private readonly uploadFileService = inject(UploadFileService);
   private readonly toastHandlingService = inject(ToastHandlingService);
 
@@ -156,5 +160,10 @@ export class UpdateAvatarFormComponent {
       translateV: 0,
     });
     this.imageChangedEvent.set(null);
+
+    const input = this.avatarInputRef()?.nativeElement as HTMLInputElement;
+    if (input) {
+      input.value = '';
+    }
   }
 }
