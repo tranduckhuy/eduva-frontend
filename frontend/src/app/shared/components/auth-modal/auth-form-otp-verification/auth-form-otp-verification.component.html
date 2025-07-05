@@ -6,6 +6,7 @@
       type="tel"
       placeholder="Nhập mã xác nhận"
       [required]="true"
+      [minLength]="6"
       [maxLength]="6"
       [pattern]="'^[0-9]{6}$'"
       [submitted]="submitted()"

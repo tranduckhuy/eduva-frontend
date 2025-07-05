@@ -16,6 +16,7 @@
         type="password"
         label="Mật khẩu hiện tại"
         placeholder="Nhập mật khẩu hiện tại của bạn"
+        [submitted]="submitted()"
         [required]="true">
       </app-form-control>
       <div class="mb-4 ml-[5px] mt-[10px]">
@@ -41,15 +42,24 @@
           formControlName="otpCode"
           name="otpCode"
           size="large"
-          [invalid]="form.get('otpCode')?.invalid ?? false"
+          [ngClass]="{
+            invalid: isOtpCodeInvalid,
+          }"
+          [invalid]="isOtpCodeInvalid"
           [length]="6"
+          [required]="true"
           [integerOnly]="true" />
       </div>
     </div>
     <div class="mt-[10px] text-center">
       <p>
         Không nhận được mã OTP?
-        <span class="cursor-pointer text-primary">Gửi lại</span>
+        <span
+          class="cursor-pointer select-none text-primary"
+          [class.disable]="isResendDisabled()"
+          (click)="onResendCode()">
+          {{ resendLinkText }}
+        </span>
       </p>
     </div>
   }
@@ -59,6 +69,10 @@
         text="Xác nhận"
         buttonType="submit"
         variant="rounded"
+        [disabled]="
+          (!isPasswordValid() && !!form.get('currentPassword')?.invalid) ||
+          (isPasswordValid() && !!form.get('otpCode')?.invalid)
+        "
         [loading]="isLoading()" />
     </div>
   </footer>

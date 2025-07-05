@@ -124,15 +124,15 @@ export class PasswordService {
 
   private handleChangePasswordError(err: HttpErrorResponse): Observable<void> {
     switch (err.error?.statusCode) {
-      case StatusCode.PROVIDED_INFORMATION_IS_INVALID:
-        this.toastHandlingService.error(
-          'Lỗi xác thực',
+      case StatusCode.INCORRECT_CURRENT_PASSWORD:
+        this.toastHandlingService.warn(
+          'Cảnh báo xác thực',
           'Mật khẩu hiện tại không chính xác. Vui lòng kiểm tra và thử lại.'
         );
         break;
       case StatusCode.NEW_PASSWORD_SAME_AS_OLD:
         this.toastHandlingService.warn(
-          'Cảnh báo',
+          'Cảnh báo xác thực',
           'Mật khẩu mới không được trùng với mật khẩu hiện tại.'
         );
         break;
