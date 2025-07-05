@@ -11,7 +11,6 @@ import { ToastHandlingService } from '../../shared/services/core/toast/toast-han
 import { GlobalModalService } from '../../shared/services/layout/global-modal/global-modal.service';
 
 import { StatusCode } from '../../shared/constants/status-code.constant';
-import { UserRoles } from '../../shared/constants/user-roles.constant';
 import { BYPASS_AUTH_ERROR } from '../../shared/tokens/context/http-context.token';
 
 import { AuthModalComponent } from '../../shared/components/auth-modal/auth-modal.component';
@@ -24,7 +23,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const toastHandlingService = inject(ToastHandlingService);
   const confirmationService = inject(ConfirmationService);
 
-  const user = userService.currentUser;
   const isByPass = req.context.get(BYPASS_AUTH_ERROR);
 
   const handleServerError = () => router.navigateByUrl('/500');
