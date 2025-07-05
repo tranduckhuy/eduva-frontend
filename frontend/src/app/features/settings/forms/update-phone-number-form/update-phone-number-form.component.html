@@ -9,9 +9,10 @@
       [phone]="true"
       placeholder="Nhập số điện thoại của bạn"
       [submitted]="submitted()"
+      [required]="true"
       [phone]="true"
       [errorMessages]="{
-        pattern: 'Số điện thoại không đúng định dạng',
+        pattern: 'Số điện thoại không hợp lệ',
       }">
     </app-form-control>
   </div>
@@ -20,6 +21,7 @@
       text="Lưu lại"
       buttonType="submit"
       variant="rounded"
+      [disabled]="form.invalid"
       [loading]="isLoading()" />
   </footer>
 </form>

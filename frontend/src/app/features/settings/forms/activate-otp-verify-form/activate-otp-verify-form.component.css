@@ -1,0 +1,10 @@
+:host span.disable {
+  opacity: 0.5;
+  cursor: default;
+  pointer-events: none;
+}
+
+:host .invalid ::ng-deep .p-inputotp-input {
+  border: 1px solid #f33a58;
+  background-color: #ff00001a;
+}

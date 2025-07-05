@@ -119,9 +119,9 @@ export class TwoFactorService {
   }
 
   private handleRequest2FAError(err: HttpErrorResponse): Observable<void> {
-    if (err.error?.statusCode === StatusCode.PROVIDED_INFORMATION_IS_INVALID) {
-      this.toastHandlingService.error(
-        'Lỗi xác thực',
+    if (err.error?.statusCode === StatusCode.INVALID_CREDENTIALS) {
+      this.toastHandlingService.warn(
+        'Cảnh báo xác thực',
         'Mật khẩu hiện tại không chính xác. Vui lòng kiểm tra và thử lại.'
       );
     } else {

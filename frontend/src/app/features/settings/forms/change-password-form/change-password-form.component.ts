@@ -4,6 +4,7 @@ import {
   inject,
   output,
   signal,
+  viewChildren,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
@@ -34,6 +35,8 @@ import { ChangePasswordRequest } from '../../../../shared/models/api/request/com
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChangePasswordFormComponent {
+  private readonly formControls = viewChildren(FormControlComponent);
+
   private readonly fb = inject(FormBuilder);
   private readonly loadingService = inject(LoadingService);
   private readonly userService = inject(UserService);
@@ -48,6 +51,9 @@ export class ChangePasswordFormComponent {
 
   submitted = signal<boolean>(false);
   isForgotPassword = signal<boolean>(false);
+  readonly passwordValue = signal<string>('');
+  readonly passwordLevel = signal<number | undefined>(undefined);
+  readonly passwordStrengthLabel = signal<string>('');
 
   constructor() {
     this.form = this.fb.group({
@@ -56,23 +62,27 @@ export class ChangePasswordFormComponent {
       confirmPassword: '',
       logoutBehavior: 0,
     });
+
+    this.form.get('newPassword')!.valueChanges.subscribe(value => {
+      this.passwordValue.set(value ?? '');
+
+      const level = this.calcPasswordLevel(value ?? '');
+      this.passwordLevel.set(level);
+
+      if (!level || level < 1) {
+        this.passwordStrengthLabel.set('');
+      } else if (level === 5) {
+        this.passwordStrengthLabel.set('Mật khẩu mạnh');
+      } else if (level === 4) {
+        this.passwordStrengthLabel.set('Mật khẩu trung bình');
+      } else {
+        this.passwordStrengthLabel.set('Mật khẩu yếu');
+      }
+    });
   }
 
   get passwordMisMatch() {
     return isFormFieldMismatch(this.form);
-  }
-
-  get passwordLevel(): number | undefined {
-    const value = this.form.get('newPassword')?.value ?? '';
-    let level = 0;
-
-    if (value.length >= 6) level++;
-    if (/[a-z]/.test(value)) level++;
-    if (/[A-Z]/.test(value)) level++;
-    if (/\d/.test(value)) level++;
-    if (/[!@#$%^&*(),.?":{}|<>]/.test(value)) level++;
-
-    return level;
   }
 
   onSubmit() {
@@ -88,14 +98,12 @@ export class ChangePasswordFormComponent {
         this.passwordChanged.emit();
       },
       error: () => {
-        this.form.reset({
-          currentPassword: '',
-          newPassword: '',
-          confirmPassword: '',
-          logoutBehavior: 0,
-        });
-        this.form.markAsUntouched();
         this.submitted.set(false);
+        this.formControls().forEach(fc => fc.resetControl());
+
+        this.passwordValue.set('');
+        this.passwordLevel.set(undefined);
+        this.passwordStrengthLabel.set('');
       },
     });
   }
@@ -106,5 +114,17 @@ export class ChangePasswordFormComponent {
 
   closeForgotPassword() {
     this.isForgotPassword.set(false);
+  }
+
+  private calcPasswordLevel(password: string): number | undefined {
+    if (!password) return undefined;
+
+    let level = 0;
+    if (password.length >= 6) level++;
+    if (/[a-z]/.test(password)) level++;
+    if (/[A-Z]/.test(password)) level++;
+    if (/\d/.test(password)) level++;
+    if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) level++;
+    return level;
   }
 }
