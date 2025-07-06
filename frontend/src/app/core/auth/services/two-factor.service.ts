@@ -190,8 +190,8 @@ export class TwoFactorService {
   private handleOtpInvalidError(err: HttpErrorResponse): void {
     switch (err.error?.statusCode) {
       case StatusCode.OTP_INVALID_OR_EXPIRED:
-        this.toastHandlingService.error(
-          'Lỗi xác thực',
+        this.toastHandlingService.warn(
+          'Cảnh báo xác thực',
           'Mã xác minh không hợp lệ hoặc đã hết hạn. Vui lòng kiểm tra lại mã OTP.'
         );
         break;
