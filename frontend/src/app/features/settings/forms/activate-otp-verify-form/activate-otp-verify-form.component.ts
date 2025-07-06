@@ -133,13 +133,6 @@ export class ActivateOtpVerifyFormComponent implements OnInit {
 
             this.startCountdown();
           },
-          error: () => {
-            this.submitted.set(false);
-            this.formControls().forEach(fc => {
-              fc.resetControl();
-              fc.control.updateValueAndValidity();
-            });
-          },
         });
     } else {
       if (!otpCode) return;
@@ -151,10 +144,6 @@ export class ActivateOtpVerifyFormComponent implements OnInit {
         .confirmEnableDisable2FA(request, this.enabled())
         .subscribe({
           next: () => this.twoFactorChanged.emit(),
-          error: () => {
-            this.submitted.set(false);
-            this.form.reset();
-          },
         });
     }
   }
