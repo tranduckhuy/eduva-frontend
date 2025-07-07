@@ -20,6 +20,9 @@ import {
 } from '../../../../shared/utils/form-validators';
 
 import { PasswordService } from '../../../../core/auth/services/password.service';
+import { LoadingService } from '../../../services/core/loading/loading.service';
+
+import { isFormFieldMismatch } from '../../../utils/util-functions';
 
 import { FormControlComponent } from '../../form-control/form-control.component';
 import { ButtonComponent } from '../../button/button.component';
@@ -42,6 +45,7 @@ import { type ResetPasswordRequest } from '../../../../core/auth/models/request/
 export class AuthFormResetPasswordComponent {
   private readonly fb = inject(FormBuilder);
   private readonly passwordService = inject(PasswordService);
+  private readonly loadingService = inject(LoadingService);
 
   email = input.required<string>();
   token = input.required<string>();
@@ -49,6 +53,8 @@ export class AuthFormResetPasswordComponent {
   passwordChanged = output<void>();
 
   form!: FormGroup;
+
+  isLoading = this.loadingService.isLoading;
 
   submitted = signal<boolean>(false);
   readonly passwordValue = signal<string>('');
@@ -86,6 +92,10 @@ export class AuthFormResetPasswordComponent {
     });
   }
 
+  get passwordMisMatch() {
+    return isFormFieldMismatch(this.form, 'password');
+  }
+
   onSubmit() {
     this.submitted.set(true);
     this.form.markAllAsTouched();
@@ -97,9 +107,9 @@ export class AuthFormResetPasswordComponent {
       token: this.token(),
       ...this.form.value,
     };
-    this.passwordService
-      .resetPassword(request)
-      .subscribe(() => this.passwordChanged.emit());
+    this.passwordService.resetPassword(request).subscribe({
+      next: () => this.passwordChanged.emit(),
+    });
   }
 
   private calcPasswordLevel(password: string): number | undefined {

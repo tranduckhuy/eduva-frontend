@@ -52,17 +52,39 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const handleForbidden = () => router.navigateByUrl('/403');
 
   const handleMissingSchoolOrSubscription = () => {
-    toastHandlingService.info(
-      'Trường chưa có gói sử dụng',
-      'Vui lòng liên hệ giáo viên hoặc quản trị viên để được cấp quyền truy cập.'
-    );
+    confirmationService.confirm({
+      header: 'Trường chưa có gói sử dụng',
+      message: `
+        <p>Trường của bạn hiện chưa có gói sử dụng.</p>
+        <p>Vui lòng liên hệ<strong>giáo viên</strong> hoặc <strong>quản trị viên</strong> để được cấp quyền truy cập.</p>
+      `,
+      acceptButtonProps: { label: 'Đăng xuất' },
+      rejectVisible: false,
+      closable: false,
+      accept: () => {
+        jwtService.clearAll();
+        userService.clearCurrentUser();
+        globalModalService.open(AuthModalComponent);
+      },
+    });
   };
 
   const handleSubscriptionExpired = () => {
-    toastHandlingService.info(
-      'Gói sử dụng đã hết hạn',
-      'Hãy liên hệ giáo viên hoặc quản trị viên để gia hạn và tiếp tục sử dụng hệ thống.'
-    );
+    confirmationService.confirm({
+      header: 'Gói sử dụng đã hết hạn',
+      message: `
+        <p>Gói sử dụng của trường bạn đã hết hạn.</p>
+        <p>Hãy liên hệ <strong>giáo viên</strong> hoặc <strong>quản trị viên</strong> để gia hạn và tiếp tục sử dụng hệ thống.</p>
+      `,
+      acceptButtonProps: { label: 'Đăng xuất' },
+      rejectVisible: false,
+      closable: false,
+      accept: () => {
+        jwtService.clearAll();
+        userService.clearCurrentUser();
+        globalModalService.open(AuthModalComponent);
+      },
+    });
   };
 
   return next(req).pipe(
