@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { EmailVerificationService } from '../../../core/auth/services/email-verification.service';
 import { GlobalModalService } from '../../services/layout/global-modal/global-modal.service';
 
 import { MODAL_DATA } from '../../tokens/injection/modal-data.token';
@@ -17,6 +18,7 @@ import { AuthFormLoginComponent } from './auth-form-login/auth-form-login.compon
 import { AuthFormForgotPasswordComponent } from './auth-form-forgot-password/auth-form-forgot-password.component';
 import { AuthFormResetPasswordComponent } from './auth-form-reset-password/auth-form-reset-password.component';
 import { AuthFormOtpVerificationComponent } from './auth-form-otp-verification/auth-form-otp-verification.component';
+import { ConfirmEmailRequest } from '../../../core/auth/models/request/confirm-email-request.model';
 
 type ScreenState =
   | 'login'
@@ -25,7 +27,7 @@ type ScreenState =
   | 'otp-verification';
 
 interface AuthModalData {
-  screenState: 'reset' | 'otp';
+  screenState: 'login' | 'reset' | 'otp';
   email: string;
   token: string;
 }
@@ -47,6 +49,7 @@ interface AuthModalData {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthModalComponent implements OnInit {
+  private readonly emailService = inject(EmailVerificationService);
   private readonly globalModalService = inject(GlobalModalService);
   readonly modalData = inject(MODAL_DATA, {
     optional: true,
@@ -59,16 +62,32 @@ export class AuthModalComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    if (
-      this.modalData?.email &&
-      this.modalData?.token &&
-      this.modalData?.screenState === 'reset'
-    ) {
-      this.screenState.set('reset-password');
-    }
+    const { email, token, screenState } = this.modalData || {};
 
-    if (this.modalData?.screenState === 'otp' && this.modalData?.email) {
-      this.screenState.set('otp-verification');
+    const hasEmail = !!email;
+    const hasToken = !!token;
+
+    switch (screenState) {
+      case 'login':
+        if (hasEmail && hasToken) {
+          this.handleConfirmEmail(email, token);
+        }
+        break;
+
+      case 'reset':
+        if (hasEmail && hasToken) {
+          this.screenState.set('reset-password');
+        }
+        break;
+
+      case 'otp':
+        if (hasEmail) {
+          this.screenState.set('otp-verification');
+        }
+        break;
+
+      default:
+        break;
     }
   }
 
@@ -94,5 +113,15 @@ export class AuthModalComponent implements OnInit {
       this.screenState() === 'reset-password' ||
       this.screenState() === 'otp-verification'
     );
+  }
+
+  private handleConfirmEmail(email: string, token: string) {
+    this.screenState.set('login');
+
+    const request: ConfirmEmailRequest = {
+      email,
+      token,
+    };
+    this.emailService.confirmEmail(request).subscribe();
   }
 }

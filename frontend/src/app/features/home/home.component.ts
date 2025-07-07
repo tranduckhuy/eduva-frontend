@@ -10,9 +10,12 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../core/auth/services/auth.service';
 import { UserService } from '../../shared/services/api/user/user.service';
-import { EntityStatus } from '../../shared/models/enum/entity-status.enum';
 import { ClassService } from '../../shared/services/api/class/class.service';
 import { LoadingService } from '../../shared/services/core/loading/loading.service';
+
+import { EntityStatus } from '../../shared/models/enum/entity-status.enum';
+import { EmailAction } from '../../shared/models/enum/email-action.enum';
+
 import { AuthModalComponent } from '../../shared/components/auth-modal/auth-modal.component';
 import { GlobalModalService } from '../../shared/services/layout/global-modal/global-modal.service';
 import { HomeCarouselComponent } from '../../shared/components/home-carousel/home-carousel.component';
@@ -72,17 +75,33 @@ export class HomeComponent implements OnInit {
     this.activatedRoute.queryParamMap.subscribe(params => {
       const email = params.get('email');
       const token = params.get('token');
+      const action = params.get('action') as EmailAction | null;
 
-      if (email && token) {
-        this.globalModalService.open(AuthModalComponent, {
-          screenState: 'reset',
-          email,
-          token,
-        });
+      if (!email || !token || !action) return;
+
+      switch (action) {
+        case EmailAction.ResetPassword:
+          this.globalModalService.open(AuthModalComponent, {
+            screenState: 'reset',
+            email,
+            token,
+          });
+          break;
+
+        case EmailAction.ConfirmEmail:
+          this.globalModalService.open(AuthModalComponent, {
+            screenState: 'login',
+            email,
+            token,
+          });
+          break;
+
+        default:
+          // ? Handle unknown action
+          break;
       }
     });
 
-    // Initial fetch if user is already logged in
     if (this.currentUser() && this.isLoggedIn()) {
       this.fetchClassesForUser(
         this.currentUser()!.id,
