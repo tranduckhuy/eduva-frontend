@@ -8,7 +8,7 @@
         class="pi text-primary"
         [class.pi-plus]="isCollapsed()"
         [class.pi-minus]="!isCollapsed()"></span>
-      {{ folder().name }}
+      {{ index() + 1 }}. {{ folder().name }}
     </h5>
     <p>{{ folder().countLessonMaterial }} bài học</p>
   </div>
@@ -17,6 +17,7 @@
       <curriculum-lesson-item
         [material]="material"
         [classId]="classId()"
+        [index]="$index"
         [folderId]="folder().id" />
     }
   </div>

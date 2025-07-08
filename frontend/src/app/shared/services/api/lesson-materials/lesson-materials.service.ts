@@ -44,6 +44,24 @@ export class LessonMaterialsService {
       );
   }
 
+  getLessonMaterialsInFolder(
+    request: GetLessonMaterialsRequest
+  ): Observable<LessonMaterial[] | null> {
+    return this.requestService
+      .get<Observable<LessonMaterial[] | null>>(
+        `${this.BASE_API_URL}/folders/${request.folderId}/lesson-materials`,
+        request,
+        {
+          loadingKey: 'get-materials',
+        }
+      )
+      .pipe(
+        tap(res => this.handleGetResponse(res)),
+        map(res => this.extractLessonMaterialsFromResponse(res)),
+        catchError(() => this.handleGetError())
+      );
+  }
+
   fetchLessonMaterialById(id: string): Observable<LessonMaterial | null> {
     return this.requestService
       .get<LessonMaterial>(

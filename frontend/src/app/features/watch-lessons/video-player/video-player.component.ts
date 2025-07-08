@@ -411,26 +411,42 @@ export class VideoPlayerComponent {
     this.isLoading.set(true);
     this.hasStarted.set(false);
 
-    const video = this.videoPlayerRef()?.nativeElement;
+    const video = this.getVideoElement();
     if (!video) return;
 
     // Reset video state
     video.src = url;
+
+    // Clear previous event listeners to avoid memory leaks
+    video.onloadedmetadata = null;
+    video.onerror = null;
+
+    video.onloadedmetadata = () => {
+      this.duration.set(video.duration);
+      this.isLoading.set(false);
+
+      // Try to play automatically
+      const playPromise = video.play();
+
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            this.hasStarted.set(true);
+            this.isPaused.set(false);
+          })
+          .catch(error => {
+            // Autoplay was prevented, keep paused state
+            console.log('Autoplay prevented:', error);
+            this.isPaused.set(true);
+          });
+      }
+    };
+
+    video.onerror = () => {
+      this.isLoading.set(false);
+      console.error('Error loading video');
+    };
+
     video.load();
-
-    const playPromise = video.play();
-
-    if (playPromise !== undefined) {
-      playPromise
-        .then(() => {
-          this.isLoading.set(false);
-          this.hasStarted.set(true);
-          this.isPaused.set(false);
-        })
-        .catch(() => {
-          this.isLoading.set(false);
-          this.isPaused.set(true);
-        });
-    }
   }
 }

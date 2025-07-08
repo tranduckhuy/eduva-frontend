@@ -5,9 +5,15 @@ import {
   inject,
   signal,
   input,
+  ElementRef,
+  ViewChildren,
+  QueryList,
+  AfterViewInit,
+  OnChanges,
+  SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { TooltipModule } from 'primeng/tooltip';
 
@@ -27,10 +33,7 @@ import { LessonMaterialsService } from '../../../../../shared/services/api/lesso
 import { LessonMaterial } from '../../../../../shared/models/entities/lesson-material.model';
 import { LoadingService } from '../../../../../shared/services/core/loading/loading.service';
 import { GetLessonMaterialsRequest } from '../../../../../shared/models/api/request/query/get-lesson-materials-request.model';
-import {
-  LessonMaterialStatus,
-  LessonMaterialVisibility,
-} from '../../../../../shared/models/enum/lesson-material.enum';
+import { LessonMaterialStatus } from '../../../../../shared/models/enum/lesson-material.enum';
 import { ToastHandlingService } from '../../../../../shared/services/core/toast/toast-handling.service';
 import { SecondsToMinutesPipe } from '../../../../../shared/pipes/seconds-to-minutes.pipe';
 import { LessonProgressService } from '../../../../../shared/services/api/local-lesson-progress/local-lesson-progress.service';
@@ -48,12 +51,11 @@ import { LessonProgressService } from '../../../../../shared/services/api/local-
   styleUrl: './sidebar-track.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SidebarTrackComponent implements OnInit {
+export class SidebarTrackComponent implements OnInit, AfterViewInit, OnChanges {
   private readonly materialService = inject(LessonMaterialsService);
   private readonly loadingService = inject(LoadingService);
   private readonly toastHandlingService = inject(ToastHandlingService);
   private readonly localLessonProgressService = inject(LessonProgressService);
-  private readonly activatedRoute = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly libIcon = inject(FaIconLibrary);
 
@@ -62,24 +64,33 @@ export class SidebarTrackComponent implements OnInit {
   readonly folder = input.required<Folder>();
   readonly index = input.required<number>();
   readonly materialId = input.required<string>();
+  readonly currentFolderId = input.required<string>();
 
   materials = signal<LessonMaterial[]>([]);
   isExpanded = signal<boolean>(false);
+
+  @ViewChildren('materialItem') materialItems!: QueryList<ElementRef>;
 
   constructor() {
     this.libIcon.addIcons(faCircleCheck, faFileLines, faCirclePlay, faFilePdf);
   }
 
-  ngOnInit(): void {
-    let folderId;
-    this.activatedRoute.queryParams.subscribe(params => {
-      folderId = params['folderId'];
-    });
-    if (this.folder().id === folderId) {
+  ngOnInit(): void {}
+
+  ngAfterViewInit() {
+    this.scrollToActiveMaterial();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (
+      changes['currentFolderId'] &&
+      this.currentFolderId() === this.folder().id
+    ) {
       this.isExpanded.set(true);
       this.getMaterials();
-    } else {
-      this.isExpanded.set(false);
+    }
+    if (changes['materialId']) {
+      this.scrollToActiveMaterial();
     }
   }
 
@@ -87,8 +98,8 @@ export class SidebarTrackComponent implements OnInit {
     if (this.isExpanded()) {
       this.isExpanded.set(false);
     } else {
-      this.getMaterials();
       this.isExpanded.set(true);
+      this.getMaterials();
     }
   }
 
@@ -96,7 +107,7 @@ export class SidebarTrackComponent implements OnInit {
     this.localLessonProgressService.setLastLesson(
       this.folder().classId!,
       this.folder().id,
-      this.materialId()
+      materialId
     );
     this.router.navigate(['/learn', materialId], {
       queryParams: {
@@ -111,11 +122,12 @@ export class SidebarTrackComponent implements OnInit {
       classId: this.folder().classId,
       folderId: this.folder().id,
       lessonStatus: LessonMaterialStatus.Approved,
-      visibility: LessonMaterialVisibility.School,
+      sortBy: 'lastmodifiedat',
+      sortDirection: 'asc',
     };
 
     this.materialService
-      .getLessonMaterials(getLessonMaterialsRequest)
+      .getLessonMaterialsInFolder(getLessonMaterialsRequest)
       .subscribe({
         next: res => {
           this.materials.set(res ?? []);
@@ -124,5 +136,16 @@ export class SidebarTrackComponent implements OnInit {
           this.toastHandlingService.errorGeneral();
         },
       });
+  }
+
+  private scrollToActiveMaterial() {
+    setTimeout(() => {
+      if (!this.materialItems) return;
+      const index = this.materials().findIndex(m => m.id === this.materialId());
+      if (index !== -1) {
+        const el = this.materialItems.toArray()[index]?.nativeElement;
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
   }
 }

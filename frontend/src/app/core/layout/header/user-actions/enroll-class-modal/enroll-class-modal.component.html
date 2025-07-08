@@ -1,0 +1,80 @@
+<div
+  class="auth-modal-height auth-modal-width relative z-[998] overflow-y-auto rounded-2xl bg-white transition-all duration-300 ease-in-out dark:text-[#242424]">
+  <div
+    class="modal-background pointer-events-none sticky left-0 right-0 top-0 z-[1] min-h-full rounded-2xl opacity-[0.08]"></div>
+
+  <div class="absolute left-0 right-0 top-0 z-[2]">
+    <!-- ? Back/Close -->
+    <div
+      class="sticky left-0 right-0 top-0 z-[10] flex w-full items-center justify-between p-5 pb-0">
+      <button
+        class="ml-auto flex size-10 cursor-pointer items-center justify-center rounded-full bg-[#16182308] text-[#333]"
+        (click)="closeModal()">
+        <span class="pi pi-times"></span>
+      </button>
+    </div>
+
+    <!-- ? Content -->
+    <div class="flex flex-col p-6 pt-0">
+      <!-- ? Header -->
+      <h1 class="text-2xl font-bold dark:text-[#242424]">Tham gia lớp học</h1>
+
+      <!-- ? Main -->
+      <div class="mt-5 rounded-[8px] border border-gray-200 p-5">
+        <p class="text-base font-medium">Bạn đang đăng nhập bằng tài khoản</p>
+        <div class="mt-3 flex items-center gap-4">
+          <img
+            [src]="currentUser()?.avatarUrl"
+            class="size-[52px] rounded-full object-cover" />
+          <div class="flex flex-col justify-center">
+            <span class="text-base">{{ currentUser()?.fullName }}</span>
+            <span class="text-sm">{{ currentUser()?.email }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="mt-5 rounded-[8px] border border-gray-200 p-5">
+        <p class="text-base font-medium">Mã lớp</p>
+        <p class="mb-2 mt-1 text-sm">
+          Đề nghị giáo viên của bạn cung cấp mã lớp rồi nhập mã đó vào đây
+        </p>
+        <form [formGroup]="form">
+          <div class="max-w-[360px]">
+            <app-form-control
+              type="email"
+              placeholder="Mã lớp"
+              [submitted]="submitted()"
+              [name]="'classCode'"
+              formControlName="classCode"
+              [maxLength]="8"
+              [minLength]="8"
+              (keydown.enter)="onSubmit()"
+              [required]="true" />
+          </div>
+        </form>
+      </div>
+      <div class="mt-4 p-5">
+        <p class="text-base font-medium">Cách đăng nhập bằng mã lớp học</p>
+        <ul>
+          <li class="mt-2">• Sử dụng tài khoản được cấp phép</li>
+          <li class="mt-2">
+            • Sử dụng mã lớp gồm 8 chữ cái hoặc số, không có dấu cách hoặc ký
+            hiệu
+          </li>
+        </ul>
+        <!-- ? Footer -->
+        <!-- ? Submit Button -->
+        <div class="mt-10 flex items-center justify-end gap-4">
+          <button (click)="closeModal()">
+            <app-button [text]="'Hủy'" [variant]="'text'" />
+          </button>
+          <button (click)="onSubmit()">
+            <app-button
+              [text]="'Tham gia'"
+              [loading]="isLoading()"
+              [variant]="'rounded'" />
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
+import { TooltipModule } from 'primeng/tooltip';
 
 import { AuthService } from '../../../auth/services/auth.service';
 import { UserService } from '../../../../shared/services/api/user/user.service';
@@ -11,6 +12,7 @@ import { InformationComponent } from './information/information.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { GlobalModalService } from '../../../../shared/services/layout/global-modal/global-modal.service';
 import { AuthModalComponent } from '../../../../shared/components/auth-modal/auth-modal.component';
+import { EnrollClassModalComponent } from './enroll-class-modal/enroll-class-modal.component';
 
 @Component({
   selector: 'header-user-actions',
@@ -20,6 +22,7 @@ import { AuthModalComponent } from '../../../../shared/components/auth-modal/aut
     NotificationsComponent,
     InformationComponent,
     ClassroomsComponent,
+    TooltipModule,
   ],
   templateUrl: './user-actions.component.html',
   styleUrl: './user-actions.component.css',
@@ -54,5 +57,9 @@ export class UserActionsComponent {
 
   openSignInModal() {
     this.globalModalService.open(AuthModalComponent);
+  }
+
+  openEnrollModal() {
+    this.globalModalService.open(EnrollClassModalComponent);
   }
 }

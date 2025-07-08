@@ -19,6 +19,15 @@
         <header-classrooms (clickOutside)="closeSubMenu()" />
       }
     </div>
+    <div class="relative">
+      <p-button
+        icon="fas fa-plus"
+        pTooltip="Tham gia lớp học"
+        tooltipPosition="bottom"
+        class="actions__btn join__btn flex items-center"
+        [rounded]="true"
+        (click)="openEnrollModal()" />
+    </div>
     <div class="flex items-center gap-3">
       <div class="relative sm:hidden">
         <p-button

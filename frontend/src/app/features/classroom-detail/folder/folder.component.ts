@@ -14,6 +14,7 @@ import { LessonMaterialsService } from '../../../shared/services/api/lesson-mate
 import { LoadingService } from '../../../shared/services/core/loading/loading.service';
 import { LessonMaterial } from '../../../shared/models/entities/lesson-material.model';
 import { ToastHandlingService } from '../../../shared/services/core/toast/toast-handling.service';
+import { LessonMaterialStatus } from '../../../shared/models/enum/lesson-material.enum';
 
 @Component({
   selector: 'app-folder',
@@ -35,6 +36,7 @@ export class FolderComponent {
 
   readonly classId = input.required<string>();
   readonly folder = input.required<Folder>();
+  readonly index = input.required<number>();
 
   isCollapsed = signal<boolean>(true);
 
@@ -51,10 +53,13 @@ export class FolderComponent {
     const getLessonMaterialsRequest: GetLessonMaterialsRequest = {
       classId: this.classId(),
       folderId: this.folder().id,
+      lessonStatus: LessonMaterialStatus.Approved,
+      sortBy: 'lastmodifiedat',
+      sortDirection: 'asc',
     };
 
     this.materialService
-      .getLessonMaterials(getLessonMaterialsRequest)
+      .getLessonMaterialsInFolder(getLessonMaterialsRequest)
       .subscribe({
         next: res => {
           this.materials.set(res || []);
