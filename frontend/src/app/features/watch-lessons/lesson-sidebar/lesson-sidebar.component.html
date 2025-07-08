@@ -22,6 +22,8 @@
 
   <!-- ? Lesson Tracker -->
   <div class="lesson-tracker flex-1 overflow-y-auto overscroll-contain">
-    <sidebar-tracks [materialId]="materialId()" />
+    <sidebar-tracks
+      [materialId]="materialId()"
+      [currentFolderId]="folderId()" />
   </div>
 </div>

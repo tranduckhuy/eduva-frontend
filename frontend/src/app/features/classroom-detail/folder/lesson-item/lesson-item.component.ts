@@ -38,6 +38,7 @@ export class LessonItemComponent {
   material = input.required<LessonMaterial>();
   folderId = input.required<string>();
   classId = input.required<string>();
+  index = input.required<number>();
 
   constructor() {
     this.libIcon.addIcons(faCirclePlay, faVolumeHigh, faFilePdf, faFileWord);

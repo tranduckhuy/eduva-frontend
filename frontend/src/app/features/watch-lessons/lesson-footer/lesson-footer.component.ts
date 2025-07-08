@@ -3,6 +3,8 @@ import {
   Component,
   input,
   output,
+  EventEmitter,
+  Output,
 } from '@angular/core';
 
 import { TooltipModule } from 'primeng/tooltip';
@@ -21,9 +23,13 @@ export class LessonFooterComponent {
   isSidebarOpen = input.required<boolean>();
   currentFolderName = input.required<string | undefined>();
   currentFolderIndex = input.required<number | undefined>();
+  isFirstMaterial = input<boolean>(false);
+  isLastMaterial = input<boolean>(false);
 
   toggleSidebar = output<void>();
   openCommentModal = output<void>();
+  @Output() nextMaterial = new EventEmitter<void>();
+  @Output() prevMaterial = new EventEmitter<void>();
 
   get iconSrc(): string {
     return this.isSidebarOpen()
@@ -37,5 +43,13 @@ export class LessonFooterComponent {
 
   onOpenCommentModalClick() {
     this.openCommentModal.emit();
+  }
+
+  onNextMaterialClick() {
+    this.nextMaterial.emit();
+  }
+
+  onPrevMaterialClick() {
+    this.prevMaterial.emit();
   }
 }

@@ -6,11 +6,13 @@
       <div class="classrooms">
         <div class="flex items-center justify-between">
           <h2 class="classrooms__header">Lớp học của tôi</h2>
-          <a
-            routerLink="/classes"
-            class="mr-1 select-none py-2 pl-2 text-[15px] font-semibold text-primary transition duration-200 hover:underline"
-            >Xem tất cả<i class="fa-solid fa-chevron-right ml-1 text-sm"></i>
-          </a>
+          @if (!isLoadingGetClasses() && classes().length > 0) {
+            <a
+              routerLink="/classes"
+              class="mr-1 select-none py-2 pl-2 text-[15px] font-semibold text-primary transition duration-200 hover:underline"
+              >Xem tất cả<i class="fa-solid fa-chevron-right ml-1 text-sm"></i>
+            </a>
+          }
         </div>
         @if (isLoadingGetClasses()) {
           <div
@@ -18,6 +20,36 @@
             @for (_ of skeletonItems; track $index) {
               <app-class-card-skeleton />
             }
+          </div>
+        } @else if (classes().length === 0) {
+          <div class="mt-6 rounded-md border border-[#dadce0] p-[25px]">
+            <div class="flex items-center sm:flex-col">
+              <img
+                src="./images/classroom-lesson-empty.svg"
+                alt=""
+                class="size-40" />
+              <div class="ml-10 flex grow flex-col sm:ml-0">
+                <p class="text-lg font-semibold">
+                  Bạn chưa tham gia lớp học nào!
+                </p>
+                <p
+                  class="mt-4 text-base italic text-gray-500 dark:text-gray-300">
+                  Khi tham gia lớp, bạn sẽ thấy tất cả bài giảng, tài liệu, và
+                  video từ giáo viên tại đây. Hãy nhập mã lớp mà giáo viên đã
+                  cung cấp để bắt đầu học nhé!
+                </p>
+              </div>
+            </div>
+            <div class="flex justify-end sm:mt-6">
+              <p-button
+                icon="fas fa-plus"
+                label="Tham gia lớp học"
+                pTooltip="Tham gia lớp học"
+                tooltipPosition="bottom"
+                class="actions__btn flex items-center"
+                [rounded]="true"
+                (click)="openEnrollClassModal()" />
+            </div>
           </div>
         } @else {
           <div
