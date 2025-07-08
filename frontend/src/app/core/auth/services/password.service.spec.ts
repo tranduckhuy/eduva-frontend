@@ -191,14 +191,15 @@ describe('PasswordService', () => {
       await new Promise<void>(resolve => {
         service.resetPassword(mockResetPasswordRequest).subscribe({
           next: () => {
+            fail('should not succeed');
+            resolve();
+          },
+          error: err => {
             expect(toastHandlingService.error).toHaveBeenCalledWith(
               'Liên kết hết hạn',
               'Vui lòng gửi lại yêu cầu đặt lại mật khẩu mới.'
             );
             resolve();
-          },
-          error: err => {
-            throw err;
           },
         });
       });
@@ -213,14 +214,15 @@ describe('PasswordService', () => {
       await new Promise<void>(resolve => {
         service.resetPassword(mockResetPasswordRequest).subscribe({
           next: () => {
+            fail('should not succeed');
+            resolve();
+          },
+          error: err => {
             expect(toastHandlingService.warn).toHaveBeenCalledWith(
               'Cảnh báo',
               'Mật khẩu mới không được trùng với mật khẩu hiện tại.'
             );
             resolve();
-          },
-          error: err => {
-            throw err;
           },
         });
       });
@@ -235,11 +237,12 @@ describe('PasswordService', () => {
       await new Promise<void>(resolve => {
         service.resetPassword(mockResetPasswordRequest).subscribe({
           next: () => {
-            expect(toastHandlingService.errorGeneral).toHaveBeenCalled();
+            fail('should not succeed');
             resolve();
           },
           error: err => {
-            throw err;
+            expect(toastHandlingService.errorGeneral).toHaveBeenCalled();
+            resolve();
           },
         });
       });
