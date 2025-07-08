@@ -5,7 +5,6 @@ import {
   output,
   EventEmitter,
   Output,
-  Input,
 } from '@angular/core';
 
 import { TooltipModule } from 'primeng/tooltip';

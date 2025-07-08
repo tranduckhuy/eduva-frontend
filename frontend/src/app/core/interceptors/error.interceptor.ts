@@ -7,7 +7,6 @@ import { ConfirmationService } from 'primeng/api';
 
 import { JwtService } from '../auth/services/jwt.service';
 import { UserService } from '../../shared/services/api/user/user.service';
-import { ToastHandlingService } from '../../shared/services/core/toast/toast-handling.service';
 import { GlobalModalService } from '../../shared/services/layout/global-modal/global-modal.service';
 
 import { StatusCode } from '../../shared/constants/status-code.constant';
@@ -22,7 +21,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const jwtService = inject(JwtService);
   const userService = inject(UserService);
   const globalModalService = inject(GlobalModalService);
-  const toastHandlingService = inject(ToastHandlingService);
   const confirmationService = inject(ConfirmationService);
 
   const isByPass = req.context.get(BYPASS_AUTH_ERROR);

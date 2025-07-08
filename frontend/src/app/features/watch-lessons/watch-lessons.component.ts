@@ -103,7 +103,7 @@ export class WatchLessonsComponent implements OnInit {
   );
 
   // Cache for folder materials
-  private folderMaterialsCache = new Map<string, LessonMaterial[]>();
+  private readonly folderMaterialsCache = new Map<string, LessonMaterial[]>();
 
   ngOnInit(): void {
     this.activatedRoute.queryParams
@@ -201,16 +201,6 @@ export class WatchLessonsComponent implements OnInit {
     if (this.folderMaterialsCache.has(folderId)) {
       return this.folderMaterialsCache.get(folderId)!;
     }
-    const getLessonMaterialsRequest: GetFoldersRequest & {
-      lessonStatus?: number;
-      sortBy?: string;
-      sortDirection?: string;
-    } = {
-      ownerType: FolderOwnerType.Class,
-      lessonStatus: LessonMaterialStatus.Approved,
-      sortBy: 'lastmodifiedat',
-      sortDirection: 'asc',
-    };
     // Use lessonMaterialService to get materials in folder
     return new Promise(resolve => {
       this.lessonMaterialService

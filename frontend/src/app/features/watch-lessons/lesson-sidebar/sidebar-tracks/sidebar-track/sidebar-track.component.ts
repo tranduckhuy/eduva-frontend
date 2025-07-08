@@ -51,7 +51,7 @@ import { LessonProgressService } from '../../../../../shared/services/api/local-
   styleUrl: './sidebar-track.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SidebarTrackComponent implements OnInit, AfterViewInit, OnChanges {
+export class SidebarTrackComponent implements AfterViewInit, OnChanges {
   private readonly materialService = inject(LessonMaterialsService);
   private readonly loadingService = inject(LoadingService);
   private readonly toastHandlingService = inject(ToastHandlingService);
@@ -74,8 +74,6 @@ export class SidebarTrackComponent implements OnInit, AfterViewInit, OnChanges {
   constructor() {
     this.libIcon.addIcons(faCircleCheck, faFileLines, faCirclePlay, faFilePdf);
   }
-
-  ngOnInit(): void {}
 
   ngAfterViewInit() {
     this.scrollToActiveMaterial();
