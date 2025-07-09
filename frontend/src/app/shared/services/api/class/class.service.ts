@@ -7,6 +7,7 @@ import { catchError, EMPTY, map, Observable, of, tap } from 'rxjs';
 import { GetStudentClassesEnrolledRequest } from '../../../models/api/request/query/get-student-classes-enrolled-request.model';
 import { EntityListResponse } from '../../../models/api/response/query/entity-list-response.model';
 import { StatusCode } from '../../../constants/status-code.constant';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
@@ -18,6 +19,7 @@ export class ClassService {
   private readonly BASE_API_URL = environment.baseApiUrl;
   private readonly BASE_CLASS_API_URL = `${this.BASE_API_URL}/classes`;
   private readonly GET_STUDENT_CLASSES_API_URL = `${this.BASE_CLASS_API_URL}/enrollment`;
+  private readonly ENROLL_CLASS_API_URL = `${this.BASE_CLASS_API_URL}/enroll-by-code`;
 
   private readonly classesSignal = signal<ClassModel[]>([]);
   classes = this.classesSignal.asReadonly();
@@ -57,6 +59,30 @@ export class ClassService {
           return of(null);
         })
       );
+  }
+
+  enrollClass(classCode: string): Observable<ClassModel | null> {
+    return this.requestService
+      .post<ClassModel>(this.ENROLL_CLASS_API_URL, classCode)
+      .pipe(
+        tap(res => this.handleEnrollClassSideEffect(res)),
+        map(res => this.extractClassFromResponse(res)),
+        catchError(err => {
+          this.handleEnrollClassError(err);
+          return of(null);
+        })
+      );
+  }
+
+  private handleEnrollClassSideEffect(res: any): void {
+    if (res.statusCode === StatusCode.SUCCESS && res.data) {
+      this.toastHandlingService.success(
+        'Thành công',
+        'Bạn đã tham gia vào lớp học thành công'
+      );
+    } else {
+      this.toastHandlingService.errorGeneral();
+    }
   }
 
   private handleGetStudentClassesEnrolledResponse(res: any): void {
@@ -99,5 +125,42 @@ export class ClassService {
       return res.data;
     }
     return null;
+  }
+
+  private handleEnrollClassError(err: HttpErrorResponse): void {
+    const statusCode = err.error?.statusCode;
+
+    switch (statusCode) {
+      case StatusCode.CLASS_NOT_FOUND:
+        this.toastHandlingService.error(
+          'Tham gia lớp học thất bại',
+          'Mã lớp không tồn tại!'
+        );
+        break;
+      case StatusCode.CLASS_CODE_DUPLICATE:
+        this.toastHandlingService.error(
+          'Tham gia lớp học thất bại',
+          'Mã lớp đã tồn tại!'
+        );
+        break;
+      case StatusCode.STUDENT_CANNOT_ENROLL_DIFFERENT_SCHOOL:
+        this.toastHandlingService.error(
+          'Tham gia lớp học thất bại',
+          'Bạn không thể tham gia một lớp học ngoài phạm vi trường của bạn!'
+        );
+        break;
+      case StatusCode.STUDENT_ALREADY_ENROLLED:
+        this.toastHandlingService.warn('Chú ý', 'Bạn đã tham gia lớp học');
+        break;
+      case StatusCode.CLASS_NOT_ACTIVE:
+        this.toastHandlingService.error(
+          'Tham gia lớp học thất bại',
+          'Lớp học hiện chưa được kích hoạt'
+        );
+        break;
+
+      default:
+        this.toastHandlingService.errorGeneral();
+    }
   }
 }
