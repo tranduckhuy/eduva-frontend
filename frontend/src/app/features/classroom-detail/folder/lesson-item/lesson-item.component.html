@@ -3,7 +3,7 @@
   class="mt-2 flex min-h-12 cursor-pointer items-center justify-between rounded-[6px] border-b border-b-[#00000008] px-8 transition-colors duration-200 hover:bg-primary-50 hover:dark:bg-[#272a31]">
   <div class="flex items-center gap-4">
     <fa-icon [icon]="icon" class="text-base text-primary"></fa-icon>
-    <span>{{ material().title }}</span>
+    <span>{{ index() + 1 }}. {{ material().title }}</span>
   </div>
   <span>{{ material().duration | secondsToMinutes }}</span>
 </div>

@@ -8,6 +8,8 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
+import { Button } from 'primeng/button';
+
 import { AuthService } from '../../core/auth/services/auth.service';
 import { UserService } from '../../shared/services/api/user/user.service';
 import { ClassService } from '../../shared/services/api/class/class.service';
@@ -22,6 +24,7 @@ import { HomeCarouselComponent } from '../../shared/components/home-carousel/hom
 import { ClassroomCardComponent } from '../../shared/components/classroom-card/classroom-card.component';
 import { GetStudentClassesEnrolledRequest } from '../../shared/models/api/request/query/get-student-classes-enrolled-request.model';
 import { ClassCardSkeletonComponent } from '../../shared/components/skeleton/class-card-skeleton/class-card-skeleton.component';
+import { EnrollClassModalComponent } from '../../core/layout/header/user-actions/enroll-class-modal/enroll-class-modal.component';
 
 @Component({
   selector: 'app-home',
@@ -31,6 +34,7 @@ import { ClassCardSkeletonComponent } from '../../shared/components/skeleton/cla
     ClassroomCardComponent,
     ClassCardSkeletonComponent,
     RouterLink,
+    Button,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
@@ -122,5 +126,9 @@ export class HomeComponent implements OnInit {
     this.classService
       .getStudentClassesEnrolled(getStudentClassesEnrolledRequest)
       .subscribe();
+  }
+
+  openEnrollClassModal() {
+    this.globalModalService.open(EnrollClassModalComponent);
   }
 }

@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -11,7 +12,7 @@ import { TooltipModule } from 'primeng/tooltip';
 @Component({
   selector: 'app-button-outline-gradient',
   standalone: true,
-  imports: [TooltipModule],
+  imports: [TooltipModule, CommonModule],
   templateUrl: './button-outline-gradient.component.html',
   styleUrl: './button-outline-gradient.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

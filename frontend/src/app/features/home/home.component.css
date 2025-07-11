@@ -6,3 +6,24 @@
 .classrooms__list {
   margin-top: 28px;
 }
+
+.actions__btn ::ng-deep .p-button {
+  color: #fff;
+  background-color: #0093fc;
+  border-color: transparent;
+  white-space: nowrap;
+  transition: opacity 0.2s linear;
+}
+
+.actions__btn ::ng-deep .p-button:hover {
+  color: #fff;
+  background-color: #0093fc;
+  border-color: transparent;
+  opacity: 0.8;
+}
+
+.join__btn ::ng-deep .p-button {
+  padding: 3px 16px;
+  height: 36px;
+  width: 36px;
+}

@@ -11,14 +11,20 @@
   <!-- ? Prev/Next Lesson -->
   <div class="flex items-center justify-center gap-3">
     <!-- ? Prev Button -->
-    <app-button-outline-gradient [variant]="'text'" [text]="'Bài Trước'">
+    <app-button-outline-gradient
+      [variant]="'text'"
+      [text]="'Bài Trước'"
+      (click)="onPrevMaterialClick()"
+      [isDisabled]="isFirstMaterial()">
       <span icon-left class="pi pi-arrow-left"></span>
     </app-button-outline-gradient>
     <!-- ? Next Button -->
     <app-button-outline-gradient
       [variant]="'outline'"
       [text]="'Bài tiếp theo'"
-      [tooltipText]="'Phím tắt: ctrl + enter'">
+      [tooltipText]="'Phím tắt: ctrl + enter'"
+      (click)="onNextMaterialClick()"
+      [isDisabled]="isLastMaterial()">
       <span icon-right class="pi pi-arrow-right"></span>
     </app-button-outline-gradient>
   </div>

@@ -20,6 +20,7 @@ export class SidebarTracksComponent {
   private readonly folderService = inject(FolderManagementService);
 
   readonly materialId = input.required<string>();
+  readonly currentFolderId = input.required<string>();
 
   readonly folders = this.folderService.folderList;
 }
