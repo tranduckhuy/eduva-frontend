@@ -22,16 +22,16 @@
       <div class="flex grow items-center justify-center md:flex-grow-[2]">
         <div class="relative w-[420px] max-w-full sm:w-full">
           <div
-            class="flex h-10 w-full items-center rounded-full border-2 border-[#e8e8e8] bg-white px-4 transition-colors duration-300 ease-in-out focus-within:border-[#444] dark:border-[#181d1e] dark:bg-[#272a31]">
+            class="flex h-10 w-full items-center rounded-full border-2 border-[#e8e8e8] bg-white px-4 text-black transition-colors duration-300 ease-in-out focus-within:border-[#444] dark:border-[#181d1e] dark:bg-[#272a31] dark:text-white">
             <span class="pi pi-search text-md font-semibold"></span>
             <input
               type="text"
-              class="search-input ml-2 h-full grow border-none bg-transparent text-sm text-black outline-none sm:hidden"
+              class="search-input ml-2 h-full grow border-none bg-transparent text-sm outline-none sm:hidden"
               placeholder="Tìm kiếm môn học, video,..."
               [(ngModel)]="searchInput" />
             <input
               type="text"
-              class="search-input ml-2 hidden h-full w-full grow border-none bg-transparent text-sm text-black outline-none sm:block"
+              class="search-input ml-2 hidden h-full w-full grow border-none bg-transparent text-sm outline-none sm:block"
               placeholder="Tìm kiếm..."
               [(ngModel)]="searchInput" />
             <span class="pi pi-times" (click)="searchInput = ''"></span>

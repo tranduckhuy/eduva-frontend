@@ -101,6 +101,9 @@
     --color-text-lesson-active: var(--color-white);
 
     --scroll-bar-thumb: rgba(255, 255, 255, 0.15);
+
+    --header-filter-title-border: #0000000d;
+    --header-filter-title-link: #0000008a;
   }
 
   *,
@@ -150,6 +153,9 @@
     --color-text-lesson-active: #808b9a;
 
     --scroll-bar-thumb: rgba(0, 0, 0, 0.05);
+
+    --header-filter-title-border: #ffffff1a;
+    --header-filter-title-link: #ffffffb3;
   }
 
   html *::-webkit-scrollbar {
