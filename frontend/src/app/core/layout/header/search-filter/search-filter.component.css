@@ -8,7 +8,7 @@
   width: 100%;
   height: 1px;
   margin-top: 8px;
-  background-color: #0000000d;
+  background-color: var(--header-filter-title-border);
 }
 
 .filter__title h5 {
@@ -24,7 +24,7 @@
 }
 
 .filter__title a {
-  color: #0000008a;
+  color: var(--header-filter-title-link);
 }
 
 .filter__title a:hover {
