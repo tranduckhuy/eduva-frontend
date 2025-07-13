@@ -104,6 +104,18 @@
 
     --header-filter-title-border: #0000000d;
     --header-filter-title-link: #0000008a;
+
+    --rich-text-text-color: var(--color-text);
+    --rich-text-placeholder-color: #24242466;
+    --rich-text-mention-bg-color: #f6f7f9;
+    --rich-text-bg-color: #eef4fc;
+    --rich-text-focus-bg-color: #fff;
+    --rich-text-focus-border-color: #444;
+
+    --comment-item-text-color: #2e3441;
+    --comment-item-hover-bg-color: #f2f9ff;
+    --comment-item-category-bg-color: var(--color-bg5);
+    --comment-pagination-disabled: var(--comment-item-text-color);
   }
 
   *,
@@ -156,6 +168,18 @@
 
     --header-filter-title-border: #ffffff1a;
     --header-filter-title-link: #ffffffb3;
+
+    --rich-text-text-color: #dae4f0;
+    --rich-text-placeholder-color: #dae4f066;
+    --rich-text-mention-bg-color: #191d1e;
+    --rich-text-bg-color: var(--color-dark3);
+    --rich-text-focus-bg-color: var(--color-dark3);
+    --rich-text-focus-border-color: #2093e7;
+
+    --comment-item-text-color: #a2adbd;
+    --comment-item-hover-bg-color: #32353b;
+    --comment-item-category-bg-color: var(--color-dark);
+    --comment-pagination-disabled: var(--color-text-lesson-active);
   }
 
   html *::-webkit-scrollbar {

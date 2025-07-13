@@ -88,6 +88,10 @@
   [isOpen]="isChapterModalOpen()"
   (closeChapterModal)="closeChapterModal()" />
 
-<comment-modal
-  [isOpen]="isCommentModalOpen()"
-  (closeCommentModal)="closeCommentModal()" />
+@if (material()) {
+  <comment-modal
+    [materialId]="materialId()"
+    [materialTitle]="material()!.title"
+    [isOpen]="isCommentModalOpen()"
+    (closeCommentModal)="closeCommentModal()" />
+}

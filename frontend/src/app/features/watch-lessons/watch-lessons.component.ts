@@ -1,17 +1,23 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  OnInit,
   DestroyRef,
-  effect,
   inject,
   input,
-  OnInit,
   signal,
   computed,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
+import { LoadingService } from '../../shared/services/core/loading/loading.service';
+import { FolderManagementService } from '../../shared/services/api/folder/folder-management.service';
+import { LessonMaterialsService } from '../../shared/services/api/lesson-materials/lesson-materials.service';
+import { LessonProgressService } from '../../shared/services/api/local-lesson-progress/local-lesson-progress.service';
+
+import { FolderOwnerType } from '../../shared/models/enum/folder-owner-type.enum';
 
 import { HeaderComponent } from '../../core/layout/header/header.component';
 import { VideoPlayerComponent } from './video-player/video-player.component';
@@ -21,18 +27,13 @@ import { LessonSidebarComponent } from './lesson-sidebar/lesson-sidebar.componen
 import { LessonFooterComponent } from './lesson-footer/lesson-footer.component';
 import { ChapterModalComponent } from './chapter-modal/chapter-modal.component';
 import { CommentModalComponent } from './comment-modal/comment-modal.component';
-import { FolderManagementService } from '../../shared/services/api/folder/folder-management.service';
-import { LoadingService } from '../../shared/services/core/loading/loading.service';
-import { LessonMaterialsService } from '../../shared/services/api/lesson-materials/lesson-materials.service';
-import { GetFoldersRequest } from '../../shared/models/api/request/query/get-folders-request.model';
-import { FolderOwnerType } from '../../shared/models/enum/folder-owner-type.enum';
-import { Folder } from '../../shared/models/entities/folder.model';
 import { AudioListenerComponent } from './audio-listener/audio-listener.component';
 import { DocViewerComponent } from './doc-viewer/doc-viewer.component';
 import { PdfViewerComponent } from './pdf-viewer/pdf-viewer.component';
-import { LessonMaterial } from '../../shared/models/entities/lesson-material.model';
-import { LessonMaterialStatus } from '../../shared/models/enum/lesson-material.enum';
-import { LessonProgressService } from '../../shared/services/api/local-lesson-progress/local-lesson-progress.service';
+
+import { type Folder } from '../../shared/models/entities/folder.model';
+import { type LessonMaterial } from '../../shared/models/entities/lesson-material.model';
+import { type GetFoldersRequest } from '../../shared/models/api/request/query/get-folders-request.model';
 
 @Component({
   selector: 'app-watch-lessons',
@@ -57,50 +58,65 @@ import { LessonProgressService } from '../../shared/services/api/local-lesson-pr
 })
 export class WatchLessonsComponent implements OnInit {
   // Services
+  private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly folderService = inject(FolderManagementService);
   private readonly loadingService = inject(LoadingService);
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly lessonMaterialService = inject(LessonMaterialsService);
   private readonly localLessonProgressService = inject(LessonProgressService);
-  private readonly destroyRef = inject(DestroyRef);
-  private readonly router = inject(Router);
 
   // Service signals
-  isLoadingGetFolders = this.loadingService.is('get-folders');
-  isLoadingGetMaterial = this.loadingService.is('get-material');
   folders = this.folderService.folderList;
   folder = this.folderService.folder;
   material = this.lessonMaterialService.lessonMaterial;
+  isLoadingGetFolders = this.loadingService.is('get-folders');
+  isLoadingGetMaterial = this.loadingService.is('get-material');
 
   // Component inputs
   readonly materialId = input.required<string>();
+
   classId = signal<string>('');
   folderId = signal<string>('');
+  currentFolderIndex = signal<number>(0);
+  currentFolder = signal<Folder | undefined>(undefined);
 
   // UI state
   isSidebarOpen = signal<boolean>(false);
   isChapterModalOpen = signal<boolean>(false);
   isCommentModalOpen = signal<boolean>(false);
-  currentFolderIndex = signal<number>(0);
-  currentFolder = signal<Folder | undefined>(undefined);
 
   // Track loading state to prevent loops
   private readonly isInitialLoad = signal<boolean>(true);
   private readonly lastLoadedMaterialId = signal<string | null>(null);
 
-  // Effect to watch for materialId changes
-  private readonly materialIdEffect = effect(
-    () => {
-      const currentMaterialId = this.materialId();
-      if (
-        currentMaterialId &&
-        currentMaterialId !== this.lastLoadedMaterialId()
-      ) {
-        this.loadData();
-      }
-    },
-    { allowSignalWrites: true }
-  );
+  // --- Computed signals for disabling buttons ---
+  isFirstMaterial = computed(() => {
+    const folders = this.folders();
+    const currentFolderId = this.folderId();
+    const currentFolderIndex = folders.findIndex(f => f.id === currentFolderId);
+    if (currentFolderIndex === -1) return true;
+    const currentMaterials =
+      this.folderMaterialsCache.get(currentFolderId) ?? [];
+    const currentIndex = this.getCurrentMaterialIndex(currentMaterials);
+    // First folder and first material
+    return currentFolderIndex === 0 && currentIndex === 0;
+  });
+
+  isLastMaterial = computed(() => {
+    const folders = this.folders();
+    const currentFolderId = this.folderId();
+    const currentFolderIndex = folders.findIndex(f => f.id === currentFolderId);
+    if (currentFolderIndex === -1) return true;
+    const currentMaterials =
+      this.folderMaterialsCache.get(currentFolderId) ?? [];
+    const currentIndex = this.getCurrentMaterialIndex(currentMaterials);
+    // Last folder and last material
+    return (
+      currentFolderIndex === folders.length - 1 &&
+      currentIndex === currentMaterials.length - 1
+    );
+  });
 
   // Cache for folder materials
   private readonly folderMaterialsCache = new Map<string, LessonMaterial[]>();
@@ -292,34 +308,6 @@ export class WatchLessonsComponent implements OnInit {
       },
     });
   }
-
-  // --- Computed signals for disabling buttons ---
-  isFirstMaterial = computed(() => {
-    const folders = this.folders();
-    const currentFolderId = this.folderId();
-    const currentFolderIndex = folders.findIndex(f => f.id === currentFolderId);
-    if (currentFolderIndex === -1) return true;
-    const currentMaterials =
-      this.folderMaterialsCache.get(currentFolderId) ?? [];
-    const currentIndex = this.getCurrentMaterialIndex(currentMaterials);
-    // First folder and first material
-    return currentFolderIndex === 0 && currentIndex === 0;
-  });
-
-  isLastMaterial = computed(() => {
-    const folders = this.folders();
-    const currentFolderId = this.folderId();
-    const currentFolderIndex = folders.findIndex(f => f.id === currentFolderId);
-    if (currentFolderIndex === -1) return true;
-    const currentMaterials =
-      this.folderMaterialsCache.get(currentFolderId) ?? [];
-    const currentIndex = this.getCurrentMaterialIndex(currentMaterials);
-    // Last folder and last material
-    return (
-      currentFolderIndex === folders.length - 1 &&
-      currentIndex === currentMaterials.length - 1
-    );
-  });
 
   // --- Event Handlers for Footer ---
   onNextMaterial() {

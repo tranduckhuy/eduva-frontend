@@ -5,7 +5,7 @@
     'invisible -translate-x-[101%] opacity-0': !isOpen(),
   }">
   <div
-    class="comment-modal-content h-full cursor-default overflow-y-auto overflow-x-hidden bg-white p-8">
+    class="comment-modal-content h-full cursor-default overflow-y-auto overflow-x-hidden bg-white p-8 dark:bg-dark-400">
     <span
       class="pi pi-times absolute right-0 top-0 z-[999] cursor-pointer p-6 text-[#1d9ffb]"
       style="font-size: 20px"
@@ -13,9 +13,9 @@
     <div>
       <!-- ? Title -->
       <div
-        class="absolute left-0 top-0 z-10 w-full bg-white px-8 pb-5 pt-[25px] text-center">
+        class="absolute left-0 top-0 z-10 w-full bg-white px-8 pb-5 pt-[25px] text-center dark:bg-dark-400">
         <div class="relative flex items-center justify-between">
-          @if (currentState() !== 'list' && currentState() !== 'loading') {
+          @if (currentState() !== 'list') {
             <button
               class="flex cursor-pointer items-center gap-2 font-semibold text-[#0093fc]"
               (click)="handleGoBack()">
@@ -24,7 +24,7 @@
             </button>
           }
           <h2
-            class="absolute left-[50%] -translate-x-[50%] text-2xl font-bold tracking-[0.5px] text-[#4e586b]">
+            class="absolute left-[50%] -translate-x-[50%] text-2xl font-bold tracking-[0.5px] text-[#4e586b] dark:text-[#dae4f0]">
             Hỏi đáp
           </h2>
         </div>
@@ -32,7 +32,7 @@
 
       <!-- ? Comment List -->
       <div class="mt-20">
-        @if (currentState() === 'loading') {
+        @if (isLoading()) {
           <div class="flex h-full w-full items-center justify-center pt-20">
             <span class="loader"></span>
           </div>
@@ -40,8 +40,19 @@
 
         @if (currentState() === 'list') {
           <comment-list
+            [materialTitle]="materialTitle()"
+            [lessonQuestions]="lessonQuestions()"
+            [currentLessonPage]="currentLessonQuestionPage()"
+            [totalLessonQuestionPages]="totalLessonQuestionPages()"
+            [lessonQuestionPages]="paginationLessonPages()"
+            [myQuestions]="myQuestions()"
+            [currentMyPage]="currentMyQuestionPage()"
+            [totalMyQuestionPages]="totalMyQuestionPages()"
+            [myQuestionPages]="paginationMyPages()"
             (viewComment)="handleViewComment($event)"
-            (newQuestion)="handleAddNewQuestion()" />
+            (newQuestion)="handleAddNewQuestion()"
+            (changeLessonPage)="onChangeLessonPage($event)"
+            (changeMyPage)="onChangeMyPage($event)" />
         }
 
         @if (currentState() === 'content') {
@@ -49,7 +60,9 @@
         }
 
         @if (currentState() === 'question') {
-          <new-question />
+          <new-question
+            [materialId]="materialId()"
+            (createQuestionSuccess)="onCreateQuestion()" />
         }
       </div>
     </div>
