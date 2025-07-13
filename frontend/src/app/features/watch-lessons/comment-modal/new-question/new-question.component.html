@@ -3,58 +3,72 @@
 </h2>
 
 <div class="mt-2 flex flex-col gap-2">
-  <!-- ? Question Category -->
-  <div class="flex">
-    <div
-      class="relative flex min-w-[220px] items-center justify-between rounded-lg bg-[#eef4fc] px-4 py-2"
-      (click)="toggleOptionOpen()">
-      <span class="font-semibold">Bài học lý thuyết</span>
-      <span
-        class="pi pi-angle-down text-[#2e3441] transition-transform duration-200"
-        [class]="isOptionsOpen() ? '-rotate-180' : 'rotate-0'"></span>
-      @if (isOptionsOpen()) {
-        <div class="options">
-          <div class="option">Show dự án</div>
-          <div class="option">Báo lỗi cho EDUVA</div>
-          <div class="option">Chủ đề ngoài bài học</div>
-          <div class="option">Các loại bài tập khác</div>
-          <div class="option">Bài học thử thách</div>
-          <div class="option active">Bài học lý thuyết</div>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <!-- ? Question Title -->
+    <div>
+      <div
+        class="relative flex w-full items-center justify-between rounded-lg border border-[#eef4fc] bg-[#eef4fc] p-2 pl-4 transition-colors duration-300 ease-linear focus-within:border-primary focus-within:bg-white dark:border-dark-300 dark:bg-dark-300 dark:focus-within:bg-dark-300"
+        [ngClass]="{
+          '!border-[#f33a58] dark:!border-[#f33a58]':
+            title?.invalid && title?.touched,
+        }"
+        [style.backgroundColor]="
+          title?.invalid && title?.touched ? '#ff00001a' : ''
+        ">
+        <input
+          formControlName="title"
+          name="title"
+          type="text"
+          class="w-full border-none bg-transparent leading-6 outline-none"
+          placeholder="Nhập tiêu đề câu hỏi"
+          [class.text-[#f33a58]]="
+            title?.invalid && title?.touched && title?.dirty
+          " />
+        @if (title?.invalid && title?.touched) {
+          <div class="absolute right-[14px] top-1/2 -translate-y-1/2">
+            <i
+              class="fa-solid fa-triangle-exclamation animate-shake text-base text-[#f33a58]">
+            </i>
+          </div>
+        }
+      </div>
+      @if (title?.invalid && title?.touched) {
+        <div class="mt-2 font-medium leading-normal text-[#f33a58]">
+          {{ getErrorMessage('title') }}
         </div>
       }
     </div>
-  </div>
 
-  <!-- ? Question Title -->
-  <div
-    class="flex w-full items-center justify-between rounded-lg border border-[#eef4fc] bg-[#eef4fc] p-2 pl-4 transition-colors duration-300 ease-linear focus-within:border-[#444]">
-    <input
-      type="text"
-      class="w-full border-none bg-transparent leading-6 outline-none"
-      placeholder="Nhập tiêu đề câu hỏi"
-      [(ngModel)]="title" />
-  </div>
-
-  <div class="flex w-full items-center justify-between">
-    <app-rich-text-editor
-      [editorValue]="description()"
-      [isHeightTextBox]="true"
-      [placeholder]="'Mô tả chi tiết câu hỏi của bạn'"
-      (valueChange)="getData($event)" />
-  </div>
-
-  <div class="flex justify-end">
-    <div class="ml-auto mt-4 flex gap-2">
-      <button class="btn">
-        <div class="btn-inner">
-          <span>Hủy</span>
+    <!-- ? Question Content -->
+    <div class="mt-3 flex w-full flex-col">
+      <app-rich-text-editor
+        placeholder="Mô tả chi tiết câu hỏi của bạn..."
+        [isHeightTextBox]="true"
+        [invalid]="invalid()"
+        [editorValue]="description()"
+        (valueChange)="getContent($event)" />
+      @if (invalid()) {
+        <div class="mt-3 font-medium leading-normal text-[#f33a58]">
+          {{ getErrorMessage('content') }}
         </div>
-      </button>
-      <button class="btn">
-        <span class="btn-inner btn-inner-submit">
-          <span>Đăng câu hỏi</span>
-        </span>
-      </button>
+      }
     </div>
-  </div>
+
+    <div class="flex justify-end">
+      <div class="ml-auto mt-4 flex gap-2">
+        <button type="button" class="btn">
+          <div class="btn-inner">
+            <span>Hủy</span>
+          </div>
+        </button>
+        <p-button
+          type="submit"
+          label="Đăng câu hỏi"
+          size="small"
+          styleClass="!rounded-lg min-w-40 h-8 uppercase font-bold tracking-[1px] leading-[1.6] whitespace-nowrap"
+          [loading]="isLoading()"
+          [disabled]="form.invalid || isLoading()" />
+      </div>
+    </div>
+  </form>
 </div>

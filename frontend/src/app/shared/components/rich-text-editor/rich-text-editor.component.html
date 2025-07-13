@@ -2,7 +2,10 @@
   [editor]="editor"
   [config]="config"
   [data]="editorValue()"
-  [class.height-textbox]="isHeightTextBox()"
+  [ngClass]="{
+    invalid: invalid(),
+    'height-textbox': isHeightTextBox(),
+  }"
   (ready)="onEditorReady($event)"
   tagName="textarea"
   style="width: 100%"></ckeditor>

@@ -5,6 +5,7 @@ import {
   output,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 import {
   ClassicEditor,
@@ -35,13 +36,15 @@ import type { Writer } from '@ckeditor/ckeditor5-engine';
 @Component({
   selector: 'app-rich-text-editor',
   standalone: true,
-  imports: [FormsModule, CKEditorModule],
+  imports: [FormsModule, CommonModule, CKEditorModule],
   templateUrl: './rich-text-editor.component.html',
   styleUrl: './rich-text-editor.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RichTextEditorComponent {
   editorValue = input.required<string>();
+  invalid = input<boolean>();
+
   valueChange = output<string>();
 
   placeholder = input<string>('Nhập nội dung...');
