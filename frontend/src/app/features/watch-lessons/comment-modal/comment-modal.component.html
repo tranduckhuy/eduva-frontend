@@ -38,28 +38,33 @@
           </div>
         }
 
-        @if (currentState() === 'list') {
+        @if (currentState() === 'list' && !isLoading()) {
           <comment-list
             [materialTitle]="materialTitle()"
             [lessonQuestions]="lessonQuestions()"
+            [totalLessonQuestions]="totalLessonQuestions()"
             [currentLessonPage]="currentLessonQuestionPage()"
             [totalLessonQuestionPages]="totalLessonQuestionPages()"
             [lessonQuestionPages]="paginationLessonPages()"
             [myQuestions]="myQuestions()"
+            [totalMyQuestions]="totalMyQuestions()"
             [currentMyPage]="currentMyQuestionPage()"
             [totalMyQuestionPages]="totalMyQuestionPages()"
             [myQuestionPages]="paginationMyPages()"
-            (viewComment)="handleViewComment($event)"
             (newQuestion)="handleAddNewQuestion()"
+            (viewComment)="handleViewComment($event)"
             (changeLessonPage)="onChangeLessonPage($event)"
             (changeMyPage)="onChangeMyPage($event)" />
         }
 
-        @if (currentState() === 'content') {
-          <comment-content />
+        @if (currentState() === 'content' && !isLoading()) {
+          <comment-content
+            [materialTitle]="materialTitle()"
+            [question]="question()"
+            (createCommentSuccess)="onCreateComment($event)" />
         }
 
-        @if (currentState() === 'question') {
+        @if (currentState() === 'question' && !isLoading()) {
           <new-question
             [materialId]="materialId()"
             (createQuestionSuccess)="onCreateQuestion()" />

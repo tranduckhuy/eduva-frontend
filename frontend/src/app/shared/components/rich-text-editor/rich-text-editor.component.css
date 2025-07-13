@@ -37,8 +37,8 @@
 :host ckeditor ::ng-deep code {
   padding: 1px 3px;
   border-radius: 3px;
-  color: #2e3441;
-  background-color: #c9fffc !important;
+  color: var(--color-text-code-block);
+  background-color: var(--color-bg-code-block) !important;
   white-space: pre-wrap;
   word-break: keep-all;
 }
@@ -48,7 +48,7 @@
 }
 
 :host ckeditor ::ng-deep blockquote p {
-  color: #4e586b;
+  color: var(--color-text-blockquote);
   font-weight: 600;
   font-style: normal;
 }

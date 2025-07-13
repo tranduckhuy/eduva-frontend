@@ -1,3 +1,5 @@
+import { Comment } from './comment.model';
+
 export interface Question {
   id: string;
   lessonMaterialId: string;
@@ -11,4 +13,8 @@ export interface Question {
   createdByAvatar: string;
   createdByRole: string;
   commentCount: number;
+  canUpdate: boolean;
+  canDelete: boolean;
+  canComment: boolean;
+  comments: Comment[];
 }

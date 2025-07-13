@@ -28,10 +28,12 @@ export class QuestionService {
   private readonly GET_MY_QUESTIONS_API_URL = `${this.BASE_QUESTION_API_URL}/my-questions`;
 
   createQuestion(request: CreateQuestionRequest): Observable<Question | null> {
-    return this.requestService.post(this.BASE_QUESTION_API_URL, request).pipe(
-      map(res => this.extractDataResponse<Question>(res)),
-      catchError((err: HttpErrorResponse) => this.handleError(err))
-    );
+    return this.requestService
+      .post<Question>(this.BASE_QUESTION_API_URL, request)
+      .pipe(
+        map(res => this.extractDataResponse<Question>(res)),
+        catchError((err: HttpErrorResponse) => this.handleError(err))
+      );
   }
 
   getLessonQuestions(
@@ -56,6 +58,15 @@ export class QuestionService {
       .get<GetQuestionsResponse>(this.GET_MY_QUESTIONS_API_URL, request)
       .pipe(
         map(res => this.extractDataResponse<GetQuestionsResponse>(res)),
+        catchError((err: HttpErrorResponse) => this.handleError(err))
+      );
+  }
+
+  getQuestionById(questionId: string): Observable<Question | null> {
+    return this.requestService
+      .get<Question>(`${this.BASE_QUESTION_API_URL}/${questionId}`)
+      .pipe(
+        map(res => this.extractDataResponse<Question>(res)),
         catchError((err: HttpErrorResponse) => this.handleError(err))
       );
   }

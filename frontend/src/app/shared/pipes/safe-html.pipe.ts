@@ -10,8 +10,8 @@ import DOMPurify from 'dompurify';
 export class SafeHtmlPipe implements PipeTransform {
   private readonly sanitizer = inject(DomSanitizer);
 
-  transform(value: string): SafeHtml {
-    const purified = DOMPurify.sanitize(value, {
+  transform(value?: string): SafeHtml {
+    const purified = DOMPurify.sanitize(value ?? '', {
       USE_PROFILES: { html: true },
     });
     return this.sanitizer.bypassSecurityTrustHtml(purified);

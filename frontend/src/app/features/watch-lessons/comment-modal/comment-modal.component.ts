@@ -45,18 +45,25 @@ export class CommentModalComponent implements OnInit {
 
   closeCommentModal = output<void>();
 
+  // ? Question list
   lessonQuestions = signal<Question[]>([]);
-  totalLessonQuestions = signal<number>(0);
   myQuestions = signal<Question[]>([]);
-  totalMyQuestions = signal<number>(0);
 
+  // ? Single Question
+  question = signal<Question | null>(null);
+
+  // ? Question pagination
+  totalLessonQuestions = signal<number>(0);
+  totalMyQuestions = signal<number>(0);
   currentLessonQuestionPage = signal<number>(1);
   currentMyQuestionPage = signal<number>(1);
   lessonQuestionPageSize = signal<number>(8);
   myQuestionPageSize = signal<number>(8);
 
+  // ? Loading State
   isLoading = signal<boolean>(false);
 
+  // ? State management
   fetchedIds = signal<Set<string>>(new Set());
   currentState = signal<'list' | 'content' | 'question'>('list');
 
@@ -111,8 +118,8 @@ export class CommentModalComponent implements OnInit {
     this.fetchAllQuestions();
   }
 
-  handleViewComment(id: number | string) {
-    setTimeout(() => this.currentState.set('content'), 600);
+  handleViewComment(questionId: string) {
+    this.fetchQuestionById(questionId);
   }
 
   handleAddNewQuestion() {
@@ -148,6 +155,10 @@ export class CommentModalComponent implements OnInit {
   onCreateQuestion() {
     this.fetchAllQuestions();
     this.currentState.set('list');
+  }
+
+  onCreateComment(questionId: string) {
+    this.fetchQuestionById(questionId);
   }
 
   private fetchAllQuestions() {
@@ -224,6 +235,17 @@ export class CommentModalComponent implements OnInit {
         this.myQuestions.set(res.data);
         this.totalMyQuestions.set(res.count);
       }
+    });
+  }
+
+  private fetchQuestionById(questionId: string) {
+    this.questionService.getQuestionById(questionId).subscribe({
+      next: question => {
+        if (question) {
+          this.question.set(question);
+          this.currentState.set('content');
+        }
+      },
     });
   }
 

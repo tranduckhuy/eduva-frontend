@@ -1,48 +1,35 @@
-<div class="mb-[70px] mt-7">
-  <app-user-comment-textbox
-    [comment]="comment()"
-    (commentChange)="getData($event)" />
+@if (question()) {
+  <div class="mb-[70px] mt-7">
+    @if (question()?.canComment) {
+      <app-user-comment-textbox
+        [questionId]="question()!.id"
+        (createCommentSuccess)="createCommentSuccess.emit($event)" />
+    }
 
-  <!-- ? Comment List -->
-  <div class="mt-6">
-    <h2 class="text-lg font-semibold text-[#4e586b]">1 bình luận</h2>
+    <!-- ? Comment List -->
+    <div class="mt-6">
+      <h2 class="text-lg font-semibold text-[#4e586b] dark:text-[#dae4f0]">
+        {{ question()?.commentCount }} bình luận
+      </h2>
 
-    <!-- ? Comments -->
-    <comment-context />
+      @for (comment of question()?.comments; track comment.id) {
+        <!-- ? Comments -->
+        <comment-context
+          [comment]="comment"
+          [isReplyMode]="false"
+          [isBestComment]="comment.id === commentWithMostReplies()?.id"
+          (createCommentSuccess)="createCommentSuccess.emit($event)" />
 
-    <!-- ? Replies -->
-    <div class="border-l-[#dae4f0 ] ml-2 mt-[30px] border-l">
-      <comment-context
-        [index]="0"
-        [isReplyMode]="true"
-        [isBestComment]="isBestComment(0)"
-        [canMarkAsBest]="canMarkBestComment(0)"
-        (markAsBest)="setBestComment(0)"
-        (unMarkAsBest)="clearBestComment()" />
-
-      <comment-context
-        [index]="1"
-        [isReplyMode]="true"
-        [isBestComment]="isBestComment(1)"
-        [canMarkAsBest]="canMarkBestComment(1)"
-        (markAsBest)="setBestComment(1)"
-        (unMarkAsBest)="clearBestComment()" />
-
-      <comment-context
-        [index]="2"
-        [isReplyMode]="true"
-        [isBestComment]="isBestComment(2)"
-        [canMarkAsBest]="canMarkBestComment(2)"
-        (markAsBest)="setBestComment(2)"
-        (unMarkAsBest)="clearBestComment()" />
-
-      <comment-context
-        [index]="3"
-        [isReplyMode]="true"
-        [isBestComment]="isBestComment(3)"
-        [canMarkAsBest]="canMarkBestComment(3)"
-        (markAsBest)="setBestComment(3)"
-        (unMarkAsBest)="clearBestComment()" />
+        <!-- ? Replies -->
+        <div class="border-l-[#dae4f0 ] ml-2 mt-[30px] border-l">
+          @for (reply of comment.replies; track reply.id) {
+            <comment-context
+              [reply]="reply"
+              [isReplyMode]="true"
+              (createCommentSuccess)="createCommentSuccess.emit($event)" />
+          }
+        </div>
+      }
     </div>
   </div>
-</div>
+}

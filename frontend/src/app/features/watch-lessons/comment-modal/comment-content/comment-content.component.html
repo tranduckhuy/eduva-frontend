@@ -1,8 +1,15 @@
 <div class="flex items-center gap-2">
-  <h2 class="text-lg font-semibold text-[#4e586b]">Thắc mắc phần slider</h2>
-  <span class="comment-category">Bài học lý thuyết</span>
+  <h2 class="text-lg font-semibold text-[#4e586b] dark:text-[#dae4f0]">
+    {{ materialTitle() }}
+  </h2>
 </div>
 
-<comment-question />
+@if (question()) {
+  <comment-question [question]="question()" />
 
-<comment-discussion />
+  @if (question()?.canComment) {
+    <comment-discussion
+      [question]="question()"
+      (createCommentSuccess)="createCommentSuccess.emit($event)" />
+  }
+}

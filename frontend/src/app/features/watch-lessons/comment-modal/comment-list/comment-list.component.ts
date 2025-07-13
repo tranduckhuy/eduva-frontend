@@ -24,6 +24,8 @@ export class CommentListComponent {
   // ? Question List
   lessonQuestions = input.required<Question[]>();
   myQuestions = input.required<Question[]>();
+  totalLessonQuestions = input.required<number>();
+  totalMyQuestions = input.required<number>();
 
   // ? Lesson Question Paging
   currentLessonPage = input.required<number>();
@@ -38,14 +40,14 @@ export class CommentListComponent {
   changeLessonPage = output<number | string>();
   changeMyPage = output<number | string>();
 
-  viewComment = output<number | string>();
+  viewComment = output<string>();
   newQuestion = output<void>();
 
   isNumber(value: unknown): value is number {
     return typeof value === 'number';
   }
 
-  onSelectComment(id: number | string) {
+  onSelectQuestion(id: string) {
     this.viewComment.emit(id);
   }
 

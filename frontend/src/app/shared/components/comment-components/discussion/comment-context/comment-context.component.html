@@ -1,94 +1,120 @@
-<div
-  class="comment mt-5 p-2"
-  [class]="isReplyMode() ? 'ml-2 pl-4' : ''"
-  [class.best-comment]="isBestComment()">
-  <div class="flex flex-col gap-4">
-    <div class="flex items-center justify-between">
-      <a
-        href="#!"
-        class="flex items-center gap-2"
-        style="text-decoration: none">
-        <img
-          src="https://files.fullstack.edu.vn/f8-prod/user_avatars/36050/649fc3c653f2c.png"
-          alt="Hòa Nguyễn Thanh"
-          class="h-9 w-9 rounded-[50%]" />
-        <span class="text-xs font-bold text-[#0093fc]">Hòa Nguyễn Thanh</span>
-        <span class="text-xs text-[#808b9a]">Một năm trước</span>
-      </a>
-
-      @if (isReplyMode() && !isBestComment() && canMarkAsBest()) {
-        <button
-          class="flex items-center gap-[6px] py-[10px] text-xs font-bold text-[#0093fc]"
-          (click)="onMarkAsBest()">
-          <span
-            class="pi pi-check"
-            style="font-size: 12px; font-weight: 700"></span>
-          <span>Đánh dấu đây là câu trả lời</span>
-        </button>
-      }
-
-      @if (isBestComment() && canMarkAsBest()) {
-        <div class="flex gap-2">
-          <div class="flex gap-[6px]">
-            <img
-              src="./images/icons/circle-check-green.svg"
-              alt="Câu trả lời tốt nhất" />
-            <span class="py-[10px] text-xs font-bold text-[#48bd79]">
-              Câu trả lời tốt nhất
+@if (comment() || reply()) {
+  <div
+    class="comment mt-5 p-2"
+    [ngClass]="{
+      'ml-2 pl-4': isReplyMode(),
+      'best-comment': isBestComment(),
+    }">
+    <div class="flex flex-col gap-4">
+      <!-- ? Content Creator -->
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <img
+            [src]="
+              !isReplyMode()
+                ? comment()?.createdByAvatar
+                : reply()?.createdByAvatar
+            "
+            [alt]="
+              !isReplyMode() ? comment()?.createdByName : reply()?.createdByName
+            "
+            class="size-9 shrink-0 rounded-[50%]" />
+          <div class="ml-1 flex flex-col">
+            <h3 class="text-xs font-bold text-[#0093fc]">
+              {{
+                !isReplyMode()
+                  ? comment()?.createdByName
+                  : reply()?.createdByName
+              }}
+            </h3>
+            <span class="text-xs text-[#808b9a]">
+              {{
+                !isReplyMode()
+                  ? (comment()?.createdAt | date: 'fullDate')
+                  : (reply()?.createdAt | date: 'fullDate')
+              }}
             </span>
           </div>
-          <button
-            class="py-[10px] text-xs font-bold text-[#0093fc]"
-            (click)="onUnMarkAsBest()">
-            <span>Bỏ chọn</span>
-          </button>
         </div>
-      }
-    </div>
-    <!-- ? Comment Text -->
-    <p>
-      Em vui lòng cung cấp thêm thông tin để mọi người có thể hỗ trợ em được tốt
-      hơn! Hình ảnh này không cho biết <code>::before ::after</code> đang nằm
-      trong selector nào? con của phần tử nào? Cấu trúc html của em ra sao....?
-    </p>
-    <!-- ? Comment Actions -->
-    <div class="relative flex justify-between">
-      <button
-        class="flex items-center gap-2 text-[#0093fc] transition-opacity ease-in hover:opacity-80"
-        (click)="toggleReplyTextbox()">
-        <span
-          class="pi pi-reply"
-          style="font-size: 14px; font-weight: 600"></span>
-        <span class="font-semibold">Phản hồi</span>
-      </button>
 
-      <button (click)="toggleFooterOptions()">
-        <span
-          class="pi pi-ellipsis-h relative top-[3px] cursor-pointer text-[#0093fc] hover:opacity-70"></span>
-      </button>
-      @if (isOptionsOpen()) {
-        <div
-          clickOutsideSubmenu
-          (clickOutside)="closeFooterOptions()"
-          class="content-footer-options absolute right-3 top-[25px] z-10">
-          <div class="content-footer-option-item">
-            <span>Chỉnh sửa</span>
+        @if (isBestComment()) {
+          <div class="mr-3 flex items-center gap-2">
+            <img
+              src="./images/icons/circle-check-green.svg"
+              alt="Bình luận tốt nhất" />
+            <span class="text-[#48bd79]">Bình luận tốt nhất</span>
           </div>
-          <div class="content-footer-option-item">
-            <span>Xóa</span>
-          </div>
-        </div>
-      }
-    </div>
-
-    @if (isReplyTextboxOpen()) {
-      <div class="pl-4">
-        <app-user-comment-textbox
-          [comment]="replyComment()"
-          [isReply]="true"
-          [mention]="'Hòa Nguyễn Thanh'"
-          (commentChange)="getData($event)" />
+        }
       </div>
-    }
+
+      <!-- ? Comment Content -->
+      <div
+        class="content"
+        [innerHTML]="
+          !isReplyMode()
+            ? (comment()?.content | safeHtml)
+            : (reply()?.content | safeHtml)
+        "></div>
+
+      <!-- ? Comment Actions -->
+      <div
+        class="relative flex"
+        [ngClass]="{
+          'justify-between': !isReplyMode(),
+          'justify-end': isReplyMode(),
+        }">
+        @if (!isReplyMode()) {
+          <button
+            class="flex items-center gap-2 text-[#0093fc] transition-opacity ease-in hover:opacity-80"
+            (click)="toggleReplyTextbox()">
+            <span
+              class="pi pi-reply"
+              style="font-size: 14px; font-weight: 600"></span>
+            <span class="font-semibold">Phản hồi</span>
+          </button>
+        }
+
+        @if (canShowFooterOptions()) {
+          <div class="flex items-center gap-4">
+            <span class="text-xs text-[#808b9a]">
+              {{ modifiedLabel() }}
+            </span>
+            <button (click)="toggleFooterOptions()">
+              <span
+                class="pi pi-ellipsis-h relative top-[3px] cursor-pointer text-[#0093fc] hover:opacity-70"></span>
+            </button>
+          </div>
+        }
+        @if (isOptionsOpen()) {
+          <div
+            clickOutsideSubmenu
+            (clickOutside)="closeFooterOptions()"
+            class="content-footer-options absolute right-3 top-[25px] z-10">
+            @if (!isReplyMode() ? comment()?.canUpdate : reply()?.canUpdate) {
+              <div class="content-footer-option-item">
+                <span>Chỉnh sửa</span>
+              </div>
+            }
+            @if (!isReplyMode() ? comment()?.canDelete : reply()?.canDelete) {
+              <div class="content-footer-option-item">
+                <span>Xóa</span>
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      @if (isReplyTextboxOpen()) {
+        <div class="pl-4">
+          <app-user-comment-textbox
+            [questionId]="questionId()"
+            [parentCommentId]="parentCommentId()"
+            [isReply]="true"
+            [mention]="mentionName()"
+            (createCommentSuccess)="createCommentSuccess.emit($event)"
+            (cancelReply)="toggleReplyTextbox()" />
+        </div>
+      }
+    </div>
   </div>
-</div>
+}

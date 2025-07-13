@@ -7,34 +7,34 @@
   word-break: break-word;
 }
 
-.content p,
-.content ul,
-.content ol {
+.content ::ng-deep p,
+.content ::ng-deep ul,
+.content ::ng-deep ol {
   margin: var(--marginParagraph, 14px 0);
 }
 
-.content code {
+.content ::ng-deep code {
   padding: 1px 3px;
   border-radius: 3px;
-  color: #2e3441;
-  background-color: #c9fffc !important;
+  color: var(--color-text-code-block);
+  background-color: var(--color-bg-code-block) !important;
   white-space: pre-wrap;
   word-break: keep-all;
 }
 
-.content blockquote {
+.content ::ng-deep blockquote {
   padding-left: 21px;
   border-left: 2px solid #0093fc !important;
   margin: 12px 0;
 }
 
-.content blockquote p {
-  color: #4e586b;
+.content ::ng-deep blockquote p {
+  color: var(--color-text-blockquote);
   font-weight: 600;
   font-style: normal;
 }
 
-.content a {
+.content ::ng-deep p a {
   color: #0093fc;
   text-decoration: underline;
 }
@@ -62,7 +62,7 @@
   flex-direction: column;
   width: 254px;
   border-radius: 8px;
-  background-color: #eef4fc;
+  background-color: var(--color-bg-footer-options-comment);
   box-shadow: 0px 8px 16px 0px rgba(35, 115, 159, 0.16);
   overflow: hidden;
 }
@@ -73,11 +73,12 @@
   padding: 12px 16px;
   font-size: 16px;
   font-weight: 400;
-  color: #2e3441;
+  color: var(--color-text-footer-options-comment);
+  background-color: var(--color-bg-footer-options-comment);
   user-select: none;
   cursor: pointer;
 }
 
 .content-footer-option-item:hover {
-  background-color: #f2f9ff;
+  filter: brightness(0.95);
 }

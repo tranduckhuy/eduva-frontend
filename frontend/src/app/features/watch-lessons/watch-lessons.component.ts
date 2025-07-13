@@ -30,6 +30,7 @@ import { CommentModalComponent } from './comment-modal/comment-modal.component';
 import { AudioListenerComponent } from './audio-listener/audio-listener.component';
 import { DocViewerComponent } from './doc-viewer/doc-viewer.component';
 import { PdfViewerComponent } from './pdf-viewer/pdf-viewer.component';
+import { PreviewLessonSkeletonComponent } from '../../shared/components/skeleton/view-lesson-skeleton/view-lesson-skeleton.component';
 
 import { type Folder } from '../../shared/models/entities/folder.model';
 import { type LessonMaterial } from '../../shared/models/entities/lesson-material.model';
@@ -51,6 +52,7 @@ import { type GetFoldersRequest } from '../../shared/models/api/request/query/ge
     AudioListenerComponent,
     DocViewerComponent,
     PdfViewerComponent,
+    PreviewLessonSkeletonComponent,
   ],
   templateUrl: './watch-lessons.component.html',
   styleUrl: './watch-lessons.component.css',

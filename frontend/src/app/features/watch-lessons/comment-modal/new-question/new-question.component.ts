@@ -67,8 +67,8 @@ export class NewQuestionComponent {
     return this.form.get('content');
   }
 
-  getContent(value: string) {
-    this.form.get('content')?.patchValue(value);
+  getContent(content: string) {
+    this.form.get('content')?.patchValue(content);
   }
 
   getErrorMessage(controlName: string): string {
