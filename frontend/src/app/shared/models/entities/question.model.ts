@@ -1,4 +1,4 @@
-import { Comment } from './comment.model';
+import { CommentEntity } from './comment.model';
 
 export interface Question {
   id: string;
@@ -16,5 +16,5 @@ export interface Question {
   canUpdate: boolean;
   canDelete: boolean;
   canComment: boolean;
-  comments: Comment[];
+  comments: CommentEntity[];
 }

@@ -24,6 +24,7 @@ export class DiscussionComponent {
   question = input.required<Question | null>();
 
   createCommentSuccess = output<string>();
+  updateCommentSuccess = output<string>();
 
   comment = signal<string>('');
 

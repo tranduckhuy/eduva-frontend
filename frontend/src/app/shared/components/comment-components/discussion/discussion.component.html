@@ -18,7 +18,8 @@
           [comment]="comment"
           [isReplyMode]="false"
           [isBestComment]="comment.id === commentWithMostReplies()?.id"
-          (createCommentSuccess)="createCommentSuccess.emit($event)" />
+          (createCommentSuccess)="createCommentSuccess.emit($event)"
+          (updateCommentSuccess)="updateCommentSuccess.emit($event)" />
 
         <!-- ? Replies -->
         <div class="border-l-[#dae4f0 ] ml-2 mt-[30px] border-l">
@@ -26,7 +27,8 @@
             <comment-context
               [reply]="reply"
               [isReplyMode]="true"
-              (createCommentSuccess)="createCommentSuccess.emit($event)" />
+              (createCommentSuccess)="createCommentSuccess.emit($event)"
+              (updateCommentSuccess)="updateCommentSuccess.emit($event)" />
           }
         </div>
       }

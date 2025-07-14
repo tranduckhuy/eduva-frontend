@@ -7,8 +7,12 @@ import { environment } from '../../../../../environments/environment';
 
 import { RequestService } from '../../../../shared/services/core/request/request.service';
 import { ToastHandlingService } from '../../../../shared/services/core/toast/toast-handling.service';
-import { CreateCommentRequest } from '../model/request/command/create-comment-request.model';
+
 import { StatusCode } from '../../../../shared/constants/status-code.constant';
+
+import { type CommentEntity } from '../../../../shared/models/entities/comment.model';
+import { type CreateCommentRequest } from '../model/request/command/create-comment-request.model';
+import { type UpdateCommentRequest } from '../model/request/command/update-comment-request.model';
 
 @Injectable({
   providedIn: 'root',
@@ -20,13 +24,30 @@ export class CommentService {
   private readonly BASE_API_URL = environment.baseApiUrl;
   private readonly BASE_COMMENT_API_URL = `${this.BASE_API_URL}/questions/comments`;
 
-  createComment(request: CreateCommentRequest): Observable<Comment | null> {
+  createComment(
+    request: CreateCommentRequest
+  ): Observable<CommentEntity | null> {
     return this.requestService
       .post(this.BASE_COMMENT_API_URL, request, {
         loadingKey: 'create-comment',
       })
       .pipe(
-        tap(res => this.handleCreateCommentResponse(res)),
+        tap(res => this.handleCommentResponse(res)),
+        map(res => this.extractDataResponse(res)),
+        catchError((err: HttpErrorResponse) => this.handleError(err))
+      );
+  }
+
+  updateComment(
+    commentId: string,
+    request: UpdateCommentRequest
+  ): Observable<CommentEntity | null> {
+    return this.requestService
+      .put(`${this.BASE_COMMENT_API_URL}/${commentId}`, request, {
+        loadingKey: 'update-comment',
+      })
+      .pipe(
+        tap(res => this.handleCommentResponse(res)),
         map(res => this.extractDataResponse(res)),
         catchError((err: HttpErrorResponse) => this.handleError(err))
       );
@@ -36,20 +57,25 @@ export class CommentService {
   //  Private Helper Functions
   // ---------------------------
 
-  private handleCreateCommentResponse(res: any): void {
-    if (res.statusCode === StatusCode.CREATED && res.data) {
-      this.toastHandlingService.success(
-        'Thành công',
-        'Đã tạo bình luận thành công.'
-      );
+  private handleCommentResponse(res: any): void {
+    if (
+      (res.statusCode === StatusCode.SUCCESS ||
+        res.statusCode === StatusCode.CREATED) &&
+      res.data
+    ) {
+      this.toastHandlingService.successGeneral();
     } else {
       this.toastHandlingService.errorGeneral();
     }
   }
 
-  private extractDataResponse(res: any): Comment | null {
-    if (res.statusCode === StatusCode.CREATED && res.data) {
-      return res.data as Comment;
+  private extractDataResponse(res: any): CommentEntity | null {
+    if (
+      (res.statusCode === StatusCode.SUCCESS ||
+        res.statusCode === StatusCode.CREATED) &&
+      res.data
+    ) {
+      return res.data as CommentEntity;
     }
     return null;
   }

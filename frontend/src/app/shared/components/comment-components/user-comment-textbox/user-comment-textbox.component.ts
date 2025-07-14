@@ -22,6 +22,7 @@ import { CommentService } from '../../../../features/watch-lessons/comment-modal
 
 import { RichTextEditorComponent } from '../../rich-text-editor/rich-text-editor.component';
 import { CreateCommentRequest } from '../../../../features/watch-lessons/comment-modal/model/request/command/create-comment-request.model';
+import { UpdateCommentRequest } from '../../../../features/watch-lessons/comment-modal/model/request/command/update-comment-request.model';
 
 @Component({
   selector: 'app-user-comment-textbox',
@@ -37,30 +38,40 @@ export class UserCommentTextboxComponent implements OnInit {
   private readonly commentService = inject(CommentService);
   private readonly loadingService = inject(LoadingService);
 
+  editCommentValue = input<string>();
   questionId = input<string>();
   parentCommentId = input<string>();
+  commentId = input<string>();
   mention = input<string | null>(null);
   isReply = input<boolean>(false);
+  isEdit = input<boolean>(false);
 
   createCommentSuccess = output<string>();
-  cancelReply = output<void>();
+  updateCommentSuccess = output<string>();
+  cancel = output<void>();
 
   form: FormGroup;
 
   user = this.userService.currentUser;
-  isLoading = this.loadingService.is('create-comment');
+  isLoadingCreate = this.loadingService.is('create-comment');
+  isLoadingUpdate = this.loadingService.is('update-comment');
 
   commentValue = signal<string>('');
   invalid = signal<boolean>(false);
 
   constructor() {
     this.form = this.fb.group({
-      content: [this.mentionValue, Validators.required],
+      content: ['', Validators.required],
     });
   }
 
   ngOnInit(): void {
-    this.commentValue.set(this.mentionValue);
+    const value = this.isEdit()
+      ? (this.editCommentValue() ?? '')
+      : this.mentionValue;
+
+    this.commentValue.set(value);
+    this.form.get('content')?.patchValue(value);
   }
 
   get content() {
@@ -76,31 +87,53 @@ export class UserCommentTextboxComponent implements OnInit {
   onSubmit() {
     this.form.markAllAsTouched();
 
-    const questionId = this.questionId();
     const content = this.content?.value;
-
-    if (!questionId) return;
 
     if (this.form.invalid || !content) {
       this.invalid.set(true);
       return;
     }
 
-    let request: CreateCommentRequest = {
-      questionId,
-      content,
-    };
+    if (this.isEdit()) {
+      const commentId = this.commentId();
+      if (!commentId) return;
 
-    if (this.isReply())
-      request = { ...request, parentCommentId: this.parentCommentId() };
+      const request: UpdateCommentRequest = { content };
+      this.commentService.updateComment(commentId, request).subscribe({
+        next: comment => {
+          if (comment) {
+            this.resetForm();
+            this.updateCommentSuccess.emit(comment.questionId);
+            this.cancel.emit();
+          }
+        },
+      });
+    } else {
+      const questionId = this.questionId();
+      if (!questionId) return;
 
-    this.commentService.createComment(request).subscribe({
-      next: () => {
-        this.resetForm();
-        this.createCommentSuccess.emit(questionId);
-        this.cancelReply.emit();
-      },
-    });
+      let request: CreateCommentRequest = {
+        questionId,
+        content,
+      };
+
+      if (this.isReply()) {
+        request = {
+          ...request,
+          parentCommentId: this.parentCommentId(),
+        };
+      }
+
+      this.commentService.createComment(request).subscribe({
+        next: comment => {
+          if (comment) {
+            this.resetForm();
+            this.createCommentSuccess.emit(comment.questionId);
+            this.cancel.emit();
+          }
+        },
+      });
+    }
   }
 
   getContent(content: string) {

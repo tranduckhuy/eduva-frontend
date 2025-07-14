@@ -60,10 +60,10 @@
       <div
         class="relative flex"
         [ngClass]="{
-          'justify-between': !isReplyMode(),
-          'justify-end': isReplyMode(),
+          'justify-between': !isReplyMode() && !isEditTextboxOpen(),
+          'justify-end': isReplyMode() || isEditTextboxOpen(),
         }">
-        @if (!isReplyMode()) {
+        @if (!isReplyMode() && !isEditTextboxOpen()) {
           <button
             class="flex items-center gap-2 text-[#0093fc] transition-opacity ease-in hover:opacity-80"
             (click)="toggleReplyTextbox()">
@@ -91,14 +91,16 @@
             (clickOutside)="closeFooterOptions()"
             class="content-footer-options absolute right-3 top-[25px] z-10">
             @if (!isReplyMode() ? comment()?.canUpdate : reply()?.canUpdate) {
-              <div class="content-footer-option-item">
+              <button
+                class="content-footer-option-item"
+                (click)="toggleEditTextbox()">
                 <span>Chỉnh sửa</span>
-              </div>
+              </button>
             }
             @if (!isReplyMode() ? comment()?.canDelete : reply()?.canDelete) {
-              <div class="content-footer-option-item">
+              <button class="content-footer-option-item">
                 <span>Xóa</span>
-              </div>
+              </button>
             }
           </div>
         }
@@ -112,7 +114,21 @@
             [isReply]="true"
             [mention]="mentionName()"
             (createCommentSuccess)="createCommentSuccess.emit($event)"
-            (cancelReply)="toggleReplyTextbox()" />
+            (cancel)="toggleReplyTextbox()" />
+        </div>
+      }
+
+      @if (isEditTextboxOpen()) {
+        <div class="pl-4">
+          <app-user-comment-textbox
+            [questionId]="questionId()"
+            [commentId]="!isReplyMode() ? comment()!.id : reply()!.id"
+            [editCommentValue]="
+              !isReplyMode() ? comment()!.content : reply()!.content
+            "
+            [isEdit]="true"
+            (updateCommentSuccess)="updateCommentSuccess.emit($event)"
+            (cancel)="toggleEditTextbox()" />
         </div>
       }
     </div>

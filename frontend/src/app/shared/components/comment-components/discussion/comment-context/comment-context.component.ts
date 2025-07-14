@@ -17,7 +17,7 @@ import { UserService } from '../../../../services/api/user/user.service';
 import { UserCommentTextboxComponent } from '../../user-comment-textbox/user-comment-textbox.component';
 
 import {
-  type Comment,
+  type CommentEntity,
   type Reply,
 } from '../../../../models/entities/comment.model';
 
@@ -40,14 +40,16 @@ export class CommentContextComponent {
 
   isReplyMode = input.required<boolean>();
   isBestComment = input<boolean>(false);
-  comment = input<Comment | null>(null);
+  comment = input<CommentEntity | null>(null);
   reply = input<Reply | null>(null);
 
   createCommentSuccess = output<string>();
+  updateCommentSuccess = output<string>();
 
   user = this.userService.currentUser;
 
   isReplyTextboxOpen = signal<boolean>(false);
+  isEditTextboxOpen = signal<boolean>(false);
   isOptionsOpen = signal<boolean>(false);
 
   readonly questionId = computed(() => this.comment()?.questionId);
@@ -100,6 +102,11 @@ export class CommentContextComponent {
 
   toggleReplyTextbox() {
     this.isReplyTextboxOpen.set(!this.isReplyTextboxOpen());
+  }
+
+  toggleEditTextbox() {
+    this.closeFooterOptions();
+    this.isEditTextboxOpen.set(!this.isEditTextboxOpen());
   }
 
   toggleFooterOptions() {

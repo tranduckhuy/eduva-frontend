@@ -12,7 +12,7 @@ export interface Reply {
   parentCommentId: string;
 }
 
-export interface Comment {
+export interface CommentEntity {
   id: string;
   questionId: string;
   content: string;

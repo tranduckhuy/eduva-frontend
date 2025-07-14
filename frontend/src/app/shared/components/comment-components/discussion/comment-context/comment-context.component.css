@@ -77,6 +77,7 @@
   font-weight: 400;
   color: var(--color-text-footer-options-comment);
   background-color: var(--color-bg-footer-options-comment);
+  outline: none;
   user-select: none;
   cursor: pointer;
 }

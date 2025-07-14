@@ -60,7 +60,8 @@
         @if (currentState() === 'content' && !isLoading()) {
           <comment-content
             [question]="question()"
-            (createCommentSuccess)="onCreateComment($event)"
+            (createCommentSuccess)="onUpdateQuestion($event)"
+            (updateCommentSuccess)="onUpdateQuestion($event)"
             (editQuestion)="onUpdateQuestionPrefill($event)"
             (deleteQuestion)="onDeleteQuestion()" />
         }

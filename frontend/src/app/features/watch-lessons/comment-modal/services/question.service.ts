@@ -67,6 +67,7 @@ export class QuestionService {
     return this.requestService
       .post<Question>(this.BASE_QUESTION_API_URL, request)
       .pipe(
+        tap(res => this.handleQuestionResponse(res)),
         map(res => this.extractDataResponse<Question>(res)),
         catchError((err: HttpErrorResponse) => this.handleError(err))
       );
@@ -79,6 +80,7 @@ export class QuestionService {
     return this.requestService
       .put<Question>(`${this.BASE_QUESTION_API_URL}/${questionId}`, request)
       .pipe(
+        tap(res => this.handleQuestionResponse(res)),
         map(res => this.extractDataResponse<Question>(res)),
         catchError((err: HttpErrorResponse) => this.handleError(err))
       );
@@ -98,11 +100,16 @@ export class QuestionService {
   //  Private Helper Functions
   // ---------------------------
 
-  private extractDataResponse<T>(res: any): T | null {
-    if (res.statusCode === StatusCode.SUCCESS && res.data) {
-      return res.data as T;
+  private handleQuestionResponse(res: any): void {
+    if (
+      (res.statusCode === StatusCode.SUCCESS ||
+        res.statusCode === StatusCode.CREATED) &&
+      res.data
+    ) {
+      this.toastHandlingService.successGeneral();
+    } else {
+      this.toastHandlingService.errorGeneral();
     }
-    return null;
   }
 
   private handleDeleteResponse(res: any): void {
@@ -111,6 +118,17 @@ export class QuestionService {
     } else {
       this.toastHandlingService.errorGeneral();
     }
+  }
+
+  private extractDataResponse<T>(res: any): T | null {
+    if (
+      (res.statusCode === StatusCode.SUCCESS ||
+        res.statusCode === StatusCode.CREATED) &&
+      res.data
+    ) {
+      return res.data as T;
+    }
+    return null;
   }
 
   private handleError(err: HttpErrorResponse) {

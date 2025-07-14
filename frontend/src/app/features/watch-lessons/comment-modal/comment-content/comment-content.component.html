@@ -13,6 +13,7 @@
   @if (question()?.canComment) {
     <comment-discussion
       [question]="question()"
-      (createCommentSuccess)="createCommentSuccess.emit($event)" />
+      (createCommentSuccess)="createCommentSuccess.emit($event)"
+      (updateCommentSuccess)="updateCommentSuccess.emit($event)" />
   }
 }

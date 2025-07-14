@@ -22,6 +22,7 @@ export class CommentContentComponent {
   question = input.required<Question | null>();
 
   createCommentSuccess = output<string>();
+  updateCommentSuccess = output<string>();
   editQuestion = output<Question | null>();
   deleteQuestion = output<void>();
 }

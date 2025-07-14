@@ -172,10 +172,6 @@ export class CommentModalComponent implements OnInit {
     this.currentState.set('list');
   }
 
-  onCreateComment(questionId: string) {
-    this.handleViewQuestion(questionId);
-  }
-
   private fetchAllQuestions() {
     this.isLoading.set(true);
 
