@@ -1,8 +1,20 @@
-<div class="flex items-center gap-2">
-  <h2 class="text-lg font-semibold text-[#4e586b]">Thắc mắc phần slider</h2>
-  <span class="comment-category">Bài học lý thuyết</span>
-</div>
+@if (question()) {
+  <div class="flex items-center gap-2">
+    <h2 class="text-lg font-semibold text-[#4e586b] dark:text-[#dae4f0]">
+      {{ question()?.title }}
+    </h2>
+  </div>
 
-<comment-question />
+  <comment-question
+    [question]="question()"
+    (editQuestion)="editQuestion.emit($event)"
+    (deleteQuestion)="deleteQuestion.emit()" />
 
-<comment-discussion />
+  @if (question()?.canComment) {
+    <comment-discussion
+      [question]="question()"
+      (createCommentSuccess)="createCommentSuccess.emit(question()!.id)"
+      (updateCommentSuccess)="updateCommentSuccess.emit(question()!.id)"
+      (deleteCommentSuccess)="deleteCommentSuccess.emit(question()!.id)" />
+  }
+}
