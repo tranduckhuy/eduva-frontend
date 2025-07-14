@@ -52,22 +52,26 @@
             [totalMyQuestionPages]="totalMyQuestionPages()"
             [myQuestionPages]="paginationMyPages()"
             (newQuestion)="handleAddNewQuestion()"
-            (viewComment)="handleViewComment($event)"
+            (viewComment)="handleViewQuestion($event)"
             (changeLessonPage)="onChangeLessonPage($event)"
             (changeMyPage)="onChangeMyPage($event)" />
         }
 
         @if (currentState() === 'content' && !isLoading()) {
           <comment-content
-            [materialTitle]="materialTitle()"
             [question]="question()"
-            (createCommentSuccess)="onCreateComment($event)" />
+            (createCommentSuccess)="onCreateComment($event)"
+            (editQuestion)="onUpdateQuestionPrefill($event)"
+            (deleteQuestion)="onDeleteQuestion()" />
         }
 
         @if (currentState() === 'question' && !isLoading()) {
           <new-question
             [materialId]="materialId()"
-            (createQuestionSuccess)="onCreateQuestion()" />
+            [questionToEdit]="editQuestion()"
+            (createQuestionSuccess)="onCreateQuestion()"
+            (updateQuestionSuccess)="onUpdateQuestion($event)"
+            (cancelUpdateQuestion)="handleViewQuestion($event)" />
         }
       </div>
     </div>

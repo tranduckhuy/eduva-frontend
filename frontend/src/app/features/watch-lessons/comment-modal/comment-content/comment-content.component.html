@@ -1,11 +1,14 @@
-<div class="flex items-center gap-2">
-  <h2 class="text-lg font-semibold text-[#4e586b] dark:text-[#dae4f0]">
-    {{ materialTitle() }}
-  </h2>
-</div>
-
 @if (question()) {
-  <comment-question [question]="question()" />
+  <div class="flex items-center gap-2">
+    <h2 class="text-lg font-semibold text-[#4e586b] dark:text-[#dae4f0]">
+      {{ question()?.title }}
+    </h2>
+  </div>
+
+  <comment-question
+    [question]="question()"
+    (editQuestion)="editQuestion.emit($event)"
+    (deleteQuestion)="deleteQuestion.emit()" />
 
   @if (question()?.canComment) {
     <comment-discussion

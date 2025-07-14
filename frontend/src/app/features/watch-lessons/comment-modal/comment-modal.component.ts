@@ -51,6 +51,7 @@ export class CommentModalComponent implements OnInit {
 
   // ? Single Question
   question = signal<Question | null>(null);
+  editQuestion = signal<Question | null>(null);
 
   // ? Question pagination
   totalLessonQuestions = signal<number>(0);
@@ -118,12 +119,12 @@ export class CommentModalComponent implements OnInit {
     this.fetchAllQuestions();
   }
 
-  handleViewComment(questionId: string) {
+  handleViewQuestion(questionId: string) {
     this.fetchQuestionById(questionId);
   }
 
   handleAddNewQuestion() {
-    setTimeout(() => this.currentState.set('question'), 600);
+    this.currentState.set('question');
   }
 
   handleGoBack() {
@@ -157,8 +158,22 @@ export class CommentModalComponent implements OnInit {
     this.currentState.set('list');
   }
 
+  onUpdateQuestionPrefill(question: Question | null) {
+    this.editQuestion.set(question);
+    this.currentState.set('question');
+  }
+
+  onUpdateQuestion(questionId: string) {
+    this.handleViewQuestion(questionId);
+  }
+
+  onDeleteQuestion() {
+    this.fetchAllQuestions();
+    this.currentState.set('list');
+  }
+
   onCreateComment(questionId: string) {
-    this.fetchQuestionById(questionId);
+    this.handleViewQuestion(questionId);
   }
 
   private fetchAllQuestions() {
@@ -205,6 +220,8 @@ export class CommentModalComponent implements OnInit {
   }
 
   private fetchLessonQuestions() {
+    this.isLoading.set(true);
+
     const req: GetQuestionsRequest = {
       pageIndex: this.currentLessonQuestionPage(),
       pageSize: this.lessonQuestionPageSize(),
@@ -212,17 +229,20 @@ export class CommentModalComponent implements OnInit {
       sortDirection: 'desc',
     };
 
-    this.questionService
-      .getLessonQuestions(this.materialId(), req)
-      .subscribe(res => {
+    this.questionService.getLessonQuestions(this.materialId(), req).subscribe({
+      next: res => {
         if (res) {
           this.lessonQuestions.set(res.data);
           this.totalLessonQuestions.set(res.count);
         }
-      });
+      },
+      complete: () => this.isLoading.set(false),
+    });
   }
 
   private fetchMyQuestions() {
+    this.isLoading.set(true);
+
     const req: GetQuestionsRequest = {
       pageIndex: this.currentMyQuestionPage(),
       pageSize: this.myQuestionPageSize(),
@@ -230,15 +250,20 @@ export class CommentModalComponent implements OnInit {
       sortDirection: 'desc',
     };
 
-    this.questionService.getMyQuestions(req).subscribe(res => {
-      if (res) {
-        this.myQuestions.set(res.data);
-        this.totalMyQuestions.set(res.count);
-      }
+    this.questionService.getMyQuestions(req).subscribe({
+      next: res => {
+        if (res) {
+          this.myQuestions.set(res.data);
+          this.totalMyQuestions.set(res.count);
+        }
+      },
+      complete: () => this.isLoading.set(false),
     });
   }
 
   private fetchQuestionById(questionId: string) {
+    this.isLoading.set(true);
+
     this.questionService.getQuestionById(questionId).subscribe({
       next: question => {
         if (question) {
@@ -246,6 +271,7 @@ export class CommentModalComponent implements OnInit {
           this.currentState.set('content');
         }
       },
+      complete: () => this.isLoading.set(false),
     });
   }
 

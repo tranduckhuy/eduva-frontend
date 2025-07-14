@@ -35,9 +35,25 @@
     </div>
   </div>
 
-  <div class="content mt-4" [innerHTML]="question()?.content | safeHtml"></div>
+  <div class="content mt-4">
+    @for (block of contentBlocks(); track $index) {
+      @if (block.type === 'html') {
+        <div [innerHTML]="block.html | safeHtml"></div>
+      }
 
-  <div class="relative flex items-center">
+      @if (block.type === 'image') {
+        <p>
+          <p-image
+            [src]="block.src"
+            [alt]="block.alt"
+            preview="true"
+            appendTo="body"></p-image>
+        </p>
+      }
+    }
+  </div>
+
+  <div class="relative mt-5 flex items-center">
     <div class="ml-auto flex w-[122px] items-center justify-center gap-[10px]">
       <span class="text-xs font-normal text-[#4e586b]">
         {{ question()?.lastModifiedAt ? 'Đã chỉnh sửa' : '' }}
@@ -58,14 +74,18 @@
         (clickOutside)="closeFooterOptions()"
         class="content-footer-options absolute right-3 top-[25px] z-10">
         @if (question()?.canUpdate) {
-          <div class="content-footer-option-item">
+          <button
+            class="content-footer-option-item"
+            (click)="editQuestion.emit(question())">
             <span>Chỉnh sửa</span>
-          </div>
+          </button>
         }
         @if (question()?.canDelete) {
-          <div class="content-footer-option-item">
+          <button
+            class="content-footer-option-item"
+            (click)="onDeleteQuestion(question()!.id)">
             <span>Xóa</span>
-          </div>
+          </button>
         }
       </div>
     }

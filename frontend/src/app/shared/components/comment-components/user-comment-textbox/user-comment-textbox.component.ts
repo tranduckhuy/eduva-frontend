@@ -48,7 +48,7 @@ export class UserCommentTextboxComponent implements OnInit {
   form: FormGroup;
 
   user = this.userService.currentUser;
-  isLoading = this.loadingService.isLoading;
+  isLoading = this.loadingService.is('create-comment');
 
   commentValue = signal<string>('');
   invalid = signal<boolean>(false);

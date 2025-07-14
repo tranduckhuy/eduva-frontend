@@ -21,11 +21,15 @@ export class CommentService {
   private readonly BASE_COMMENT_API_URL = `${this.BASE_API_URL}/questions/comments`;
 
   createComment(request: CreateCommentRequest): Observable<Comment | null> {
-    return this.requestService.post(this.BASE_COMMENT_API_URL, request).pipe(
-      tap(res => this.handleCreateCommentResponse(res)),
-      map(res => this.extractDataResponse(res)),
-      catchError((err: HttpErrorResponse) => this.handleError(err))
-    );
+    return this.requestService
+      .post(this.BASE_COMMENT_API_URL, request, {
+        loadingKey: 'create-comment',
+      })
+      .pipe(
+        tap(res => this.handleCreateCommentResponse(res)),
+        map(res => this.extractDataResponse(res)),
+        catchError((err: HttpErrorResponse) => this.handleError(err))
+      );
   }
 
   // ---------------------------

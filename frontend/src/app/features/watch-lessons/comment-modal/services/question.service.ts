@@ -14,6 +14,7 @@ import { type Question } from '../../../../shared/models/entities/question.model
 import { type GetQuestionsRequest } from '../model/request/query/get-questions-request.model';
 import { type GetQuestionsResponse } from '../model/response/query/get-questions-response.model';
 import { type CreateQuestionRequest } from '../model/request/command/create-question-request.model';
+import { type UpdateQuestionRequest } from '../model/request/command/update-question-request.model';
 
 @Injectable({
   providedIn: 'root',
@@ -26,15 +27,6 @@ export class QuestionService {
   private readonly BASE_QUESTION_API_URL = `${this.BASE_API_URL}/questions`;
   private readonly GET_LESSON_QUESTIONS_API_URL = `${this.BASE_QUESTION_API_URL}/lesson`;
   private readonly GET_MY_QUESTIONS_API_URL = `${this.BASE_QUESTION_API_URL}/my-questions`;
-
-  createQuestion(request: CreateQuestionRequest): Observable<Question | null> {
-    return this.requestService
-      .post<Question>(this.BASE_QUESTION_API_URL, request)
-      .pipe(
-        map(res => this.extractDataResponse<Question>(res)),
-        catchError((err: HttpErrorResponse) => this.handleError(err))
-      );
-  }
 
   getLessonQuestions(
     materialId: string,
@@ -71,6 +63,37 @@ export class QuestionService {
       );
   }
 
+  createQuestion(request: CreateQuestionRequest): Observable<Question | null> {
+    return this.requestService
+      .post<Question>(this.BASE_QUESTION_API_URL, request)
+      .pipe(
+        map(res => this.extractDataResponse<Question>(res)),
+        catchError((err: HttpErrorResponse) => this.handleError(err))
+      );
+  }
+
+  updateQuestion(
+    questionId: string,
+    request: UpdateQuestionRequest
+  ): Observable<Question | null> {
+    return this.requestService
+      .put<Question>(`${this.BASE_QUESTION_API_URL}/${questionId}`, request)
+      .pipe(
+        map(res => this.extractDataResponse<Question>(res)),
+        catchError((err: HttpErrorResponse) => this.handleError(err))
+      );
+  }
+
+  deleteQuestion(questionId: string): Observable<void> {
+    return this.requestService
+      .delete(`${this.BASE_QUESTION_API_URL}/${questionId}`)
+      .pipe(
+        tap(res => this.handleDeleteResponse(res)),
+        map(() => void 0),
+        catchError((err: HttpErrorResponse) => this.handleError(err))
+      );
+  }
+
   // ---------------------------
   //  Private Helper Functions
   // ---------------------------
@@ -80,6 +103,14 @@ export class QuestionService {
       return res.data as T;
     }
     return null;
+  }
+
+  private handleDeleteResponse(res: any): void {
+    if (res.statusCode === StatusCode.SUCCESS) {
+      this.toastHandlingService.successGeneral();
+    } else {
+      this.toastHandlingService.errorGeneral();
+    }
   }
 
   private handleError(err: HttpErrorResponse) {

@@ -1,8 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  effect,
   input,
   output,
+  signal,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -46,14 +48,26 @@ export class RichTextEditorComponent {
   invalid = input<boolean>();
 
   valueChange = output<string>();
-
   placeholder = input<string>('Nhập nội dung...');
   isAutoFocus = input<boolean>(false);
   isHeightTextBox = input<boolean>(false);
 
+  editorContent = signal<string>('');
+
   editorInstance: any;
   editor = ClassicEditor;
   config!: EditorConfig;
+
+  constructor() {
+    effect(
+      () => {
+        const raw = this.editorValue();
+        const parsed = raw ? this.convertPImageToFigureImg(raw) : '';
+        this.editorContent.set(parsed);
+      },
+      { allowSignalWrites: true }
+    );
+  }
 
   ngOnInit(): void {
     this.config = {
@@ -136,7 +150,7 @@ export class RichTextEditorComponent {
             writer.setSelection(end);
           }
         });
-      });
+      }, 0);
     }
   }
 
@@ -151,7 +165,35 @@ export class RichTextEditorComponent {
       pImage.setAttribute('alt', img.getAttribute('alt') ?? '');
       pImage.setAttribute('preview', 'true');
 
-      figure.replaceWith(pImage);
+      // ? Wrap p-image tag with p tag for DOM Sanitization
+      const wrapperP = document.createElement('p');
+      wrapperP.appendChild(pImage);
+
+      figure.replaceWith(wrapperP);
+    });
+
+    return doc.body.innerHTML;
+  }
+
+  convertPImageToFigureImg(html: string): string {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+
+    doc.querySelectorAll('p > p-image').forEach(pImage => {
+      const p = pImage.parentElement;
+      if (!p || !(pImage instanceof HTMLElement)) return;
+
+      const src = pImage.getAttribute('src') || '';
+      const alt = pImage.getAttribute('alt') || '';
+
+      const figure = document.createElement('figure');
+      figure.classList.add('image');
+
+      const img = document.createElement('img');
+      img.setAttribute('src', src);
+      img.setAttribute('alt', alt);
+
+      figure.appendChild(img);
+      p.replaceWith(figure);
     });
 
     return doc.body.innerHTML;

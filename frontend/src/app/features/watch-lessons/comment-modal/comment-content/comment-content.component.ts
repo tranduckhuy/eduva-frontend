@@ -19,8 +19,9 @@ import { type Question } from '../../../../shared/models/entities/question.model
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CommentContentComponent {
-  materialTitle = input<string>();
   question = input.required<Question | null>();
 
   createCommentSuccess = output<string>();
+  editQuestion = output<Question | null>();
+  deleteQuestion = output<void>();
 }
