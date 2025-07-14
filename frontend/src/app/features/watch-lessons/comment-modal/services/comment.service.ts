@@ -53,6 +53,16 @@ export class CommentService {
       );
   }
 
+  deleteComment(commentId: string): Observable<void> {
+    return this.requestService
+      .delete(`${this.BASE_COMMENT_API_URL}/${commentId}`)
+      .pipe(
+        tap(res => this.handleDeleteResponse(res)),
+        map(() => void 0),
+        catchError((err: HttpErrorResponse) => this.handleError(err))
+      );
+  }
+
   // ---------------------------
   //  Private Helper Functions
   // ---------------------------
@@ -63,6 +73,14 @@ export class CommentService {
         res.statusCode === StatusCode.CREATED) &&
       res.data
     ) {
+      this.toastHandlingService.successGeneral();
+    } else {
+      this.toastHandlingService.errorGeneral();
+    }
+  }
+
+  private handleDeleteResponse(res: any): void {
+    if (res.statusCode === StatusCode.SUCCESS) {
       this.toastHandlingService.successGeneral();
     } else {
       this.toastHandlingService.errorGeneral();

@@ -13,12 +13,13 @@ import { SubmenuDirective } from '../../../../directives/submenu/submenu.directi
 import { SafeHtmlPipe } from '../../../../pipes/safe-html.pipe';
 
 import { UserService } from '../../../../services/api/user/user.service';
+import { CommentService } from '../../../../../features/watch-lessons/comment-modal/services/comment.service';
 
 import { UserCommentTextboxComponent } from '../../user-comment-textbox/user-comment-textbox.component';
 
 import {
-  type CommentEntity,
   type Reply,
+  type CommentEntity,
 } from '../../../../models/entities/comment.model';
 
 @Component({
@@ -37,14 +38,16 @@ import {
 })
 export class CommentContextComponent {
   private readonly userService = inject(UserService);
+  private readonly commentService = inject(CommentService);
 
   isReplyMode = input.required<boolean>();
   isBestComment = input<boolean>(false);
   comment = input<CommentEntity | null>(null);
   reply = input<Reply | null>(null);
 
-  createCommentSuccess = output<string>();
-  updateCommentSuccess = output<string>();
+  createCommentSuccess = output<void>();
+  updateCommentSuccess = output<void>();
+  deleteCommentSuccess = output<void>();
 
   user = this.userService.currentUser;
 
@@ -115,5 +118,20 @@ export class CommentContextComponent {
 
   closeFooterOptions() {
     this.isOptionsOpen.set(false);
+  }
+
+  onDeleteComment() {
+    const commentId = !this.isReplyMode()
+      ? this.comment()?.id
+      : this.reply()?.id;
+
+    if (!commentId) return;
+
+    this.commentService.deleteComment(commentId).subscribe({
+      next: () => {
+        this.closeFooterOptions();
+        this.deleteCommentSuccess.emit();
+      },
+    });
   }
 }

@@ -98,7 +98,9 @@
               </button>
             }
             @if (!isReplyMode() ? comment()?.canDelete : reply()?.canDelete) {
-              <button class="content-footer-option-item">
+              <button
+                class="content-footer-option-item"
+                (click)="onDeleteComment()">
                 <span>Xóa</span>
               </button>
             }
@@ -113,7 +115,7 @@
             [parentCommentId]="parentCommentId()"
             [isReply]="true"
             [mention]="mentionName()"
-            (createCommentSuccess)="createCommentSuccess.emit($event)"
+            (createCommentSuccess)="createCommentSuccess.emit()"
             (cancel)="toggleReplyTextbox()" />
         </div>
       }
@@ -127,7 +129,7 @@
               !isReplyMode() ? comment()!.content : reply()!.content
             "
             [isEdit]="true"
-            (updateCommentSuccess)="updateCommentSuccess.emit($event)"
+            (updateCommentSuccess)="updateCommentSuccess.emit()"
             (cancel)="toggleEditTextbox()" />
         </div>
       }

@@ -60,10 +60,11 @@
         @if (currentState() === 'content' && !isLoading()) {
           <comment-content
             [question]="question()"
+            (deleteQuestion)="onDeleteQuestion()"
+            (editQuestion)="onUpdateQuestionPrefill($event)"
             (createCommentSuccess)="onUpdateQuestion($event)"
             (updateCommentSuccess)="onUpdateQuestion($event)"
-            (editQuestion)="onUpdateQuestionPrefill($event)"
-            (deleteQuestion)="onDeleteQuestion()" />
+            (deleteCommentSuccess)="onUpdateQuestion($event)" />
         }
 
         @if (currentState() === 'question' && !isLoading()) {

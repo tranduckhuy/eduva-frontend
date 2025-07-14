@@ -23,6 +23,7 @@ export class CommentContentComponent {
 
   createCommentSuccess = output<string>();
   updateCommentSuccess = output<string>();
+  deleteCommentSuccess = output<string>();
   editQuestion = output<Question | null>();
   deleteQuestion = output<void>();
 }

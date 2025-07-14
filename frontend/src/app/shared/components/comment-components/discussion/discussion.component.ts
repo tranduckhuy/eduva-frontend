@@ -23,8 +23,9 @@ import { type Question } from '../../../models/entities/question.model';
 export class DiscussionComponent {
   question = input.required<Question | null>();
 
-  createCommentSuccess = output<string>();
-  updateCommentSuccess = output<string>();
+  createCommentSuccess = output<void>();
+  updateCommentSuccess = output<void>();
+  deleteCommentSuccess = output<void>();
 
   comment = signal<string>('');
 

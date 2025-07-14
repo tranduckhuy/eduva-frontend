@@ -46,8 +46,8 @@ export class UserCommentTextboxComponent implements OnInit {
   isReply = input<boolean>(false);
   isEdit = input<boolean>(false);
 
-  createCommentSuccess = output<string>();
-  updateCommentSuccess = output<string>();
+  createCommentSuccess = output<void>();
+  updateCommentSuccess = output<void>();
   cancel = output<void>();
 
   form: FormGroup;
@@ -103,7 +103,7 @@ export class UserCommentTextboxComponent implements OnInit {
         next: comment => {
           if (comment) {
             this.resetForm();
-            this.updateCommentSuccess.emit(comment.questionId);
+            this.updateCommentSuccess.emit();
             this.cancel.emit();
           }
         },
@@ -128,7 +128,7 @@ export class UserCommentTextboxComponent implements OnInit {
         next: comment => {
           if (comment) {
             this.resetForm();
-            this.createCommentSuccess.emit(comment.questionId);
+            this.createCommentSuccess.emit();
             this.cancel.emit();
           }
         },
