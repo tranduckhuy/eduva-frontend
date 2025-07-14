@@ -8,49 +8,65 @@
     class="lesson-content bg-[#f6f7f999] transition-colors duration-[0.25s] ease-in dark:bg-[#191d1e]">
     <div class="video-wrapper">
       <!-- ? Video Player -->
-      <div class="bg-black">
-        <div class="wrap relative">
-          @switch (material()?.contentType) {
-            @case (0) {
-              <video-player [materialSourceUrl]="material()!.sourceUrl" />
-            }
+      <div
+        class="bg-black"
+        [ngClass]="{
+          'relative pt-[30%]': isLoadingGetMaterial(),
+        }">
+        @if (isLoadingGetMaterial()) {
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="loading-spinner animate-spin"></div>
+          </div>
+        } @else {
+          <div class="wrap relative">
+            @switch (material()?.contentType) {
+              @case (0) {
+                <video-player [materialSourceUrl]="material()!.sourceUrl" />
+              }
 
-            @case (1) {
-              <app-audio-listener [materialSourceUrl]="material()!.sourceUrl" />
-            }
+              @case (1) {
+                <app-audio-listener
+                  [materialSourceUrl]="material()!.sourceUrl" />
+              }
 
-            @case (2) {
-              <app-doc-viewer [materialSourceUrl]="material()!.sourceUrl" />
-            }
+              @case (2) {
+                <app-doc-viewer [materialSourceUrl]="material()!.sourceUrl" />
+              }
 
-            @default {
-              <app-pdf-viewer [materialSourceUrl]="material()!.sourceUrl" />
+              @default {
+                <app-pdf-viewer [materialSourceUrl]="material()!.sourceUrl" />
+              }
             }
-          }
-        </div>
+          </div>
+        }
       </div>
 
       <!-- ? Video Information -->
       <div class="wrap">
-        <!-- ? Video Title & Updated Date -->
-        <div class="video-info mt-5">
-          <h2
-            class="text-2xl font-semibold leading-[1.5] tracking-[-0.3px] text-[#45494f] dark:text-[#fff]">
-            {{ material()?.title }}
-          </h2>
-          <p class="mt-1 text-xs font-normal text-[#808b9a] dark:text-[#fffc]">
-            {{
-              formatUpdateDate(
-                material()?.lastModifiedAt ?? material()?.createdAt
-              )
-            }}
-          </p>
-        </div>
+        @if (isLoadingGetMaterial()) {
+          <app-view-lesson-skeleton />
+        } @else {
+          <!-- ? Video Title & Updated Date -->
+          <div class="video-info mt-5">
+            <h2
+              class="text-2xl font-semibold leading-[1.5] tracking-[-0.3px] text-[#45494f] dark:text-[#fff]">
+              {{ material()?.title }}
+            </h2>
+            <p
+              class="mt-1 text-xs font-normal text-[#808b9a] dark:text-[#fffc]">
+              {{
+                formatUpdateDate(
+                  material()?.lastModifiedAt ?? material()?.createdAt
+                )
+              }}
+            </p>
+          </div>
 
-        <!-- ? Video Description -->
-        <div class="m-w-[720px] mx-auto mb-0 mt-8 w-[75%]">
-          <video-description [description]="material()?.description ?? ''" />
-        </div>
+          <!-- ? Video Description -->
+          <div class="m-w-[720px] mx-auto mb-0 mt-8 w-[75%]">
+            <video-description [description]="material()?.description ?? ''" />
+          </div>
+        }
       </div>
 
       <!-- ? Lesson Feedback -->
@@ -88,6 +104,10 @@
   [isOpen]="isChapterModalOpen()"
   (closeChapterModal)="closeChapterModal()" />
 
-<comment-modal
-  [isOpen]="isCommentModalOpen()"
-  (closeCommentModal)="closeCommentModal()" />
+@if (material()) {
+  <comment-modal
+    [materialId]="materialId()"
+    [materialTitle]="material()!.title"
+    [isOpen]="isCommentModalOpen()"
+    (closeCommentModal)="closeCommentModal()" />
+}

@@ -100,10 +100,29 @@
 
     --color-text-lesson-active: var(--color-white);
 
-    --scroll-bar-thumb: rgba(255, 255, 255, 0.15);
+    --scroll-bar-thumb: #b5c3d7;
 
     --header-filter-title-border: #0000000d;
     --header-filter-title-link: #0000008a;
+
+    --rich-text-text-color: var(--color-text);
+    --rich-text-placeholder-color: #24242466;
+    --rich-text-mention-bg-color: #f6f7f9;
+    --rich-text-bg-color: #eef4fc;
+    --rich-text-focus-bg-color: #fff;
+    --rich-text-focus-border-color: #444;
+
+    --comment-item-text-color: #2e3441;
+    --comment-item-hover-bg-color: #f2f9ff;
+    --comment-item-category-bg-color: var(--color-bg5);
+    --comment-pagination-disabled: var(--comment-item-text-color);
+
+    --color-text-blockquote: #4e586b;
+    --color-text-code-block: #2e3441;
+    --color-bg-code-block: #c9fffc;
+
+    --color-text-footer-options-comment: #2e3441;
+    --color-bg-footer-options-comment: #eef4fc;
   }
 
   *,
@@ -152,21 +171,44 @@
 
     --color-text-lesson-active: #808b9a;
 
-    --scroll-bar-thumb: rgba(0, 0, 0, 0.05);
+    --scroll-bar-thumb: #ffffff26;
 
     --header-filter-title-border: #ffffff1a;
     --header-filter-title-link: #ffffffb3;
+
+    --rich-text-text-color: #dae4f0;
+    --rich-text-placeholder-color: #dae4f066;
+    --rich-text-mention-bg-color: #191d1e;
+    --rich-text-bg-color: var(--color-dark3);
+    --rich-text-focus-bg-color: var(--color-dark3);
+    --rich-text-focus-border-color: #2093e7;
+
+    --comment-item-text-color: #a2adbd;
+    --comment-item-hover-bg-color: #32353b;
+    --comment-item-category-bg-color: var(--color-dark);
+    --comment-pagination-disabled: var(--color-text-lesson-active);
+
+    --color-text-blockquote: #a2adbd;
+    --color-text-code-block: #dae4f0;
+    --color-bg-code-block: #34474c;
+
+    --color-text-footer-options-comment: var(--color-text-code-block);
+    --color-bg-footer-options-comment: #3b4554;
   }
 
   html *::-webkit-scrollbar {
-    width: 0;
+    width: 8px;
+    height: 8px;
+    border-radius: 0;
   }
 
   html *::-webkit-scrollbar-thumb {
+    border-radius: 4px;
     background-color: var(--scroll-bar-thumb);
   }
 
   html *::-webkit-scrollbar-track {
+    border-radius: 0;
     background-color: var(--color-black-0);
   }
 
