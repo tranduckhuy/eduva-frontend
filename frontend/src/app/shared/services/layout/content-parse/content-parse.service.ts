@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 export type RenderBlock =
   | { type: 'html'; html: string }
-  | { type: 'image'; src: string; alt?: string };
+  | { type: 'image'; src: string; alt?: string; width?: string };
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +22,7 @@ export class ContentParserService {
             type: 'image',
             src: el.getAttribute('src') || '',
             alt: el.getAttribute('alt') || '',
+            width: el.getAttribute('width') || '',
           });
         }
 
@@ -35,6 +36,7 @@ export class ContentParserService {
             type: 'image',
             src: pImage.getAttribute('src') || '',
             alt: pImage.getAttribute('alt') || '',
+            width: pImage.getAttribute('width') || '',
           });
         }
 

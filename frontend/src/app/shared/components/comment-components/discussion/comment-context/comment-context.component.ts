@@ -2,12 +2,15 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  OnInit,
   inject,
   input,
   output,
   signal,
 } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
+
+import { ImageModule } from 'primeng/image';
 
 import { SubmenuDirective } from '../../../../directives/submenu/submenu.directive';
 import { SafeHtmlPipe } from '../../../../pipes/safe-html.pipe';
@@ -21,6 +24,10 @@ import {
   type Reply,
   type CommentEntity,
 } from '../../../../models/entities/comment.model';
+import {
+  type RenderBlock,
+  ContentParserService,
+} from '../../../../services/layout/content-parse/content-parse.service';
 
 @Component({
   selector: 'comment-context',
@@ -28,6 +35,7 @@ import {
   imports: [
     CommonModule,
     DatePipe,
+    ImageModule,
     SubmenuDirective,
     SafeHtmlPipe,
     UserCommentTextboxComponent,
@@ -36,14 +44,16 @@ import {
   styleUrl: './comment-context.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CommentContextComponent {
+export class CommentContextComponent implements OnInit {
   private readonly userService = inject(UserService);
   private readonly commentService = inject(CommentService);
+  private readonly contentParseService = inject(ContentParserService);
 
-  isReplyMode = input.required<boolean>();
-  isBestComment = input<boolean>(false);
   comment = input<CommentEntity | null>(null);
   reply = input<Reply | null>(null);
+  questionId = input<string>();
+  isBestComment = input<boolean>(false);
+  isReplyMode = input<boolean>();
 
   createCommentSuccess = output<void>();
   updateCommentSuccess = output<void>();
@@ -54,11 +64,10 @@ export class CommentContextComponent {
   isReplyTextboxOpen = signal<boolean>(false);
   isEditTextboxOpen = signal<boolean>(false);
   isOptionsOpen = signal<boolean>(false);
-
-  readonly questionId = computed(() => this.comment()?.questionId);
+  contentBlocks = signal<RenderBlock[]>([]);
 
   readonly parentCommentId = computed(() =>
-    this.isReplyMode() ? this.reply()?.id : this.comment()?.id
+    this.isReplyMode() ? this.reply()?.parentCommentId : this.comment()?.id
   );
 
   canShowFooterOptions = computed(() => {
@@ -103,6 +112,13 @@ export class CommentContextComponent {
     return modifiedAt ? 'Đã chỉnh sửa' : '';
   });
 
+  ngOnInit(): void {
+    const rawContent = !this.isReplyMode()
+      ? (this.comment()?.content ?? '')
+      : (this.reply()?.content ?? '');
+    this.contentParse(rawContent);
+  }
+
   toggleReplyTextbox() {
     this.isReplyTextboxOpen.set(!this.isReplyTextboxOpen());
   }
@@ -133,5 +149,11 @@ export class CommentContextComponent {
         this.deleteCommentSuccess.emit();
       },
     });
+  }
+
+  private contentParse(content: string) {
+    this.contentBlocks.set(
+      this.contentParseService.convertHtmlToBlocks(content)
+    );
   }
 }

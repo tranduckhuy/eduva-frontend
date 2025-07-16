@@ -107,22 +107,15 @@ export class RichTextEditorComponent {
         resizeOptions: [
           {
             name: 'resizeImage:original',
-            label: 'Default image width',
+            label: 'Chiều rộng mặc định',
             value: null,
           },
-          { name: 'resizeImage:50', label: '50% page width', value: '50' },
-          { name: 'resizeImage:75', label: '75% page width', value: '75' },
+          { name: 'resizeImage:35', label: '35% chiều rộng', value: '35' },
+          { name: 'resizeImage:50', label: '50% chiều rộng', value: '50' },
+          { name: 'resizeImage:75', label: '75% chiều rộng', value: '75' },
+          { name: 'resizeImage:100', label: '100% chiều rộng', value: '100' },
         ],
-        toolbar: [
-          'imageTextAlternative',
-          'toggleImageCaption',
-          '|',
-          'imageStyle:inline',
-          'imageStyle:wrapText',
-          'imageStyle:breakText',
-          '|',
-          'resizeImage',
-        ],
+        toolbar: ['imageTextAlternative', '|', 'resizeImage'],
       },
       link: {
         addTargetToExternalLinks: true,
@@ -160,9 +153,12 @@ export class RichTextEditorComponent {
       const img = figure.querySelector('img');
       if (!img) return;
 
+      const figureWidth = (figure as HTMLElement).style.width ?? '';
+
       const pImage = document.createElement('p-image');
       pImage.setAttribute('src', img.getAttribute('src') ?? '');
       pImage.setAttribute('alt', img.getAttribute('alt') ?? '');
+      pImage.setAttribute('width', figureWidth);
       pImage.setAttribute('preview', 'true');
 
       // ? Wrap p-image tag with p tag for DOM Sanitization
@@ -184,6 +180,7 @@ export class RichTextEditorComponent {
 
       const src = pImage.getAttribute('src') || '';
       const alt = pImage.getAttribute('alt') || '';
+      const width = pImage.getAttribute('width') || '';
 
       const figure = document.createElement('figure');
       figure.classList.add('image');
@@ -191,6 +188,7 @@ export class RichTextEditorComponent {
       const img = document.createElement('img');
       img.setAttribute('src', src);
       img.setAttribute('alt', alt);
+      figure.style.width = width;
 
       figure.appendChild(img);
       p.replaceWith(figure);

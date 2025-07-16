@@ -37,9 +37,22 @@
   text-decoration: underline;
 }
 
-.content ::ng-deep .image img {
-  border-radius: 8px;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+.content ::ng-deep .p-image-preview {
+  margin: 24px auto;
+}
+
+.content ::ng-deep p-image {
+  display: flex;
+}
+
+.content ::ng-deep img,
+.content ::ng-deep .p-image-preview-mask {
+  display: block;
+  max-width: 100% !important;
+  max-height: 420px;
+  padding: 4px;
+  border-radius: 12px;
+  box-shadow: 0 0 0 1px var(--color-shadow-image);
 }
 
 .content ::ng-deep .mention {
