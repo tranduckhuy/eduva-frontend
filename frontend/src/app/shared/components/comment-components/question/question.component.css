@@ -54,7 +54,7 @@
   max-height: 420px;
   padding: 4px;
   border-radius: 12px;
-  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 0 1px var(--color-shadow-image);
 }
 
 .content-footer-options {

@@ -164,6 +164,7 @@ export class CommentModalComponent implements OnInit {
   }
 
   onUpdateQuestion(questionId: string) {
+    this.editQuestion.set(null);
     this.handleViewQuestion(questionId);
   }
 

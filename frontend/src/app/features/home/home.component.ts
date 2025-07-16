@@ -107,11 +107,16 @@ export class HomeComponent implements OnInit {
     });
 
     if (this.currentUser() && this.isLoggedIn()) {
-      this.fetchClassesForUser(
-        this.currentUser()!.id,
-        this.currentUser()!.school!.id
-      );
+      const userId = this.currentUser()!.id;
+      const schoolId = this.currentUser()!.school?.id;
+      if (userId && schoolId) {
+        this.fetchClassesForUser(userId, schoolId);
+      }
     }
+  }
+
+  openEnrollClassModal() {
+    this.globalModalService.open(EnrollClassModalComponent);
   }
 
   private fetchClassesForUser(studentId: string, schoolId: number): void {
@@ -126,9 +131,5 @@ export class HomeComponent implements OnInit {
     this.classService
       .getStudentClassesEnrolled(getStudentClassesEnrolledRequest)
       .subscribe();
-  }
-
-  openEnrollClassModal() {
-    this.globalModalService.open(EnrollClassModalComponent);
   }
 }

@@ -48,22 +48,34 @@
       </div>
 
       <!-- ? Comment Content -->
-      <div
-        class="content"
-        [innerHTML]="
-          !isReplyMode()
-            ? (comment()?.content | safeHtml)
-            : (reply()?.content | safeHtml)
-        "></div>
+      <div class="content">
+        @for (block of contentBlocks(); track $index) {
+          @if (block.type === 'html') {
+            <div [innerHTML]="block.html | safeHtml"></div>
+          }
+
+          @if (block.type === 'image') {
+            <p>
+              <p-image
+                [src]="block.src"
+                [alt]="block.alt"
+                [style]="{ width: block.width }"
+                preview="true"
+                loading="lazy"
+                appendTo="body"></p-image>
+            </p>
+          }
+        }
+      </div>
 
       <!-- ? Comment Actions -->
       <div
         class="relative flex"
         [ngClass]="{
-          'justify-between': !isReplyMode() && !isEditTextboxOpen(),
-          'justify-end': isReplyMode() || isEditTextboxOpen(),
+          'justify-between': !isEditTextboxOpen(),
+          'justify-end': isEditTextboxOpen(),
         }">
-        @if (!isReplyMode() && !isEditTextboxOpen()) {
+        @if (!isEditTextboxOpen()) {
           <button
             class="flex items-center gap-2 text-[#0093fc] transition-opacity ease-in hover:opacity-80"
             (click)="toggleReplyTextbox()">
