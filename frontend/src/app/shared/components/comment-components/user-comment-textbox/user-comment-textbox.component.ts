@@ -40,8 +40,8 @@ export class UserCommentTextboxComponent implements OnInit {
 
   editCommentValue = input<string>();
   questionId = input<string>();
-  parentCommentId = input<string>();
   commentId = input<string>();
+  parentCommentId = input<string>();
   mention = input<string | null>(null);
   isReply = input<boolean>(false);
   isEdit = input<boolean>(false);
@@ -146,7 +146,7 @@ export class UserCommentTextboxComponent implements OnInit {
     return '';
   }
 
-  resetForm() {
+  private resetForm() {
     this.commentValue.set('');
     this.form.reset();
     this.form.updateValueAndValidity();

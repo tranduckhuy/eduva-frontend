@@ -59,15 +59,15 @@ export class QuestionComponent implements OnInit {
     this.isOptionsOpen.set(false);
   }
 
-  contentParse(content: string) {
-    this.contentBlocks.set(
-      this.contentParseService.convertHtmlToBlocks(content)
-    );
-  }
-
   onDeleteQuestion(questionId: string) {
     this.questionService.deleteQuestion(questionId).subscribe({
       next: () => this.deleteQuestion.emit(),
     });
+  }
+
+  private contentParse(content: string) {
+    this.contentBlocks.set(
+      this.contentParseService.convertHtmlToBlocks(content)
+    );
   }
 }

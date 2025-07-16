@@ -52,7 +52,6 @@ export class EnrollClassModalComponent {
   }
 
   onSubmit(): void {
-    console.log('this.form.value', this.form.invalid);
     this.submitted.set(true);
     this.form.markAllAsTouched();
 
@@ -60,7 +59,6 @@ export class EnrollClassModalComponent {
 
     this.classService.enrollClass(this.form.value).subscribe({
       next: res => {
-        console.log(res);
         this.router.navigate(['/classes', res?.classId]);
         this.closeModal();
       },

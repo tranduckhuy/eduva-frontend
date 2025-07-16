@@ -16,7 +16,7 @@
         <!-- ? Comments -->
         <comment-context
           [comment]="comment"
-          [isReplyMode]="false"
+          [questionId]="question()?.id"
           [isBestComment]="comment.id === commentWithMostReplies()?.id"
           (createCommentSuccess)="createCommentSuccess.emit()"
           (updateCommentSuccess)="updateCommentSuccess.emit()"
@@ -27,6 +27,7 @@
           @for (reply of comment.replies; track reply.id) {
             <comment-context
               [reply]="reply"
+              [questionId]="question()?.id"
               [isReplyMode]="true"
               (createCommentSuccess)="createCommentSuccess.emit()"
               (updateCommentSuccess)="updateCommentSuccess.emit()"

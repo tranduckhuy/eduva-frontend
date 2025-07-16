@@ -46,7 +46,9 @@
           <p-image
             [src]="block.src"
             [alt]="block.alt"
+            [style]="{ width: block.width }"
             preview="true"
+            loading="lazy"
             appendTo="body"></p-image>
         </p>
       }

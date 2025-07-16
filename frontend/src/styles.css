@@ -120,6 +120,7 @@
     --color-text-blockquote: #4e586b;
     --color-text-code-block: #2e3441;
     --color-bg-code-block: #c9fffc;
+    --color-shadow-image: #0000000d;
 
     --color-text-footer-options-comment: #2e3441;
     --color-bg-footer-options-comment: #eef4fc;
@@ -191,6 +192,7 @@
     --color-text-blockquote: #a2adbd;
     --color-text-code-block: #dae4f0;
     --color-bg-code-block: #34474c;
+    --color-shadow-image: #ffffff1a;
 
     --color-text-footer-options-comment: var(--color-text-code-block);
     --color-bg-footer-options-comment: #3b4554;
