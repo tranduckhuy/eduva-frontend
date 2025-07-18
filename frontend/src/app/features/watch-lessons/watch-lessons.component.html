@@ -80,7 +80,7 @@
   <div
     class="lesson-sidebar bg-white transition-colors duration-[0.25s] ease-in dark:bg-dark-400">
     <lesson-sidebar
-      [materialId]="materialId()"
+      [materialId]="materialIdFromRoute() || materialId()"
       (openChapterModal)="openChapterModal()"
       [isOpen]="isSidebarOpen()"
       [folderId]="folderId()" />
@@ -106,7 +106,7 @@
 
 @if (material()) {
   <comment-modal
-    [materialId]="materialId()"
+    [materialId]="materialIdFromRoute() || materialId()"
     [materialTitle]="material()!.title"
     [isOpen]="isCommentModalOpen()"
     (closeCommentModal)="closeCommentModal()" />
