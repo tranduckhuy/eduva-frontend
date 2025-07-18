@@ -7,6 +7,7 @@ import {
   input,
   signal,
   computed,
+  effect,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -80,6 +81,7 @@ export class WatchLessonsComponent implements OnInit {
 
   classId = signal<string>('');
   folderId = signal<string>('');
+  materialIdFromRoute = signal<string>('');
   currentFolderIndex = signal<number>(0);
   currentFolder = signal<Folder | undefined>(undefined);
 
@@ -91,6 +93,7 @@ export class WatchLessonsComponent implements OnInit {
   // Track loading state to prevent loops
   private readonly isInitialLoad = signal<boolean>(true);
   private readonly lastLoadedMaterialId = signal<string | null>(null);
+  private readonly lastLoadedFolderId = signal<string | null>(null);
 
   // --- Computed signals for disabling buttons ---
   isFirstMaterial = computed(() => {
@@ -123,12 +126,66 @@ export class WatchLessonsComponent implements OnInit {
   // Cache for folder materials
   private readonly folderMaterialsCache = new Map<string, LessonMaterial[]>();
 
+  constructor() {
+    // Watch for material ID and folder ID changes
+    effect(() => {
+      const currentMaterialId = this.materialId();
+      const currentFolderId = this.folderId();
+
+      // Skip on initial load
+      if (this.isInitialLoad()) return;
+
+      // Check if material ID changed
+      if (
+        currentMaterialId &&
+        currentMaterialId !== this.lastLoadedMaterialId()
+      ) {
+        this.lastLoadedMaterialId.set(currentMaterialId);
+        this.getMaterial();
+      }
+
+      // Check if folder ID changed
+      if (currentFolderId && currentFolderId !== this.lastLoadedFolderId()) {
+        this.lastLoadedFolderId.set(currentFolderId);
+        this.getClassFolders();
+      }
+    });
+  }
+
   ngOnInit(): void {
+    // Listen to route parameters (materialId)
+    this.activatedRoute.params
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(params => {
+        const routeMaterialId = params['materialId'];
+
+        this.materialIdFromRoute.set(routeMaterialId);
+
+        // Check if this is a new material ID
+        if (
+          routeMaterialId &&
+          routeMaterialId !== this.lastLoadedMaterialId()
+        ) {
+          this.lastLoadedMaterialId.set(routeMaterialId);
+          this.getMaterial();
+        }
+      });
+
+    // Listen to query parameters (classId, folderId)
     this.activatedRoute.queryParams
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(params => {
-        this.classId.set(params['classId'] ?? '');
-        this.folderId.set(params['folderId'] ?? '');
+        const newClassId = params['classId'] ?? '';
+        const newFolderId = params['folderId'] ?? '';
+
+        this.classId.set(newClassId);
+        this.folderId.set(newFolderId);
+
+        // Check if folder ID changed
+        if (newFolderId && newFolderId !== this.lastLoadedFolderId()) {
+          this.lastLoadedFolderId.set(newFolderId);
+          this.getClassFolders();
+        }
 
         // Only load on initial route params if we haven't loaded yet
         if (this.isInitialLoad()) {
@@ -166,7 +223,9 @@ export class WatchLessonsComponent implements OnInit {
 
   // Private methods
   private loadData(): void {
-    const currentMaterialId = this.materialId();
+    const currentMaterialId = this.materialIdFromRoute() || this.materialId();
+    const currentFolderId = this.folderId();
+
     if (
       !currentMaterialId ||
       currentMaterialId === this.lastLoadedMaterialId()
@@ -175,13 +234,15 @@ export class WatchLessonsComponent implements OnInit {
     }
 
     this.lastLoadedMaterialId.set(currentMaterialId);
+    this.lastLoadedFolderId.set(currentFolderId);
     this.getMaterial();
     this.getClassFolders();
   }
 
   private getMaterial(): void {
+    const materialIdToUse = this.materialIdFromRoute() || this.materialId();
     this.lessonMaterialService
-      .fetchLessonMaterialById(this.materialId())
+      .fetchLessonMaterialById(materialIdToUse)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe();
   }
@@ -238,7 +299,8 @@ export class WatchLessonsComponent implements OnInit {
   }
 
   private getCurrentMaterialIndex(materials: LessonMaterial[]): number {
-    return materials.findIndex(m => m.id === this.materialId());
+    const materialIdToUse = this.materialIdFromRoute() || this.materialId();
+    return materials.findIndex(m => m.id === materialIdToUse);
   }
 
   async goToNextMaterial() {
