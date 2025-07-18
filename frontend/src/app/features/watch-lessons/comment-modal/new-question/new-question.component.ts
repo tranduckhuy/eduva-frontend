@@ -25,7 +25,7 @@ import { RichTextEditorComponent } from '../../../../shared/components/rich-text
 
 import { type Question } from '../../../../shared/models/entities/question.model';
 import { type CreateQuestionRequest } from '../model/request/command/create-question-request.model';
-import { UpdateQuestionRequest } from '../model/request/command/update-question-request.model';
+import { type UpdateQuestionRequest } from '../model/request/command/update-question-request.model';
 
 @Component({
   selector: 'new-question',

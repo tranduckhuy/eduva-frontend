@@ -21,8 +21,9 @@ import { LoadingService } from '../../../services/core/loading/loading.service';
 import { CommentService } from '../../../../features/watch-lessons/comment-modal/services/comment.service';
 
 import { RichTextEditorComponent } from '../../rich-text-editor/rich-text-editor.component';
-import { CreateCommentRequest } from '../../../../features/watch-lessons/comment-modal/model/request/command/create-comment-request.model';
-import { UpdateCommentRequest } from '../../../../features/watch-lessons/comment-modal/model/request/command/update-comment-request.model';
+
+import { type CreateCommentRequest } from '../../../../features/watch-lessons/comment-modal/model/request/command/create-comment-request.model';
+import { type UpdateCommentRequest } from '../../../../features/watch-lessons/comment-modal/model/request/command/update-comment-request.model';
 
 @Component({
   selector: 'app-user-comment-textbox',
