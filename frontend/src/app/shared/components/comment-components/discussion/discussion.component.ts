@@ -32,9 +32,10 @@ export class DiscussionComponent {
   readonly commentWithMostReplies = computed(() => {
     const comments = this.question()?.comments ?? [];
 
-    if (comments.length === 0) return null;
+    const filtered = comments.filter(c => c.replyCount > 0);
+    if (filtered.length === 0) return null;
 
-    return comments.reduce((max, current) =>
+    return filtered.reduce((max, current) =>
       current.replyCount > max.replyCount ? current : max
     );
   });
