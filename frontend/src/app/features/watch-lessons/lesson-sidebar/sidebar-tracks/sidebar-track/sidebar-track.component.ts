@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  OnInit,
   inject,
   signal,
   input,
@@ -11,11 +10,9 @@ import {
   AfterViewInit,
   OnChanges,
   SimpleChanges,
-  DestroyRef,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 
 import { TooltipModule } from 'primeng/tooltip';
 
@@ -64,14 +61,14 @@ export class SidebarTrackComponent implements AfterViewInit, OnChanges {
 
   materials = signal<LessonMaterial[]>([]);
   isExpanded = signal<boolean>(false);
-  private classId = signal<string>('');
+  private readonly classId = signal<string>('');
 
   constructor() {
     this.libIcon.addIcons(faCircleCheck, faFileLines, faCirclePlay, faFilePdf);
 
     // Get classId from query params
     const queryParams = new URLSearchParams(window.location.search);
-    this.classId.set(queryParams.get('classId') || '');
+    this.classId.set(queryParams.get('classId') ?? '');
     this.libIcon.addIcons(faCircleCheck, faFileLines, faCirclePlay, faFilePdf);
   }
 

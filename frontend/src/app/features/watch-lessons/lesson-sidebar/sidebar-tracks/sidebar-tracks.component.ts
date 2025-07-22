@@ -18,7 +18,7 @@ import { GetAllFoldersMaterialsResponse } from '../../../../shared/models/api/re
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarTracksComponent {
-  private lessonMaterialsService = inject(LessonMaterialsService);
+  private readonly lessonMaterialsService = inject(LessonMaterialsService);
 
   readonly materialId = input.required<string>();
   readonly currentFolderId = input.required<string>();

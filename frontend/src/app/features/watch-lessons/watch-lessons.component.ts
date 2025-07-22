@@ -393,7 +393,6 @@ export class WatchLessonsComponent implements OnInit {
     const currentFolder = folders.find(f => f.id === currentFolderId);
     const currentMaterials = currentFolder ? currentFolder.lessonMaterials : [];
     const currentIndex = this.getCurrentMaterialIndex(currentMaterials);
-    let currentMaterial;
 
     if (currentIndex < currentMaterials.length - 1) {
       // Next material in current folder
@@ -401,14 +400,12 @@ export class WatchLessonsComponent implements OnInit {
         currentMaterials[currentIndex + 1],
         currentFolderId
       );
-      currentMaterial = currentMaterials[currentIndex + 1];
     } else if (currentFolderIndex < folders.length - 1) {
       // First material in next folder
       const nextFolder = folders[currentFolderIndex + 1];
       const nextMaterials = nextFolder.lessonMaterials || [];
       if (nextMaterials.length > 0) {
         this.navigateToMaterial(nextMaterials[0], nextFolder.id);
-        currentMaterial = nextMaterials[0];
       }
     }
   }
