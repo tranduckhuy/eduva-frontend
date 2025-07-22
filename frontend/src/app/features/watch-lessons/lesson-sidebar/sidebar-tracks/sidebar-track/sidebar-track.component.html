@@ -6,9 +6,9 @@
     <div>
       <h3 class="leading-[1.5]">{{ index() + 1 }}. {{ folder().name }}</h3>
       <div class="text-xs font-normal text-[#808b9a]">
-        <span>{{ folder().countLessonMaterial }} bài</span>
+        <span>{{ folder().countLessonMaterials }} bài</span>
         <span class="relative bottom-[1px]"> | </span>
-        <span>23:13</span>
+        <span>{{ getFolderDurationFormatted(folder().lessonMaterials) }}</span>
       </div>
     </div>
     <span
@@ -24,7 +24,7 @@
       'block opacity-100': isExpanded(),
       'hidden opacity-0': !isExpanded(),
     }">
-    @for (material of materials(); track material.id) {
+    @for (material of folder().lessonMaterials; track material.id) {
       <div
         #materialItem
         (click)="chooseLessonMaterial(material.id)"

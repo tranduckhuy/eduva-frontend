@@ -26,11 +26,6 @@
               <h2 class="text-[32px] font-bold">
                 {{ classDetail()?.name }}
               </h2>
-              <p class="mt-4 leading-4 text-[#000c] dark:text-[#fffc]">
-                Xây dựng ứng dụng đưa ra cảnh báo khi người dùng sờ tay lên mặt.
-                Chúng ta sẽ sử dụng thư viện ReactJS & Tensoflow để hoàn thiện
-                ứng dụng này.
-              </p>
             }
           </div>
 
@@ -39,11 +34,6 @@
             <h3 class="text-xl font-bold">Danh sách bài học</h3>
             <div class="mt-4 flex items-center justify-between">
               <ul class="flex items-center">
-                <!-- <li>
-                  <strong>3</strong>
-                  chương
-                </li> -->
-                <!-- <li class="mx-2 size-1 rounded-full bg-black"></li> -->
                 @if (isLoadingGetClass()) {
                   <li>
                     <p-skeleton
@@ -74,15 +64,10 @@
                     class="mx-2 size-1 rounded-full bg-black dark:bg-[#fffc]"></li>
                   <li>
                     Thời lượng
-                    <strong>01 giờ 34 phút</strong>
+                    <strong>{{ totalDuration() }}</strong>
                   </li>
                 }
               </ul>
-              <!-- <div
-                class="cursor-pointer select-none font-semibold text-primary transition-opacity duration-200 hover:opacity-80"
-                (click)="toggleAllCurriculums()">
-                {{ areAllExpanded() ? 'Thu nhỏ tất cả' : 'Mở rộng tất cả' }}
-              </div> -->
             </div>
 
             <!-- ? Folders -->
@@ -92,7 +77,11 @@
                   <app-class-detail-folder-skeleton />
                 }
               } @else {
-                @for (folder of folders(); track $index; let i = $index) {
+                @for (
+                  folder of foldersAndLessonMaterials();
+                  track folder.id;
+                  let i = $index
+                ) {
                   <app-folder
                     [classId]="classId()"
                     [folder]="folder"
@@ -109,7 +98,9 @@
           @if (isLoadingGetClass() || isLoadingGetFolders()) {
             <app-watch-lesson-card-skeleton />
           } @else {
-            <classroom-watch-lesson-badge [classDetail]="classDetail()!" />
+            <classroom-watch-lesson-badge
+              [classDetail]="classDetail()!"
+              [totalDuration]="totalDuration()" />
           }
         </div>
       </div>
