@@ -14,11 +14,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { LoadingService } from '../../shared/services/core/loading/loading.service';
-import { FolderManagementService } from '../../shared/services/api/folder/folder-management.service';
 import { LessonMaterialsService } from '../../shared/services/api/lesson-materials/lesson-materials.service';
 import { LessonProgressService } from '../../shared/services/api/local-lesson-progress/local-lesson-progress.service';
-
-import { FolderOwnerType } from '../../shared/models/enum/folder-owner-type.enum';
 
 import { HeaderComponent } from '../../core/layout/header/header.component';
 import { VideoPlayerComponent } from './video-player/video-player.component';
@@ -33,9 +30,8 @@ import { DocViewerComponent } from './doc-viewer/doc-viewer.component';
 import { PdfViewerComponent } from './pdf-viewer/pdf-viewer.component';
 import { PreviewLessonSkeletonComponent } from '../../shared/components/skeleton/view-lesson-skeleton/view-lesson-skeleton.component';
 
-import { type Folder } from '../../shared/models/entities/folder.model';
 import { type LessonMaterial } from '../../shared/models/entities/lesson-material.model';
-import { type GetFoldersRequest } from '../../shared/models/api/request/query/get-folders-request.model';
+import { GetAllFoldersMaterialsResponse } from '../../shared/models/api/response/query/get-all-folders-materials-response.model';
 
 @Component({
   selector: 'app-watch-lessons',
@@ -63,18 +59,59 @@ export class WatchLessonsComponent implements OnInit {
   // Services
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly folderService = inject(FolderManagementService);
   private readonly loadingService = inject(LoadingService);
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly lessonMaterialService = inject(LessonMaterialsService);
   private readonly localLessonProgressService = inject(LessonProgressService);
 
   // Service signals
-  folders = this.folderService.folderList;
-  folder = this.folderService.folder;
   material = this.lessonMaterialService.lessonMaterial;
-  isLoadingGetFolders = this.loadingService.is('get-folders');
+  foldersAndLessonMaterials = this.lessonMaterialService.foldersLessonMaterials;
+
+  // Track if we are in search mode
+  private readonly isSearching = computed(() => {
+    const term = this.searchTerm();
+    return term !== null && term !== undefined && term.trim().length > 0;
+  });
+
+  // Computed signal for filtered materials
+  filteredFoldersAndMaterials = computed(() => {
+    const folders = this.foldersAndLessonMaterials();
+    const searchTerm = this.searchTerm().trim().toLowerCase();
+
+    // Return original list if no folders or no search
+    if (!folders || folders.length === 0 || !this.isSearching()) {
+      return folders || [];
+    }
+
+    // Create a new array to avoid mutating the original
+    return folders.reduce((acc: GetAllFoldersMaterialsResponse[], folder) => {
+      // Deep clone the folder to avoid mutation
+      const newFolder = { ...folder };
+
+      // Filter materials that match the search term
+      const filteredMaterials =
+        folder.lessonMaterials?.filter(
+          material =>
+            material.title?.toLowerCase().includes(searchTerm) ||
+            material.description?.toLowerCase().includes(searchTerm)
+        ) || [];
+
+      // Only include folder if it has matching materials
+      if (filteredMaterials.length > 0) {
+        newFolder.lessonMaterials = filteredMaterials;
+        newFolder.countLessonMaterials = filteredMaterials.length;
+        acc.push(newFolder);
+      }
+
+      return acc;
+    }, []);
+  });
+
   isLoadingGetMaterial = this.loadingService.is('get-material');
+  isLoadingGetAllFoldersAndMaterials = this.loadingService.is(
+    'all-folders-and-materials'
+  );
 
   // Component inputs
   readonly materialId = input.required<string>();
@@ -83,7 +120,8 @@ export class WatchLessonsComponent implements OnInit {
   folderId = signal<string>('');
   materialIdFromRoute = signal<string>('');
   currentFolderIndex = signal<number>(0);
-  currentFolder = signal<Folder | undefined>(undefined);
+  currentFolder = signal<GetAllFoldersMaterialsResponse | undefined>(undefined);
+  searchTerm = signal<string>('');
 
   // UI state
   isSidebarOpen = signal<boolean>(false);
@@ -97,26 +135,34 @@ export class WatchLessonsComponent implements OnInit {
 
   // --- Computed signals for disabling buttons ---
   isFirstMaterial = computed(() => {
-    const folders = this.folders();
+    const folders = this.filteredFoldersAndMaterials();
+    if (!folders || folders.length === 0) return true;
+
     const currentFolderId = this.folderId();
     const currentFolderIndex = folders.findIndex(f => f.id === currentFolderId);
     if (currentFolderIndex === -1) return true;
-    const currentMaterials =
-      this.folderMaterialsCache.get(currentFolderId) ?? [];
+
+    const currentFolder = folders[currentFolderIndex];
+    const currentMaterials = currentFolder.lessonMaterials || [];
     const currentIndex = this.getCurrentMaterialIndex(currentMaterials);
-    // First folder and first material
+
+    // First material in first folder
     return currentFolderIndex === 0 && currentIndex === 0;
   });
 
   isLastMaterial = computed(() => {
-    const folders = this.folders();
+    const folders = this.filteredFoldersAndMaterials();
+    if (!folders || folders.length === 0) return true;
+
     const currentFolderId = this.folderId();
     const currentFolderIndex = folders.findIndex(f => f.id === currentFolderId);
     if (currentFolderIndex === -1) return true;
-    const currentMaterials =
-      this.folderMaterialsCache.get(currentFolderId) ?? [];
+
+    const currentFolder = folders[currentFolderIndex];
+    const currentMaterials = currentFolder.lessonMaterials || [];
     const currentIndex = this.getCurrentMaterialIndex(currentMaterials);
-    // Last folder and last material
+
+    // Last material in last folder
     return (
       currentFolderIndex === folders.length - 1 &&
       currentIndex === currentMaterials.length - 1
@@ -124,7 +170,6 @@ export class WatchLessonsComponent implements OnInit {
   });
 
   // Cache for folder materials
-  private readonly folderMaterialsCache = new Map<string, LessonMaterial[]>();
 
   constructor() {
     // Watch for material ID and folder ID changes
@@ -147,26 +192,21 @@ export class WatchLessonsComponent implements OnInit {
       // Check if folder ID changed
       if (currentFolderId && currentFolderId !== this.lastLoadedFolderId()) {
         this.lastLoadedFolderId.set(currentFolderId);
-        this.getClassFolders();
+        this.getCurrentFolder();
       }
     });
   }
 
   ngOnInit(): void {
-    // Listen to route parameters (materialId)
+    // Combine both route params and query params to handle URL changes
     this.activatedRoute.params
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(params => {
         const routeMaterialId = params['materialId'];
-
-        this.materialIdFromRoute.set(routeMaterialId);
-
-        // Check if this is a new material ID
-        if (
-          routeMaterialId &&
-          routeMaterialId !== this.lastLoadedMaterialId()
-        ) {
+        if (routeMaterialId) {
+          this.materialIdFromRoute.set(routeMaterialId);
           this.lastLoadedMaterialId.set(routeMaterialId);
+          // Always reload material when materialId changes
           this.getMaterial();
         }
       });
@@ -177,17 +217,23 @@ export class WatchLessonsComponent implements OnInit {
       .subscribe(params => {
         const newClassId = params['classId'] ?? '';
         const newFolderId = params['folderId'] ?? '';
+        const classIdChanged = newClassId !== this.classId();
+        const folderIdChanged = newFolderId !== this.folderId();
 
         this.classId.set(newClassId);
         this.folderId.set(newFolderId);
 
-        // Check if folder ID changed
-        if (newFolderId && newFolderId !== this.lastLoadedFolderId()) {
-          this.lastLoadedFolderId.set(newFolderId);
-          this.getClassFolders();
+        if (classIdChanged) {
+          // When class changes, reload everything
+          this.getFoldersAndMaterials();
         }
 
-        // Only load on initial route params if we haven't loaded yet
+        if (folderIdChanged) {
+          this.lastLoadedFolderId.set(newFolderId);
+          this.getCurrentFolder();
+        }
+
+        // Initial load
         if (this.isInitialLoad()) {
           this.loadData();
           this.isInitialLoad.set(false);
@@ -221,147 +267,112 @@ export class WatchLessonsComponent implements OnInit {
     return `Cập nhật tháng ${date.getUTCMonth() + 1} năm ${date.getUTCFullYear()}`;
   }
 
+  onSearchTriggered(term: string): void {
+    console.log('Search triggered with term:', term);
+
+    this.searchTerm.set(term);
+  }
+
   // Private methods
   private loadData(): void {
     const currentMaterialId = this.materialIdFromRoute() || this.materialId();
     const currentFolderId = this.folderId();
+    const currentClassId = this.classId();
 
-    if (
-      !currentMaterialId ||
-      currentMaterialId === this.lastLoadedMaterialId()
-    ) {
+    if (!currentClassId) {
       return;
     }
 
+    // Set last loaded values
     this.lastLoadedMaterialId.set(currentMaterialId);
     this.lastLoadedFolderId.set(currentFolderId);
-    this.getMaterial();
-    this.getClassFolders();
+
+    // First get folders and materials
+    this.getFoldersAndMaterials();
+
+    // Then get the current material
+    if (currentMaterialId) {
+      this.getMaterial();
+    }
   }
 
   private getMaterial(): void {
     const materialIdToUse = this.materialIdFromRoute() || this.materialId();
+
+    if (!materialIdToUse) {
+      console.warn('Cannot fetch material: materialId is empty');
+      return;
+    }
+
+    if (this.isLoadingGetMaterial()) {
+      return;
+    }
+
     this.lessonMaterialService
       .fetchLessonMaterialById(materialIdToUse)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe();
+      .subscribe({
+        next: () => {
+          // Material state is managed by the service
+          // After getting material, ensure folders are loaded
+          if (!this.foldersAndLessonMaterials().length) {
+            this.getFoldersAndMaterials();
+          }
+        },
+        error: error => {
+          console.error('Error fetching material:', error);
+        },
+      });
   }
+  private getFoldersAndMaterials(): void {
+    if (!this.classId()) {
+      return;
+    }
 
-  private getClassFolders(): void {
-    const getFoldersRequest: GetFoldersRequest = {
-      ownerType: FolderOwnerType.Class,
-    };
+    // Prevent multiple simultaneous calls
+    if (this.isLoadingGetAllFoldersAndMaterials()) {
+      return;
+    }
 
-    this.folderService
-      .getClassFolders(getFoldersRequest, this.classId())
+    this.lessonMaterialService
+      .getAllFoldersAndLessonMaterials(this.classId())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: () => this.getCurrentFolder(),
-        error: err => console.error('Failed to load folders:', err),
+        next: () => {
+          // Wait for the next tick to ensure the data is updated
+          setTimeout(() => {
+            this.getCurrentFolder();
+          }, 0);
+        },
       });
   }
 
   private getCurrentFolder(): void {
-    const foundFolder = this.folders().find((folder: Folder, index: number) => {
-      if (folder.id === this.folderId()) {
-        this.currentFolderIndex.set(index + 1);
-        return true;
-      }
-      return false;
-    });
-
-    this.currentFolder.set(foundFolder);
-  }
-
-  // --- Navigation Methods ---
-  private async loadMaterialsForFolder(
-    folderId: string
-  ): Promise<LessonMaterial[]> {
-    if (this.folderMaterialsCache.has(folderId)) {
-      return this.folderMaterialsCache.get(folderId)!;
+    const folders = this.foldersAndLessonMaterials();
+    if (!folders || folders.length === 0) {
+      // If folders are not loaded yet, wait for them
+      this.getFoldersAndMaterials();
+      return;
     }
-    // Use lessonMaterialService to get materials in folder
-    return new Promise(resolve => {
-      this.lessonMaterialService
-        .getLessonMaterialsInFolder({
-          classId: this.classId(),
-          folderId,
-          lessonStatus: 1,
-          sortBy: 'lastmodifiedat',
-          sortDirection: 'asc',
-        })
-        .subscribe(materials => {
-          const result = materials ?? [];
-          this.folderMaterialsCache.set(folderId, result);
-          resolve(result);
-        });
-    });
+
+    const foundFolder = folders.find(
+      (item: GetAllFoldersMaterialsResponse, index: number) => {
+        if (item.id === this.folderId()) {
+          this.currentFolderIndex.set(index + 1);
+          return true;
+        }
+        return false;
+      }
+    );
+
+    if (foundFolder) {
+      this.currentFolder.set(foundFolder);
+    }
   }
 
   private getCurrentMaterialIndex(materials: LessonMaterial[]): number {
     const materialIdToUse = this.materialIdFromRoute() || this.materialId();
     return materials.findIndex(m => m.id === materialIdToUse);
-  }
-
-  async goToNextMaterial() {
-    const folders = this.folders();
-    const currentFolderId = this.folderId();
-    const currentFolderIndex = folders.findIndex(f => f.id === currentFolderId);
-    const currentMaterials = await this.loadMaterialsForFolder(currentFolderId);
-    const currentIndex = this.getCurrentMaterialIndex(currentMaterials);
-    let currentMaterial;
-
-    if (currentIndex < currentMaterials.length - 1) {
-      this.navigateToMaterial(
-        currentMaterials[currentIndex + 1],
-        currentFolderId
-      );
-      currentMaterial = currentMaterials[currentIndex + 1];
-    } else if (currentFolderIndex < folders.length - 1) {
-      const nextFolder = folders[currentFolderIndex + 1];
-      const nextMaterials = await this.loadMaterialsForFolder(nextFolder.id);
-      if (nextMaterials.length > 0) {
-        this.navigateToMaterial(nextMaterials[0], nextFolder.id);
-      }
-      currentMaterial = nextMaterials[0];
-    }
-    this.localLessonProgressService.setLastLesson(
-      this.classId(),
-      currentFolderId,
-      currentMaterial!.id
-    );
-  }
-
-  async goToPreviousMaterial() {
-    const folders = this.folders();
-    const currentFolderId = this.folderId();
-    const currentFolderIndex = folders.findIndex(f => f.id === currentFolderId);
-    const currentMaterials = await this.loadMaterialsForFolder(currentFolderId);
-    let currentMaterial;
-    const currentIndex = this.getCurrentMaterialIndex(currentMaterials);
-    if (currentIndex > 0) {
-      this.navigateToMaterial(
-        currentMaterials[currentIndex - 1],
-        currentFolderId
-      );
-      currentMaterial = currentMaterials[currentIndex - 1];
-    } else if (currentFolderIndex > 0) {
-      const prevFolder = folders[currentFolderIndex - 1];
-      const prevMaterials = await this.loadMaterialsForFolder(prevFolder.id);
-      if (prevMaterials.length > 0) {
-        this.navigateToMaterial(
-          prevMaterials[prevMaterials.length - 1],
-          prevFolder.id
-        );
-      }
-      currentMaterial = prevMaterials[prevMaterials.length - 1];
-    }
-
-    this.localLessonProgressService.setLastLesson(
-      this.classId(),
-      currentFolderId,
-      currentMaterial!.id
-    );
   }
 
   private navigateToMaterial(material: LessonMaterial, folderId: string) {
@@ -371,6 +382,72 @@ export class WatchLessonsComponent implements OnInit {
         folderId,
       },
     });
+  }
+
+  goToNextMaterial() {
+    const folders = this.filteredFoldersAndMaterials();
+    if (!folders || folders.length === 0) return;
+
+    const currentFolderId = this.folderId();
+    const currentFolderIndex = folders.findIndex(f => f.id === currentFolderId);
+    const currentFolder = folders.find(f => f.id === currentFolderId);
+    const currentMaterials = currentFolder ? currentFolder.lessonMaterials : [];
+    const currentIndex = this.getCurrentMaterialIndex(currentMaterials);
+
+    if (currentIndex < currentMaterials.length - 1) {
+      // Next material in current folder
+      this.navigateToMaterial(
+        currentMaterials[currentIndex + 1],
+        currentFolderId
+      );
+    } else if (currentFolderIndex < folders.length - 1) {
+      // First material in next folder
+      const nextFolder = folders[currentFolderIndex + 1];
+      const nextMaterials = nextFolder.lessonMaterials || [];
+      if (nextMaterials.length > 0) {
+        this.navigateToMaterial(nextMaterials[0], nextFolder.id);
+      }
+    }
+  }
+
+  goToPreviousMaterial() {
+    const folders = this.filteredFoldersAndMaterials();
+    if (!folders || folders.length === 0) return;
+
+    const currentFolderId = this.folderId();
+    const currentFolderIndex = folders.findIndex(f => f.id === currentFolderId);
+    const currentFolder = folders.find(f => f.id === currentFolderId);
+    const currentMaterials = currentFolder ? currentFolder.lessonMaterials : [];
+    const currentIndex = this.getCurrentMaterialIndex(currentMaterials);
+    let currentMaterial;
+
+    if (currentIndex > 0) {
+      // Previous material in current folder
+      this.navigateToMaterial(
+        currentMaterials[currentIndex - 1],
+        currentFolderId
+      );
+      currentMaterial = currentMaterials[currentIndex - 1];
+    } else if (currentFolderIndex > 0) {
+      // Last material in previous folder
+      const prevFolder = folders[currentFolderIndex - 1];
+      const prevMaterials = prevFolder.lessonMaterials || [];
+      if (prevMaterials.length > 0) {
+        this.navigateToMaterial(
+          prevMaterials[prevMaterials.length - 1],
+          prevFolder.id
+        );
+        currentMaterial = prevMaterials[prevMaterials.length - 1];
+      }
+    }
+
+    if (currentMaterial) {
+      this.localLessonProgressService.setLastLesson(
+        this.classId(),
+        currentFolderId,
+        currentMaterial.id
+      );
+    }
   }
 
   // --- Event Handlers for Footer ---

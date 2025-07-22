@@ -9,6 +9,9 @@ import { StatusCode } from '../../../constants/status-code.constant';
 
 import { type LessonMaterial } from '../../../models/entities/lesson-material.model';
 import { type GetLessonMaterialsRequest } from '../../../models/api/request/query/get-lesson-materials-request.model';
+import { LessonMaterialStatus } from '../../../models/enum/lesson-material.enum';
+import { EntityStatus } from '../../../models/enum/entity-status.enum';
+import { GetAllFoldersMaterialsResponse } from '../../../models/api/response/query/get-all-folders-materials-response.model';
 
 @Injectable({
   providedIn: 'root',
@@ -19,9 +22,15 @@ export class LessonMaterialsService {
 
   private readonly BASE_API_URL = environment.baseApiUrl;
   private readonly LESSON_MATERIALS_API_URL = `${this.BASE_API_URL}/lesson-materials`;
+  private readonly ALL_FOLDERS_AND_LESSON_MATERIALS_API_URL = `${this.BASE_API_URL}/classes`;
 
   private readonly lessonMaterialsSignal = signal<LessonMaterial[]>([]);
   lessonMaterials = this.lessonMaterialsSignal.asReadonly();
+
+  private readonly foldersLessonMaterialsSignal = signal<
+    GetAllFoldersMaterialsResponse[]
+  >([]);
+  foldersLessonMaterials = this.foldersLessonMaterialsSignal.asReadonly();
 
   private readonly lessonMaterialSignal = signal<LessonMaterial | null>(null);
   lessonMaterial = this.lessonMaterialSignal.asReadonly();
@@ -78,6 +87,28 @@ export class LessonMaterialsService {
       );
   }
 
+  getAllFoldersAndLessonMaterials(
+    classId: string
+  ): Observable<GetAllFoldersMaterialsResponse[] | null> {
+    return this.requestService
+      .get<GetAllFoldersMaterialsResponse[]>(
+        `${this.ALL_FOLDERS_AND_LESSON_MATERIALS_API_URL}/${classId}/lesson-materials
+`,
+        {
+          lessonStatus: LessonMaterialStatus.Approved,
+          status: EntityStatus.Active,
+        },
+        {
+          loadingKey: 'all-folders-and-materials',
+        }
+      )
+      .pipe(
+        tap(res => this.handleFoldersAndLessonMaterialsResponse(res)),
+        map(res => this.extractFoldersAndLessonMaterialsResponse(res)),
+        catchError(() => this.handleGetError())
+      );
+  }
+
   // ---------------------------
   //  Private Helper Functions
   // ---------------------------
@@ -109,6 +140,20 @@ export class LessonMaterialsService {
   }
 
   private extractDetailResponse(res: any): LessonMaterial | null {
+    return res.statusCode === StatusCode.SUCCESS ? res.data : null;
+  }
+
+  private handleFoldersAndLessonMaterialsResponse(res: any): void {
+    if (res.statusCode === StatusCode.SUCCESS && res.data) {
+      this.foldersLessonMaterialsSignal.set(res.data);
+    } else {
+      this.toastHandlingService.errorGeneral();
+    }
+  }
+
+  private extractFoldersAndLessonMaterialsResponse(
+    res: any
+  ): GetAllFoldersMaterialsResponse[] | null {
     return res.statusCode === StatusCode.SUCCESS ? res.data : null;
   }
 

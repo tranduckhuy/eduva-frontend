@@ -37,6 +37,7 @@ import { ToastHandlingService } from '../../../shared/services/core/toast/toast-
 })
 export class WatchLessonBadgeComponent {
   readonly classDetail = input.required<ClassModel>();
+  readonly totalDuration = input.required<string>();
 
   private readonly libIcon = inject(FaIconLibrary);
   private readonly folderService = inject(FolderManagementService);

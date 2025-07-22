@@ -6,9 +6,9 @@
     <div>
       <h3 class="leading-[1.5]">{{ index() + 1 }}. {{ folder().name }}</h3>
       <div class="text-xs font-normal text-[#808b9a]">
-        <span>{{ folder().countLessonMaterial }} bài</span>
+        <span>{{ folder().countLessonMaterials }} bài</span>
         <span class="relative bottom-[1px]"> | </span>
-        <span>23:13</span>
+        <span>{{ getFolderDurationFormatted(folder().lessonMaterials) }}</span>
       </div>
     </div>
     <span
@@ -24,13 +24,14 @@
       'block opacity-100': isExpanded(),
       'hidden opacity-0': !isExpanded(),
     }">
-    @for (material of materials(); track material.id) {
+    @for (material of folder().lessonMaterials; track material.id) {
       <div
         #materialItem
         (click)="chooseLessonMaterial(material.id)"
         class="relative flex cursor-pointer select-none items-center border-b border-b-[#e4eef0] px-[10px] py-2 text-sm font-normal tracking-[1px] text-[#2e3441] transition-colors duration-300 ease-out hover:bg-[#f2f9ff] dark:border-[#181d1e] dark:text-white dark:hover:bg-[#32353b]"
         [ngClass]="{
-          active: material.id === materialId(),
+          active:
+            material.id === materialId() && currentFolderId() === folder().id,
         }">
         <!-- ? Media Icon -->
         <div class="mr-[2px] flex w-6 items-center justify-center">
@@ -72,12 +73,6 @@
             {{ material.duration | secondsToMinutes }}
           </p>
         </div>
-        <!-- ? Completed Icon -->
-        <fa-icon
-          [icon]="'circle-check'"
-          class="ml-auto text-[#48bd79]"
-          pTooltip="Bài học đã hoàn thành"
-          tooltipPosition="left"></fa-icon>
       </div>
     }
   </div>

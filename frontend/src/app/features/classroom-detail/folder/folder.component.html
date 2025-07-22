@@ -10,10 +10,10 @@
         [class.pi-minus]="!isCollapsed()"></span>
       {{ index() + 1 }}. {{ folder().name }}
     </h5>
-    <p>{{ folder().countLessonMaterial }} bài học</p>
+    <p>{{ folder().countLessonMaterials }} bài học</p>
   </div>
   <div [class.hidden]="isCollapsed()">
-    @for (material of materials(); track $index) {
+    @for (material of folder().lessonMaterials; track $index) {
       <curriculum-lesson-item
         [material]="material"
         [classId]="classId()"

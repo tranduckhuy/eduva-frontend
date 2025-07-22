@@ -17,8 +17,6 @@ import { NewQuestionComponent } from './new-question/new-question.component';
 
 import { QuestionService } from './services/question.service';
 
-import { PAGE_SIZE } from '../../../shared/constants/common.constant';
-
 import { type Question } from '../../../shared/models/entities/question.model';
 import { type GetQuestionsRequest } from './model/request/query/get-questions-request.model';
 import { forkJoin } from 'rxjs';
