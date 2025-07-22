@@ -30,7 +30,8 @@
         (click)="chooseLessonMaterial(material.id)"
         class="relative flex cursor-pointer select-none items-center border-b border-b-[#e4eef0] px-[10px] py-2 text-sm font-normal tracking-[1px] text-[#2e3441] transition-colors duration-300 ease-out hover:bg-[#f2f9ff] dark:border-[#181d1e] dark:text-white dark:hover:bg-[#32353b]"
         [ngClass]="{
-          active: material.id === materialId(),
+          active:
+            material.id === materialId() && currentFolderId() === folder().id,
         }">
         <!-- ? Media Icon -->
         <div class="mr-[2px] flex w-6 items-center justify-center">
@@ -72,12 +73,6 @@
             {{ material.duration | secondsToMinutes }}
           </p>
         </div>
-        <!-- ? Completed Icon -->
-        <fa-icon
-          [icon]="'circle-check'"
-          class="ml-auto text-[#48bd79]"
-          pTooltip="Bài học đã hoàn thành"
-          tooltipPosition="left"></fa-icon>
       </div>
     }
   </div>
