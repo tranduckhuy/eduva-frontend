@@ -1,8 +1,12 @@
 <div>
-  @for (folder of folders(); track folder.id) {
+  @for (
+    folder of filteredFoldersAndMaterials();
+    track folder.id;
+    let i = $index
+  ) {
     <sidebar-track
       [folder]="folder"
-      [index]="$index"
+      [index]="getFolderIndex(folder.id)"
       [materialId]="materialId()"
       [currentFolderId]="currentFolderId()" />
   }

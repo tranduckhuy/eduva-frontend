@@ -5,4 +5,5 @@ export interface GetAllFoldersMaterialsResponse {
   name: string;
   countLessonMaterials: number;
   lessonMaterials: LessonMaterial[];
+  index?: number; // Original position in the unfiltered list
 }

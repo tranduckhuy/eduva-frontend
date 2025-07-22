@@ -80,8 +80,10 @@
   <div
     class="lesson-sidebar bg-white transition-colors duration-[0.25s] ease-in dark:bg-dark-400">
     <lesson-sidebar
+      (search)="onSearchTriggered($event)"
       [materialId]="materialIdFromRoute() || materialId()"
       (openChapterModal)="openChapterModal()"
+      [filteredFoldersAndMaterials]="filteredFoldersAndMaterials()"
       [isOpen]="isSidebarOpen()"
       [folderId]="folderId()" />
   </div>
