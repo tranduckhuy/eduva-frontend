@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  DestroyRef,
+  inject,
+} from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
@@ -13,6 +19,7 @@ import { NotificationsComponent } from './notifications/notifications.component'
 import { GlobalModalService } from '../../../../shared/services/layout/global-modal/global-modal.service';
 import { AuthModalComponent } from '../../../../shared/components/auth-modal/auth-modal.component';
 import { EnrollClassModalComponent } from './enroll-class-modal/enroll-class-modal.component';
+import { NotificationSocketService } from '../../../../shared/services/api/notification/notification-socket.service';
 
 @Component({
   selector: 'header-user-actions',
@@ -28,14 +35,28 @@ import { EnrollClassModalComponent } from './enroll-class-modal/enroll-class-mod
   styleUrl: './user-actions.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserActionsComponent {
+export class UserActionsComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
   private readonly authService = inject(AuthService);
   private readonly userService = inject(UserService);
   private readonly headerSubmenuService = inject(HeaderSubmenuService);
   private readonly globalModalService = inject(GlobalModalService);
+  private readonly notificationSocketService = inject(
+    NotificationSocketService
+  );
 
   isLoggedIn = this.authService.isLoggedIn;
   user = this.userService.currentUser;
+
+  constructor() {
+    this.destroyRef.onDestroy(() => {
+      this.notificationSocketService.disconnect();
+    });
+  }
+
+  ngOnInit(): void {
+    this.notificationSocketService.connect();
+  }
 
   get activeSubmenu() {
     return this.headerSubmenuService.getActiveSubmenuMenu();

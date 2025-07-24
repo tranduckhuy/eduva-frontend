@@ -16,13 +16,6 @@
         (ngModelChange)="searchTerm.set($event)"
         (keydown.enter)="search.emit(searchTerm())" />
     </div>
-    <!-- ? Chapter List -->
-    <!-- <div
-      class="ml-4 flex cursor-pointer select-none flex-col items-center justify-center text-[10px]"
-      (click)="onOpenChapterModalClick()">
-      <img src="./images/icons/book.svg" alt="Danh sách chương" />
-      <span class="mt-[6px] text-[#0093fc]">Danh sách chương</span>
-    </div> -->
   </div>
 
   <!-- ? Lesson Tracker -->
@@ -34,9 +27,9 @@
     } @else {
       <!-- ? Sidebar Tracks -->
       <sidebar-tracks
-        [filteredFoldersAndMaterials]="filteredFoldersAndMaterials()"
         [materialId]="materialId()"
-        [currentFolderId]="folderId()" />
+        [currentFolderId]="folderId()"
+        [filteredFoldersAndMaterials]="filteredFoldersAndMaterials()" />
     }
   </div>
 </div>

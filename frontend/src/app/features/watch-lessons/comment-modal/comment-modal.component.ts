@@ -11,15 +11,16 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { forkJoin } from 'rxjs';
+
+import { QuestionService } from './services/question.service';
+
 import { CommentListComponent } from './comment-list/comment-list.component';
 import { CommentContentComponent } from './comment-content/comment-content.component';
 import { NewQuestionComponent } from './new-question/new-question.component';
 
-import { QuestionService } from './services/question.service';
-
 import { type Question } from '../../../shared/models/entities/question.model';
 import { type GetQuestionsRequest } from './model/request/query/get-questions-request.model';
-import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'comment-modal',
@@ -40,6 +41,8 @@ export class CommentModalComponent implements OnInit {
   materialId = input.required<string>();
   materialTitle = input.required<string>();
   isOpen = input.required<boolean>();
+
+  questionIdFromNotification = input<string>('');
 
   closeCommentModal = output<void>();
 
@@ -63,14 +66,8 @@ export class CommentModalComponent implements OnInit {
   isLoading = signal<boolean>(false);
 
   // ? State management
-  fetchedIds = signal<Set<string>>(new Set());
+  hasFetchedOnce = signal(false);
   currentState = signal<'list' | 'content' | 'question'>('list');
-
-  private readonly shouldFetch = computed(() => {
-    const open = this.isOpen();
-    const id = this.materialId();
-    return open && !this.fetchedIds().has(id);
-  });
 
   paginationLessonPages = computed(() =>
     this.generatePaginationPages(
@@ -95,11 +92,16 @@ export class CommentModalComponent implements OnInit {
   );
 
   constructor() {
-    // effect(() => {
-    //   if (this.shouldFetch()) {
-    //     this.fetchAllQuestions();
-    //   }
-    // });
+    effect(
+      () => {
+        if (this.isOpen() && !this.hasFetchedOnce()) {
+          this.fetchAllQuestions();
+          this.hasFetchedOnce.set(true);
+        }
+      },
+      { allowSignalWrites: true }
+    );
+
     effect(
       () => {
         const totalPages = this.totalLessonQuestionPages();
@@ -115,6 +117,10 @@ export class CommentModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchAllQuestions();
+
+    if (this.questionIdFromNotification()) {
+      this.handleViewQuestion(this.questionIdFromNotification());
+    }
   }
 
   handleViewQuestion(questionId: string) {
@@ -131,14 +137,6 @@ export class CommentModalComponent implements OnInit {
 
   closeModal() {
     this.closeCommentModal.emit();
-  }
-
-  resetCommentCache(id: string) {
-    this.fetchedIds.update(set => {
-      const newSet = new Set(set);
-      newSet.delete(id);
-      return newSet;
-    });
   }
 
   onChangeLessonPage(page: number | string) {
@@ -209,7 +207,6 @@ export class CommentModalComponent implements OnInit {
       complete: () => {
         this.isLoading.set(false);
         this.currentState.set('list');
-        this.fetchedIds.update(set => new Set(set).add(this.materialId()));
       },
     });
   }

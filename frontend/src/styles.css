@@ -66,7 +66,7 @@
     --color-primary-800: #104878;
     --color-primary-900: #0b355a;
     --color-primary-950: #062538;
-    --color-primary: var(var(--color-primary-500));
+    --color-primary: var(--color-primary-500);
 
     /* === Light mode === */
     --color-bg: var(--color-white);
@@ -97,8 +97,6 @@
       linear-gradient(#5ebbff 0%, #a174ff 40%) border-box;
     --color-bg-icon-btn-gradient-icon: #fbfdff;
     --color-bg-hover-btn-gradient-icon: #e1effe;
-
-    --color-text-lesson-active: var(--color-white);
 
     --scroll-bar-thumb: #b5c3d7;
 
@@ -169,8 +167,6 @@
     --color-bg-btn-gradient-icon: #292d35;
     --color-bg-icon-btn-gradient-icon: var(--color-bg-btn-gradient-icon);
     --color-bg-hover-btn-gradient-icon: #2e4a8d;
-
-    --color-text-lesson-active: #808b9a;
 
     --scroll-bar-thumb: #ffffff26;
 
