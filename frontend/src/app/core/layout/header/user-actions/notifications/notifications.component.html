@@ -24,7 +24,9 @@
       @if (isLoading()) {
         <notification-skeleton />
       } @else {
-        <ul class="max-h-[70vh] overflow-y-auto overscroll-contain">
+        <ul
+          class="max-h-[70vh] overflow-y-auto overscroll-contain"
+          (scroll)="onScroll($event)">
           @for (notification of displayNotifications(); track notification.id) {
             <li
               [ngClass]="{
