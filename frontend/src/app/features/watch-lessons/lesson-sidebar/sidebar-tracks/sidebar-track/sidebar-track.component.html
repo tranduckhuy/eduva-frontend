@@ -37,39 +37,70 @@
         <div class="mr-[2px] flex w-6 items-center justify-center">
           @if (material.contentType === 0) {
             <fa-icon
-              [icon]="['far', 'circle-play']"
-              class="icon text-base text-[#808b9a]"
               pTooltip="Bài học video"
-              tooltipPosition="left"></fa-icon>
+              tooltipPosition="left"
+              class="icon text-base text-[#808b9a]"
+              [icon]="['far', 'circle-play']"
+              [ngClass]="{
+                '!text-white':
+                  material.id === materialId() &&
+                  currentFolderId() === folder().id,
+              }"></fa-icon>
           } @else if (material.contentType === 1) {
             <span
-              class="icon pi pi-volume-up text-[#808b9a]"
-              style="font-size: 16px"
               pTooltip="Bài học audio"
-              tooltipPosition="left"></span>
+              tooltipPosition="left"
+              style="font-size: 16px"
+              class="icon pi pi-volume-up text-[#808b9a]"
+              [ngClass]="{
+                '!text-white':
+                  material.id === materialId() &&
+                  currentFolderId() === folder().id,
+              }"></span>
           } @else if (material.contentType === 2) {
             <fa-icon
-              [icon]="['far', 'file-lines']"
-              class="icon text-base text-[#808b9a]"
               pTooltip="Tài liệu DOC"
-              tooltipPosition="left"></fa-icon>
+              tooltipPosition="left"
+              class="icon text-base text-[#808b9a]"
+              [icon]="['far', 'file-lines']"
+              [ngClass]="{
+                '!text-white':
+                  material.id === materialId() &&
+                  currentFolderId() === folder().id,
+              }"></fa-icon>
           } @else {
             <fa-icon
-              [icon]="['far', 'file-pdf']"
-              class="icon relative left-[2px] pr-1 text-base text-[#808b9a]"
               pTooltip="Tài liệu PDF"
-              tooltipPosition="left"></fa-icon>
+              tooltipPosition="left"
+              class="icon relative left-[2px] pr-1 text-base text-[#808b9a]"
+              [icon]="['far', 'file-pdf']"
+              [ngClass]="{
+                '!text-white':
+                  material.id === materialId() &&
+                  currentFolderId() === folder().id,
+              }"></fa-icon>
           }
         </div>
         <!-- ? Media Information -->
         <div class="ml-[6px]">
           <h4
             class="line-clamp-1"
+            tooltipPosition="top"
             [pTooltip]="material.title"
-            tooltipPosition="top">
+            [ngClass]="{
+              '!text-white':
+                material.id === materialId() &&
+                currentFolderId() === folder().id,
+            }">
             {{ index() + 1 }}.{{ $index + 1 }} {{ material.title }}
           </h4>
-          <p class="text-xs font-normal text-[#808b9a]">
+          <p
+            class="text-xs font-normal text-[#808b9a]"
+            [ngClass]="{
+              '!text-white':
+                material.id === materialId() &&
+                currentFolderId() === folder().id,
+            }">
             {{ material.duration | secondsToMinutes }}
           </p>
         </div>

@@ -1,5 +1,9 @@
 import { effect, EffectRef, Signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormGroup } from '@angular/forms';
+
+import { type NotificationPayloadMap } from '../../core/layout/header/user-actions/notifications/models/notification-payload-mapping.model';
+import { type NotificationModel } from '../models/entities/notification.model';
 
 /**
  * Checks whether the value and confirm value fields in a FormGroup do not match.
@@ -53,4 +57,46 @@ export function debounceSignal<T>(
     clearTimeout(timer);
     ref.destroy();
   };
+}
+
+/**
+ * Casts the raw payload of a notification to its specific typed payload
+ * based on the notification type, enabling type-safe access to payload properties.
+ *
+ * @template T - The specific key of the NotificationPayloadMap indicating the notification type.
+ * @param raw - The original notification object with an untyped payload.
+ * @returns A new notification object with the payload cast to its corresponding typed structure.
+ */
+export function mapNotificationPayload<T extends keyof NotificationPayloadMap>(
+  raw: NotificationModel<any>
+): NotificationModel<NotificationPayloadMap[T]> {
+  const typedPayload = raw.payload as NotificationPayloadMap[T];
+
+  return {
+    ...raw,
+    payload: typedPayload,
+  };
+}
+
+/**
+ * Removes specific query parameters from the current route URL without reloading the page.
+ *
+ * @param router - The Angular Router instance used to navigate.
+ * @param activatedRoute - The current ActivatedRoute instance for relative navigation.
+ * @param keys - An array of query parameter keys to be removed.
+ */
+export function clearQueryParams(
+  router: Router,
+  activatedRoute: ActivatedRoute,
+  keys: string[]
+): void {
+  const queryParams: Record<string, null> = {};
+  keys.forEach(key => (queryParams[key] = null));
+
+  router.navigate([], {
+    relativeTo: activatedRoute,
+    queryParams,
+    queryParamsHandling: 'merge',
+    replaceUrl: true,
+  });
 }

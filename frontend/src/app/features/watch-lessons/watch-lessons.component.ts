@@ -17,6 +17,8 @@ import { LoadingService } from '../../shared/services/core/loading/loading.servi
 import { LessonMaterialsService } from '../../shared/services/api/lesson-materials/lesson-materials.service';
 import { LessonProgressService } from '../../shared/services/api/local-lesson-progress/local-lesson-progress.service';
 
+import { clearQueryParams } from '../../shared/utils/util-functions';
+
 import { HeaderComponent } from '../../core/layout/header/header.component';
 import { VideoPlayerComponent } from './video-player/video-player.component';
 import { VideoDescriptionComponent } from './video-description/video-description.component';
@@ -31,7 +33,7 @@ import { PdfViewerComponent } from './pdf-viewer/pdf-viewer.component';
 import { PreviewLessonSkeletonComponent } from '../../shared/components/skeleton/view-lesson-skeleton/view-lesson-skeleton.component';
 
 import { type LessonMaterial } from '../../shared/models/entities/lesson-material.model';
-import { GetAllFoldersMaterialsResponse } from '../../shared/models/api/response/query/get-all-folders-materials-response.model';
+import { type GetAllFoldersMaterialsResponse } from '../../shared/models/api/response/query/get-all-folders-materials-response.model';
 
 @Component({
   selector: 'app-watch-lessons',
@@ -68,8 +70,34 @@ export class WatchLessonsComponent implements OnInit {
   material = this.lessonMaterialService.lessonMaterial;
   foldersAndLessonMaterials = this.lessonMaterialService.foldersLessonMaterials;
 
+  isLoadingGetMaterial = this.loadingService.is('get-material');
+  isLoadingGetAllFoldersAndMaterials = this.loadingService.is(
+    'all-folders-and-materials'
+  );
+
+  // Component inputs
+  readonly materialId = input.required<string>();
+
+  classId = signal<string>('');
+  folderId = signal<string>('');
+  materialIdFromRoute = signal<string>('');
+  questionIdFromNotification = signal<string>('');
+  currentFolderIndex = signal<number>(0);
+  currentFolder = signal<GetAllFoldersMaterialsResponse | undefined>(undefined);
+  searchTerm = signal<string>('');
+
+  // UI state
+  isSidebarOpen = signal<boolean>(false);
+  isChapterModalOpen = signal<boolean>(false);
+  isCommentModalOpen = signal<boolean>(false);
+
+  // Track loading state to prevent loops
+  private readonly isInitialLoad = signal<boolean>(true);
+  private readonly lastLoadedMaterialId = signal<string | null>(null);
+  private readonly lastLoadedFolderId = signal<string | null>(null);
+
   // Track if we are in search mode
-  private readonly isSearching = computed(() => {
+  isSearching = computed(() => {
     const term = this.searchTerm();
     return term !== null && term !== undefined && term.trim().length > 0;
   });
@@ -108,31 +136,6 @@ export class WatchLessonsComponent implements OnInit {
     }, []);
   });
 
-  isLoadingGetMaterial = this.loadingService.is('get-material');
-  isLoadingGetAllFoldersAndMaterials = this.loadingService.is(
-    'all-folders-and-materials'
-  );
-
-  // Component inputs
-  readonly materialId = input.required<string>();
-
-  classId = signal<string>('');
-  folderId = signal<string>('');
-  materialIdFromRoute = signal<string>('');
-  currentFolderIndex = signal<number>(0);
-  currentFolder = signal<GetAllFoldersMaterialsResponse | undefined>(undefined);
-  searchTerm = signal<string>('');
-
-  // UI state
-  isSidebarOpen = signal<boolean>(false);
-  isChapterModalOpen = signal<boolean>(false);
-  isCommentModalOpen = signal<boolean>(false);
-
-  // Track loading state to prevent loops
-  private readonly isInitialLoad = signal<boolean>(true);
-  private readonly lastLoadedMaterialId = signal<string | null>(null);
-  private readonly lastLoadedFolderId = signal<string | null>(null);
-
   // --- Computed signals for disabling buttons ---
   isFirstMaterial = computed(() => {
     const folders = this.filteredFoldersAndMaterials();
@@ -168,8 +171,6 @@ export class WatchLessonsComponent implements OnInit {
       currentIndex === currentMaterials.length - 1
     );
   });
-
-  // Cache for folder materials
 
   constructor() {
     // Watch for material ID and folder ID changes
@@ -239,6 +240,24 @@ export class WatchLessonsComponent implements OnInit {
           this.isInitialLoad.set(false);
         }
       });
+
+    this.activatedRoute.queryParamMap.subscribe(params => {
+      const questionId = params.get('questionId');
+      const isLinkedFromNotification = params.has('isLinkedFromNotification');
+
+      if (isLinkedFromNotification) {
+        this.isCommentModalOpen.set(true);
+
+        if (questionId) {
+          this.questionIdFromNotification.set(questionId);
+        }
+
+        clearQueryParams(this.router, this.activatedRoute, [
+          'isLinkedFromNotification',
+          'questionId',
+        ]);
+      }
+    });
   }
 
   // Public methods
