@@ -426,11 +426,13 @@ describe('AuthService', () => {
 
   describe('private methods', () => {
     it('should handle token storage correctly', () => {
+      const fixedNow = 1721845795574; // or any fixed ms timestamp
+      vi.spyOn(Date, 'now').mockReturnValue(fixedNow);
+
       const expiresDate = new Date(
-        Date.now() + mockAuthTokenResponse.expiresIn * 1000
+        fixedNow + mockAuthTokenResponse.expiresIn * 1000
       ).toISOString();
 
-      // Access private method through public method
       service.handleLoginSuccess(mockAuthTokenResponse);
 
       expect(jwtService.setAccessToken).toHaveBeenCalledWith(
@@ -440,6 +442,8 @@ describe('AuthService', () => {
         mockAuthTokenResponse.refreshToken
       );
       expect(jwtService.setExpiresDate).toHaveBeenCalledWith(expiresDate);
+
+      (Date.now as any).mockRestore(); // Clean up
     });
 
     it('should clear session correctly', async () => {

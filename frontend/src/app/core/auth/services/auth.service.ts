@@ -133,6 +133,12 @@ export class AuthService {
     this.handleAfterLogin();
   }
 
+  clearSession(): void {
+    this.jwtService.clearAll();
+    this.userService.clearCurrentUser();
+    this.isLoggedInSignal.set(false);
+  }
+
   // ---------------------------
   //  Private Helper Functions
   // ---------------------------
@@ -220,11 +226,5 @@ export class AuthService {
         description: 'Vui lòng kiểm tra email của bạn để hoàn tất xác minh.',
       })
       .subscribe();
-  }
-
-  private clearSession(): void {
-    this.jwtService.clearAll();
-    this.userService.clearCurrentUser();
-    this.isLoggedInSignal.set(false);
   }
 }

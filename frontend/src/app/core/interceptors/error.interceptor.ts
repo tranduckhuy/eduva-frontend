@@ -1,11 +1,13 @@
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { catchError, throwError } from 'rxjs';
 
 import { ConfirmationService } from 'primeng/api';
 
 import { JwtService } from '../auth/services/jwt.service';
+import { AuthService } from '../auth/services/auth.service';
 import { UserService } from '../../shared/services/api/user/user.service';
 import { GlobalModalService } from '../../shared/services/layout/global-modal/global-modal.service';
 
@@ -14,11 +16,10 @@ import { BYPASS_AUTH_ERROR } from '../../shared/tokens/context/http-context.toke
 
 import { AuthModalComponent } from '../../shared/components/auth-modal/auth-modal.component';
 
-let hasShownUnauthorizedDialog = false;
-
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const jwtService = inject(JwtService);
+  const authService = inject(AuthService);
   const userService = inject(UserService);
   const globalModalService = inject(GlobalModalService);
   const confirmationService = inject(ConfirmationService);
@@ -28,21 +29,24 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const handleServerError = () => router.navigateByUrl('/500');
 
   const handleUnauthorized = () => {
-    if (hasShownUnauthorizedDialog) return;
-
-    hasShownUnauthorizedDialog = true;
-
     globalModalService.close();
     confirmationService.confirm({
-      message: 'Vui lòng đăng nhập lại.',
       header: 'Phiên đã hết hạn',
+      message: 'Vui lòng đăng nhập lại.',
       closable: false,
       rejectVisible: false,
       acceptButtonProps: { label: 'Đồng ý' },
       accept: () => {
-        jwtService.clearAll();
-        userService.clearCurrentUser();
-        globalModalService.open(AuthModalComponent);
+        // ? Clear user profile cache
+        authService.clearSession();
+
+        // ? Close modal
+        globalModalService.close();
+
+        // ? Close Submenus
+        window.dispatchEvent(new Event('close-all-submenus'));
+
+        router.navigateByUrl('/home', { replaceUrl: true });
       },
     });
   };
