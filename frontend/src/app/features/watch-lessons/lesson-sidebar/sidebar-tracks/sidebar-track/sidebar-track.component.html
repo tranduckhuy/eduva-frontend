@@ -6,9 +6,9 @@
     <div>
       <h3 class="leading-[1.5]">{{ index() + 1 }}. {{ folder().name }}</h3>
       <div class="text-xs font-normal text-[#808b9a]">
-        <span>{{ folder().countLessonMaterial }} bài</span>
+        <span>{{ folder().countLessonMaterials }} bài</span>
         <span class="relative bottom-[1px]"> | </span>
-        <span>23:13</span>
+        <span>{{ getFolderDurationFormatted(folder().lessonMaterials) }}</span>
       </div>
     </div>
     <span
@@ -19,65 +19,91 @@
 
   <!-- ? Media List -->
   <div
-    class="animate-fadeIn bg-white dark:bg-dark-400 dark:text-white dark:hover:bg-[#32353b]"
+    class="animate-fadeIn bg-white dark:bg-dark-400 dark:text-white"
     [ngClass]="{
       'block opacity-100': isExpanded(),
       'hidden opacity-0': !isExpanded(),
     }">
-    @for (material of materials(); track material.id) {
+    @for (material of folder().lessonMaterials; track material.id) {
       <div
         #materialItem
         (click)="chooseLessonMaterial(material.id)"
         class="relative flex cursor-pointer select-none items-center border-b border-b-[#e4eef0] px-[10px] py-2 text-sm font-normal tracking-[1px] text-[#2e3441] transition-colors duration-300 ease-out hover:bg-[#f2f9ff] dark:border-[#181d1e] dark:text-white dark:hover:bg-[#32353b]"
         [ngClass]="{
-          active: material.id === materialId(),
+          active:
+            material.id === materialId() && currentFolderId() === folder().id,
         }">
         <!-- ? Media Icon -->
         <div class="mr-[2px] flex w-6 items-center justify-center">
           @if (material.contentType === 0) {
             <fa-icon
-              [icon]="['far', 'circle-play']"
-              class="icon text-base text-[#808b9a]"
               pTooltip="Bài học video"
-              tooltipPosition="left"></fa-icon>
+              tooltipPosition="left"
+              class="icon text-base text-[#808b9a]"
+              [icon]="['far', 'circle-play']"
+              [ngClass]="{
+                '!text-white':
+                  material.id === materialId() &&
+                  currentFolderId() === folder().id,
+              }"></fa-icon>
           } @else if (material.contentType === 1) {
             <span
-              class="icon pi pi-volume-up text-[#808b9a]"
-              style="font-size: 16px"
               pTooltip="Bài học audio"
-              tooltipPosition="left"></span>
+              tooltipPosition="left"
+              style="font-size: 16px"
+              class="icon pi pi-volume-up text-[#808b9a]"
+              [ngClass]="{
+                '!text-white':
+                  material.id === materialId() &&
+                  currentFolderId() === folder().id,
+              }"></span>
           } @else if (material.contentType === 2) {
             <fa-icon
-              [icon]="['far', 'file-lines']"
-              class="icon text-base text-[#808b9a]"
               pTooltip="Tài liệu DOC"
-              tooltipPosition="left"></fa-icon>
+              tooltipPosition="left"
+              class="icon text-base text-[#808b9a]"
+              [icon]="['far', 'file-lines']"
+              [ngClass]="{
+                '!text-white':
+                  material.id === materialId() &&
+                  currentFolderId() === folder().id,
+              }"></fa-icon>
           } @else {
             <fa-icon
-              [icon]="['far', 'file-pdf']"
-              class="icon relative left-[2px] pr-1 text-base text-[#808b9a]"
               pTooltip="Tài liệu PDF"
-              tooltipPosition="left"></fa-icon>
+              tooltipPosition="left"
+              class="icon relative left-[2px] pr-1 text-base text-[#808b9a]"
+              [icon]="['far', 'file-pdf']"
+              [ngClass]="{
+                '!text-white':
+                  material.id === materialId() &&
+                  currentFolderId() === folder().id,
+              }"></fa-icon>
           }
         </div>
         <!-- ? Media Information -->
         <div class="ml-[6px]">
           <h4
             class="line-clamp-1"
+            tooltipPosition="top"
             [pTooltip]="material.title"
-            tooltipPosition="top">
+            [ngClass]="{
+              '!text-white':
+                material.id === materialId() &&
+                currentFolderId() === folder().id,
+            }">
             {{ index() + 1 }}.{{ $index + 1 }} {{ material.title }}
           </h4>
-          <p class="text-xs font-normal text-[#808b9a]">
+          <p
+            class="text-xs font-normal text-[#808b9a]"
+            [ngClass]="{
+              '!text-white':
+                material.id === materialId() &&
+                currentFolderId() === folder().id,
+            }">
             {{ material.duration | secondsToMinutes }}
           </p>
         </div>
-        <!-- ? Completed Icon -->
-        <fa-icon
-          [icon]="'circle-check'"
-          class="ml-auto text-[#48bd79]"
-          pTooltip="Bài học đã hoàn thành"
-          tooltipPosition="left"></fa-icon>
       </div>
     }
   </div>

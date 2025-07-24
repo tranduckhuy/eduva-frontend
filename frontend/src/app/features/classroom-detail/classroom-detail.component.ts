@@ -1,29 +1,26 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   input,
   OnInit,
 } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { Skeleton } from 'primeng/skeleton';
 
 import { FolderComponent } from './folder/folder.component';
 import { WatchLessonBadgeComponent } from './watch-lesson-badge/watch-lesson-badge.component';
-import { FolderManagementService } from '../../shared/services/api/folder/folder-management.service';
 import { LoadingService } from '../../shared/services/core/loading/loading.service';
-import { GetFoldersRequest } from '../../shared/models/api/request/query/get-folders-request.model';
-import { FolderOwnerType } from '../../shared/models/enum/folder-owner-type.enum';
 import { ClassService } from '../../shared/services/api/class/class.service';
 import { ClassDetailFolderSkeletonComponent } from '../../shared/components/skeleton/class-detail-folder-skeleton/class-detail-folder-skeleton.component';
 import { UserService } from '../../shared/services/api/user/user.service';
-import { Skeleton } from 'primeng/skeleton';
 import { WatchLessonCardSkeletonComponent } from '../../shared/components/skeleton/watch-lesson-card-skeleton/watch-lesson-card-skeleton.component';
 import { ToastHandlingService } from '../../shared/services/core/toast/toast-handling.service';
 import { LessonProgressService } from '../../shared/services/api/local-lesson-progress/local-lesson-progress.service';
-import { Router } from '@angular/router';
-import { GetLessonMaterialsRequest } from '../../shared/models/api/request/query/get-lesson-materials-request.model';
 import { LessonMaterialsService } from '../../shared/services/api/lesson-materials/lesson-materials.service';
-import { Folder } from '../../shared/models/entities/folder.model';
-import { LessonMaterialStatus } from '../../shared/models/enum/lesson-material.enum';
+import { GetAllFoldersMaterialsResponse } from '../../shared/models/api/response/query/get-all-folders-materials-response.model';
 
 @Component({
   selector: 'app-classroom-detail',
@@ -40,7 +37,6 @@ import { LessonMaterialStatus } from '../../shared/models/enum/lesson-material.e
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ClassroomDetailComponent implements OnInit {
-  private readonly folderService = inject(FolderManagementService);
   private readonly loadingService = inject(LoadingService);
   private readonly classService = inject(ClassService);
   private readonly userService = inject(UserService);
@@ -53,20 +49,47 @@ export class ClassroomDetailComponent implements OnInit {
 
   isLoadingGetFolders = this.loadingService.is('get-folders');
   isLoadingGetClass = this.loadingService.is('get-class');
+  isLoadingGetFoldersMaterials = this.loadingService.is(
+    'all-folders-and-materials'
+  );
 
-  folders = this.folderService.folderList;
+  foldersAndLessonMaterials = this.materialService.foldersLessonMaterials;
   classDetail = this.classService.classModel;
   currentUser = this.userService.currentUser;
 
+  totalDuration = computed(() =>
+    this.getTotalDurationFormatted(this.foldersAndLessonMaterials())
+  );
+
   ngOnInit(): void {
-    const getFoldersRequest: GetFoldersRequest = {
-      ownerType: FolderOwnerType.Class,
-    };
-    this.folderService
-      .getClassFolders(getFoldersRequest, this.classId())
+    this.materialService
+      .getAllFoldersAndLessonMaterials(this.classId())
       .subscribe();
 
     this.classService.getStudentClassById(this.classId()).subscribe();
+  }
+
+  getTotalDurationFormatted(data: GetAllFoldersMaterialsResponse[]): string {
+    let totalDuration = 0;
+
+    data.forEach(group => {
+      group.lessonMaterials.forEach(material => {
+        totalDuration += material.duration || 0;
+      });
+    });
+
+    const hours = Math.floor(totalDuration / 3600);
+    const minutes = Math.floor((totalDuration % 3600) / 60);
+
+    if (hours >= 1) {
+      const paddedHours = String(hours).padStart(2, '0');
+      const paddedMinutes = String(minutes).padStart(2, '0');
+      return `${paddedHours} giờ ${paddedMinutes} phút`;
+    } else if (minutes > 0) {
+      return `${minutes} phút`;
+    } else {
+      return `0 phút`;
+    }
   }
 
   redirect() {
@@ -88,31 +111,20 @@ export class ClassroomDetailComponent implements OnInit {
           },
         });
       } else {
-        const folderHasLesson = this.folders().find(
-          (folder: Folder) => folder.countLessonMaterial > 0
+        const folderHasLesson = this.foldersAndLessonMaterials().find(
+          (folder: GetAllFoldersMaterialsResponse) =>
+            folder.countLessonMaterials > 0
         );
-
         if (!folderHasLesson) return;
-
-        const getLessonMaterialsRequest: GetLessonMaterialsRequest = {
-          classId: this.classId(),
-          folderId: folderHasLesson?.id,
-          lessonStatus: LessonMaterialStatus.Approved,
-          sortBy: 'lastmodifiedat',
-          sortDirection: 'asc',
-        };
-        this.materialService
-          .getLessonMaterialsInFolder(getLessonMaterialsRequest)
-          .subscribe({
-            next: res => {
-              this.router.navigate(['/learn', res![0].id], {
-                queryParams: {
-                  classId: this.classId(),
-                  folderId: folderHasLesson?.id,
-                },
-              });
+        this.router.navigate(
+          ['/learn', folderHasLesson.lessonMaterials[0].id],
+          {
+            queryParams: {
+              classId: this.classId(),
+              folderId: folderHasLesson?.id,
             },
-          });
+          }
+        );
       }
     }
   }

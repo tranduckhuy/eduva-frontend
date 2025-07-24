@@ -92,7 +92,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       const isForbidden = error.status === 403;
       const isServerError = error.status === 0 || error.status >= 500;
 
-      const statusCode = (error.error as any)?.statusCode;
+      const statusCode = error.error?.statusCode;
 
       if (isServerError) {
         handleServerError();

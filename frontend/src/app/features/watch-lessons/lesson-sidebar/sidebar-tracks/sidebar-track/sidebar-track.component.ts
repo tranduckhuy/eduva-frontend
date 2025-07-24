@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  OnInit,
   inject,
   signal,
   input,
@@ -28,15 +27,11 @@ import {
   faFilePdf,
 } from '@fortawesome/free-regular-svg-icons';
 
-import { Folder } from '../../../../../shared/models/entities/folder.model';
-import { LessonMaterialsService } from '../../../../../shared/services/api/lesson-materials/lesson-materials.service';
 import { LessonMaterial } from '../../../../../shared/models/entities/lesson-material.model';
 import { LoadingService } from '../../../../../shared/services/core/loading/loading.service';
-import { GetLessonMaterialsRequest } from '../../../../../shared/models/api/request/query/get-lesson-materials-request.model';
-import { LessonMaterialStatus } from '../../../../../shared/models/enum/lesson-material.enum';
-import { ToastHandlingService } from '../../../../../shared/services/core/toast/toast-handling.service';
 import { SecondsToMinutesPipe } from '../../../../../shared/pipes/seconds-to-minutes.pipe';
 import { LessonProgressService } from '../../../../../shared/services/api/local-lesson-progress/local-lesson-progress.service';
+import { GetAllFoldersMaterialsResponse } from '../../../../../shared/models/api/response/query/get-all-folders-materials-response.model';
 
 @Component({
   selector: 'sidebar-track',
@@ -52,28 +47,32 @@ import { LessonProgressService } from '../../../../../shared/services/api/local-
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidebarTrackComponent implements AfterViewInit, OnChanges {
-  private readonly materialService = inject(LessonMaterialsService);
   private readonly loadingService = inject(LoadingService);
-  private readonly toastHandlingService = inject(ToastHandlingService);
   private readonly localLessonProgressService = inject(LessonProgressService);
   private readonly router = inject(Router);
   private readonly libIcon = inject(FaIconLibrary);
 
   isLoadingGetMaterials = this.loadingService.is('get-materials');
 
-  readonly folder = input.required<Folder>();
+  readonly folder = input.required<GetAllFoldersMaterialsResponse>();
   readonly index = input.required<number>();
   readonly materialId = input.required<string>();
   readonly currentFolderId = input.required<string>();
 
   materials = signal<LessonMaterial[]>([]);
   isExpanded = signal<boolean>(false);
-
-  @ViewChildren('materialItem') materialItems!: QueryList<ElementRef>;
+  private readonly classId = signal<string>('');
 
   constructor() {
     this.libIcon.addIcons(faCircleCheck, faFileLines, faCirclePlay, faFilePdf);
+
+    // Get classId from query params
+    const queryParams = new URLSearchParams(window.location.search);
+    this.classId.set(queryParams.get('classId') ?? '');
+    this.libIcon.addIcons(faCircleCheck, faFileLines, faCirclePlay, faFilePdf);
   }
+
+  @ViewChildren('materialItem') materialItems!: QueryList<ElementRef>;
 
   ngAfterViewInit() {
     this.scrollToActiveMaterial();
@@ -85,7 +84,6 @@ export class SidebarTrackComponent implements AfterViewInit, OnChanges {
       this.currentFolderId() === this.folder().id
     ) {
       this.isExpanded.set(true);
-      this.getMaterials();
     }
     if (changes['materialId']) {
       this.scrollToActiveMaterial();
@@ -97,44 +95,43 @@ export class SidebarTrackComponent implements AfterViewInit, OnChanges {
       this.isExpanded.set(false);
     } else {
       this.isExpanded.set(true);
-      this.getMaterials();
     }
   }
 
   chooseLessonMaterial(materialId: string) {
     this.localLessonProgressService.setLastLesson(
-      this.folder().classId!,
+      this.classId(),
       this.folder().id,
       materialId
     );
     this.router.navigate(['/learn', materialId], {
       queryParams: {
-        classId: this.folder().classId,
+        classId: this.classId(),
         folderId: this.folder().id,
       },
     });
   }
 
-  private getMaterials() {
-    const getLessonMaterialsRequest: GetLessonMaterialsRequest = {
-      classId: this.folder().classId,
-      folderId: this.folder().id,
-      lessonStatus: LessonMaterialStatus.Approved,
-      sortBy: 'lastmodifiedat',
-      sortDirection: 'asc',
-    };
+  getFolderDurationFormatted = (materials: LessonMaterial[]) => {
+    let totalDuration = 0;
 
-    this.materialService
-      .getLessonMaterialsInFolder(getLessonMaterialsRequest)
-      .subscribe({
-        next: res => {
-          this.materials.set(res ?? []);
-        },
-        error: _ => {
-          this.toastHandlingService.errorGeneral();
-        },
-      });
-  }
+    materials.forEach(material => {
+      totalDuration += material.duration || 0;
+    });
+
+    const hours = Math.floor(totalDuration / 3600);
+    const minutes = Math.floor((totalDuration % 3600) / 60);
+
+    if (hours >= 1) {
+      const paddedHours = String(hours).padStart(2, '0');
+      const paddedMinutes = String(minutes).padStart(2, '0');
+      return `${paddedHours} giờ ${paddedMinutes} phút`;
+    } else if (minutes > 0) {
+      return `${minutes} phút`;
+    } else {
+      return `0 phút`;
+    }
+  };
 
   private scrollToActiveMaterial() {
     setTimeout(() => {
