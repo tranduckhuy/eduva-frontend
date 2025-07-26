@@ -9,8 +9,11 @@ import {
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
+import { finalize } from 'rxjs';
+
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { SubmenuDirective } from '../../../../../shared/directives/submenu/submenu.directive';
 import { SafeHtmlPipe } from '../../../../../shared/pipes/safe-html.pipe';
@@ -41,6 +44,7 @@ interface FormattedNotification {
     SafeHtmlPipe,
     ButtonModule,
     TooltipModule,
+    ProgressSpinnerModule,
     NotificationSkeletonComponent,
   ],
   templateUrl: './notifications.component.html',
@@ -61,6 +65,7 @@ export class NotificationsComponent {
   currentPage = signal<number>(0);
   pageSize = signal<number>(20);
   hasMore = signal<boolean>(true);
+  isFetchMore = signal<boolean>(false);
 
   displayNotifications = computed(() =>
     this.notifications().map(n => {
@@ -90,32 +95,36 @@ export class NotificationsComponent {
 
   onScroll(event: Event) {
     const target = event.target as HTMLElement;
-    const threshold = 100;
-    if (
-      target.scrollHeight - target.scrollTop - target.clientHeight <
-      threshold
-    ) {
+
+    const isAtBottom =
+      Math.ceil(target.scrollTop + target.clientHeight) >= target.scrollHeight;
+
+    if (isAtBottom) {
       this.loadMore();
     }
   }
 
   loadMore() {
-    if (!this.hasMore() || this.isLoading()) return;
+    if (!this.hasMore() || this.isLoading() || this.isFetchMore()) return;
+
+    this.isFetchMore.set(true);
 
     const nextPage = this.currentPage() + 1;
-
     const request: GetNotificationsRequest = {
       pageIndex: nextPage,
       pageSize: this.pageSize(),
     };
-    this.notificationService.getNotifications(request).subscribe({
-      next: res => {
-        this.currentPage.set(nextPage);
-        if (!res || res.length < this.pageSize()) {
-          this.hasMore.set(false);
-        }
-      },
-    });
+    this.notificationService
+      .getNotifications(request)
+      .pipe(finalize(() => this.isFetchMore.set(false)))
+      .subscribe({
+        next: res => {
+          this.currentPage.set(nextPage);
+          if (!res || res.length < this.pageSize()) {
+            this.hasMore.set(false);
+          }
+        },
+      });
   }
 
   markAsRead(notification: NotificationWithTypedPayload) {

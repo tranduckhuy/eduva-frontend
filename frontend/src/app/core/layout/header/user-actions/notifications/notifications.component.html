@@ -1,16 +1,16 @@
 <div
-  class="absolute right-0 top-12 z-[10]"
+  class="absolute right-0 top-12 z-[10] xs:-right-[15%] xs:translate-x-[15%]"
   clickOutsideSubmenu
   (clickOutside)="clickOutside.emit()">
   <div
     class="animate-fadeInForward rounded-[10px] bg-white shadow-filterBox transition-all duration-300 ease-in-out will-change-[opacity,transform] dark:bg-dark-500 dark:shadow-filterBoxDark">
     <!-- ? Notifications -->
-    <div class="w-[350px] pb-2">
+    <div class="w-[350px] pb-2 xs:w-[300px]">
       <div
         class="sticky top-0 flex items-center justify-between rounded-tl-[10px] rounded-tr-[10px] bg-white px-5 py-4 dark:bg-dark-500">
-        <h5 class="flex items-center gap-1 text-lg font-semibold">
+        <h5 class="flex items-center gap-1 text-lg font-semibold xs:text-sm">
           Thông báo
-          <span class="text-sm font-medium tracking-wider">
+          <span class="text-sm font-medium tracking-wider xs:text-sm">
             ({{ displayTotalNotification() }})
           </span>
         </h5>
@@ -18,14 +18,14 @@
           label="Đánh dấu đã đọc"
           variant="text"
           size="small"
-          styleClass="!text-primary hover:!text-primary-600 dark:hover:!text-primary hover:!bg-primary-50 dark:hover:!bg-[color-mix(in_srgb,#55aaef,transparent_96%)]"
+          styleClass="!text-primary hover:!text-primary-600 dark:hover:!text-primary hover:!bg-primary-50 dark:hover:!bg-[color-mix(in_srgb,#55aaef,transparent_96%)] xs:!px-4"
           (onClick)="markAllAsRead()" />
       </div>
-      @if (isLoading()) {
+      @if (isLoading() && currentPage() === 0) {
         <notification-skeleton />
       } @else {
         <ul
-          class="max-h-[70vh] overflow-y-auto overscroll-contain"
+          class="max-h-[70vh] overflow-y-auto overscroll-contain sm:max-h-[65vh]"
           (scroll)="onScroll($event)">
           @for (notification of displayNotifications(); track notification.id) {
             <li
@@ -52,7 +52,7 @@
                   class="size-12 rounded-full bg-white dark:bg-dark-500" />
                 <div class="flex flex-col gap-1">
                   <p
-                    class="line-clamp-2 max-w-[220px]"
+                    class="ml-2 line-clamp-2 max-w-[220px] text-left"
                     tooltipPosition="bottom"
                     [pTooltip]="notification.formatted.tooltip"
                     [innerHTML]="notification.formatted.message | safeHtml"></p>
@@ -70,6 +70,23 @@
                   </span>
                 }
               </button>
+            </li>
+          }
+          @if (isLoading()) {
+            <li class="flex w-full items-center justify-center pb-2 pt-3">
+              <p-progressspinner [style]="{ width: '30px', height: '30px' }" />
+            </li>
+          }
+          @if (displayNotifications().length <= 0 && !isLoading()) {
+            <li
+              class="flex size-full min-h-[40vh] flex-col items-center justify-center gap-1">
+              <img
+                src="./images/icons/notification-empty.svg"
+                alt="Chưa có thông báo nào"
+                class="size-14" />
+              <p class="dark:text-dark-100 text-gray-500">
+                Chưa có thông báo nào
+              </p>
             </li>
           }
         </ul>
