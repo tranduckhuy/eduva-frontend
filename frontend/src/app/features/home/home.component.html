@@ -53,7 +53,7 @@
           </div>
         } @else {
           <div
-            class="classrooms__list grid grid-cols-4 gap-x-6 gap-y-10 xl:grid-cols-3 xl:gap-x-4 xl:gap-y-6 lg:gap-x-3 md:grid-cols-2">
+            class="classrooms__list grid grid-cols-4 gap-x-6 gap-y-10 xl:grid-cols-3 xl:gap-x-4 xl:gap-y-6 lg:gap-x-3 md:grid-cols-2 xs:grid-cols-1">
             @for (classroom of classes(); track classroom.id) {
               <div>
                 <classroom-card [classroom]="classroom" />

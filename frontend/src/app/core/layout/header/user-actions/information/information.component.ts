@@ -11,6 +11,9 @@ import { SubmenuDirective } from '../../../../../shared/directives/submenu/subme
 import { AuthService } from '../../../../auth/services/auth.service';
 import { UserService } from '../../../../../shared/services/api/user/user.service';
 import { ThemeService } from '../../../../../shared/services/core/theme/theme.service';
+import { GlobalModalService } from '../../../../../shared/services/layout/global-modal/global-modal.service';
+
+import { EnrollClassModalComponent } from '../enroll-class-modal/enroll-class-modal.component';
 
 @Component({
   selector: 'header-user-information',
@@ -24,6 +27,7 @@ export class InformationComponent {
   private readonly authService = inject(AuthService);
   private readonly userService = inject(UserService);
   private readonly themeService = inject(ThemeService);
+  private readonly globalModalService = inject(GlobalModalService);
 
   readonly clickOutside = output<void>();
 
@@ -38,5 +42,9 @@ export class InformationComponent {
 
   logout() {
     this.authService.logout().subscribe();
+  }
+
+  openEnrollModal() {
+    this.globalModalService.open(EnrollClassModalComponent);
   }
 }
