@@ -21,6 +21,11 @@
             "customWebpackConfig": {
               "path": "./custom-webpack.config.ts"
             },
+            "allowedCommonJsDependencies": [
+              "plyr",
+              "fuzzysort",
+              "color-convert"
+            ],
             "outputPath": "dist/eduva-student",
             "index": "src/index.html",
             "main": "src/main.ts",

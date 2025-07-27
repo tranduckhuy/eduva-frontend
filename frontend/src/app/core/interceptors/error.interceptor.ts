@@ -40,8 +40,8 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         // ? Clear user profile cache
         authService.clearSession();
 
-        // ? Close modal
-        globalModalService.close();
+        // ? Open Auth Modal
+        globalModalService.open(AuthModalComponent);
 
         // ? Close Submenus
         window.dispatchEvent(new Event('close-all-submenus'));
@@ -64,9 +64,16 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       rejectVisible: false,
       closable: false,
       accept: () => {
-        jwtService.clearAll();
-        userService.clearCurrentUser();
-        globalModalService.open(AuthModalComponent);
+        // ? Clear user profile cache
+        authService.clearSession();
+
+        // ? Close Modal
+        globalModalService.close();
+
+        // ? Close Submenus
+        window.dispatchEvent(new Event('close-all-submenus'));
+
+        router.navigateByUrl('/home', { replaceUrl: true });
       },
     });
   };
@@ -82,9 +89,16 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       rejectVisible: false,
       closable: false,
       accept: () => {
-        jwtService.clearAll();
-        userService.clearCurrentUser();
-        globalModalService.open(AuthModalComponent);
+        // ? Clear user profile cache
+        authService.clearSession();
+
+        // ? Close Modal
+        globalModalService.close();
+
+        // ? Close Submenus
+        window.dispatchEvent(new Event('close-all-submenus'));
+
+        router.navigateByUrl('/home', { replaceUrl: true });
       },
     });
   };
