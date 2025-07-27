@@ -7,10 +7,12 @@ import {
   output,
   signal,
 } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
 import { UserService } from '../../../../shared/services/api/user/user.service';
 import { LoadingService } from '../../../../shared/services/core/loading/loading.service';
+
+import { noSpecialCharactersOrNumbersValidator } from '../../../../shared/utils/form-validators';
 
 import { FormControlComponent } from '../../../../shared/components/form-control/form-control.component';
 import { ButtonComponent } from '../../../../shared/components/button/button.component';
@@ -34,7 +36,12 @@ export class UpdateNameFormComponent {
 
   nameChanged = output<void>();
 
-  form = this.fb.group({ fullName: [''] });
+  form = this.fb.group({
+    fullName: [
+      '',
+      [Validators.required, noSpecialCharactersOrNumbersValidator],
+    ],
+  });
 
   isLoading = this.loadingService.isLoading;
 
