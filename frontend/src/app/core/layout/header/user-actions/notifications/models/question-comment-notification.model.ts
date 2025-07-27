@@ -1,6 +1,7 @@
 import { QuestionActionType } from '../../../../../../shared/models/enum/question-action-type.enum';
 
 export interface QuestionCommentNotification {
+  userNotificationId: string;
   commentId: string;
   questionId: string;
   title: string;

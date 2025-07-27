@@ -1,17 +1,19 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { Observable, catchError, map, of, tap } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
+
+import { Observable, catchError, map, tap, throwError } from 'rxjs';
 
 import { environment } from '../../../../../environments/environment';
 import { RequestService } from '../../core/request/request.service';
 import { ToastHandlingService } from '../../core/toast/toast-handling.service';
 
 import { StatusCode } from '../../../constants/status-code.constant';
+import { EntityStatus } from '../../../models/enum/entity-status.enum';
+import { LessonMaterialStatus } from '../../../models/enum/lesson-material.enum';
 
 import { type LessonMaterial } from '../../../models/entities/lesson-material.model';
 import { type GetLessonMaterialsRequest } from '../../../models/api/request/query/get-lesson-materials-request.model';
-import { LessonMaterialStatus } from '../../../models/enum/lesson-material.enum';
-import { EntityStatus } from '../../../models/enum/entity-status.enum';
-import { GetAllFoldersMaterialsResponse } from '../../../models/api/response/query/get-all-folders-materials-response.model';
+import { type GetAllFoldersMaterialsResponse } from '../../../models/api/response/query/get-all-folders-materials-response.model';
 
 @Injectable({
   providedIn: 'root',
@@ -49,7 +51,7 @@ export class LessonMaterialsService {
       .pipe(
         tap(res => this.handleGetResponse(res)),
         map(res => this.extractLessonMaterialsFromResponse(res)),
-        catchError(() => this.handleGetError())
+        catchError((err: HttpErrorResponse) => this.handleGetError(err))
       );
   }
 
@@ -67,7 +69,7 @@ export class LessonMaterialsService {
       .pipe(
         tap(res => this.handleGetResponse(res)),
         map(res => this.extractLessonMaterialsFromResponse(res)),
-        catchError(() => this.handleGetError())
+        catchError((err: HttpErrorResponse) => this.handleGetError(err))
       );
   }
 
@@ -83,7 +85,7 @@ export class LessonMaterialsService {
       .pipe(
         tap(res => this.handleDetailResponse(res)),
         map(res => this.extractDetailResponse(res)),
-        catchError(() => this.handleError())
+        catchError((err: HttpErrorResponse) => this.handleError(err))
       );
   }
 
@@ -105,7 +107,7 @@ export class LessonMaterialsService {
       .pipe(
         tap(res => this.handleFoldersAndLessonMaterialsResponse(res)),
         map(res => this.extractFoldersAndLessonMaterialsResponse(res)),
-        catchError(() => this.handleGetError())
+        catchError((err: HttpErrorResponse) => this.handleGetError(err))
       );
   }
 
@@ -157,13 +159,36 @@ export class LessonMaterialsService {
     return res.statusCode === StatusCode.SUCCESS ? res.data : null;
   }
 
-  private handleError(): Observable<null> {
-    this.toastHandlingService.errorGeneral();
-    return of(null);
+  private handleError(err: HttpErrorResponse): Observable<null> {
+    switch (err.error?.statusCode) {
+      case StatusCode.SCHOOL_SUBSCRIPTION_NOT_FOUND:
+        this.toastHandlingService.warn(
+          'Thiếu gói đăng ký',
+          'Trường học của bạn hiện chưa đăng ký gói sử dụng hệ thống.'
+        );
+        break;
+      case StatusCode.LESSON_MATERIAL_NOT_ACTIVE:
+        this.toastHandlingService.warn(
+          'Bài giảng đã bị xóa',
+          'Bài giảng đã bị giáo viên sở hữu chuyển vào thùng rác hoặc xóa.'
+        );
+        break;
+      case StatusCode.STUDENT_NOT_ENROLLED_IN_CLASS_WITH_MATERIAL:
+        this.toastHandlingService.warn(
+          'Chưa tham gia lớp học',
+          'Bạn chưa tham gia lớp học có chứa tài liệu này.'
+        );
+        window.history.back();
+        break;
+      default:
+        this.toastHandlingService.errorGeneral();
+    }
+
+    return throwError(() => err);
   }
 
-  private handleGetError(): Observable<null> {
+  private handleGetError(err: HttpErrorResponse): Observable<null> {
     this.toastHandlingService.errorGeneral();
-    return of(null);
+    return throwError(() => err);
   }
 }
