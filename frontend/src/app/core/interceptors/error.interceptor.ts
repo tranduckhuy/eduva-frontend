@@ -6,9 +6,7 @@ import { catchError, throwError } from 'rxjs';
 
 import { ConfirmationService } from 'primeng/api';
 
-import { JwtService } from '../auth/services/jwt.service';
 import { AuthService } from '../auth/services/auth.service';
-import { UserService } from '../../shared/services/api/user/user.service';
 import { GlobalModalService } from '../../shared/services/layout/global-modal/global-modal.service';
 
 import { StatusCode } from '../../shared/constants/status-code.constant';
@@ -18,9 +16,7 @@ import { AuthModalComponent } from '../../shared/components/auth-modal/auth-moda
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
-  const jwtService = inject(JwtService);
   const authService = inject(AuthService);
-  const userService = inject(UserService);
   const globalModalService = inject(GlobalModalService);
   const confirmationService = inject(ConfirmationService);
 
