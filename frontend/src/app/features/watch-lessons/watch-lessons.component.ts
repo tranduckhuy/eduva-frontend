@@ -13,6 +13,8 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
+import { DrawerModule } from 'primeng/drawer';
+
 import { LoadingService } from '../../shared/services/core/loading/loading.service';
 import { LessonMaterialsService } from '../../shared/services/api/lesson-materials/lesson-materials.service';
 import { LessonProgressService } from '../../shared/services/api/local-lesson-progress/local-lesson-progress.service';
@@ -25,7 +27,6 @@ import { VideoDescriptionComponent } from './video-description/video-description
 import { LessonFeedbackComponent } from './lesson-feedback/lesson-feedback.component';
 import { LessonSidebarComponent } from './lesson-sidebar/lesson-sidebar.component';
 import { LessonFooterComponent } from './lesson-footer/lesson-footer.component';
-import { ChapterModalComponent } from './chapter-modal/chapter-modal.component';
 import { CommentModalComponent } from './comment-modal/comment-modal.component';
 import { AudioListenerComponent } from './audio-listener/audio-listener.component';
 import { DocViewerComponent } from './doc-viewer/doc-viewer.component';
@@ -40,13 +41,13 @@ import { type GetAllFoldersMaterialsResponse } from '../../shared/models/api/res
   standalone: true,
   imports: [
     CommonModule,
+    DrawerModule,
     HeaderComponent,
     VideoPlayerComponent,
     VideoDescriptionComponent,
     LessonFeedbackComponent,
     LessonSidebarComponent,
     LessonFooterComponent,
-    ChapterModalComponent,
     CommentModalComponent,
     AudioListenerComponent,
     DocViewerComponent,
@@ -88,8 +89,8 @@ export class WatchLessonsComponent implements OnInit {
 
   // UI state
   isSidebarOpen = signal<boolean>(false);
-  isChapterModalOpen = signal<boolean>(false);
-  isCommentModalOpen = signal<boolean>(false);
+  isChapterModalOpen = false;
+  isCommentModalOpen = false;
 
   // Track loading state to prevent loops
   private readonly isInitialLoad = signal<boolean>(true);
@@ -246,7 +247,7 @@ export class WatchLessonsComponent implements OnInit {
       const isLinkedFromNotification = params.has('isLinkedFromNotification');
 
       if (isLinkedFromNotification) {
-        this.isCommentModalOpen.set(true);
+        this.isCommentModalOpen = true;
 
         if (questionId) {
           this.questionIdFromNotification.set(questionId);
@@ -262,19 +263,19 @@ export class WatchLessonsComponent implements OnInit {
 
   // Public methods
   openChapterModal(): void {
-    this.isChapterModalOpen.set(true);
+    this.isChapterModalOpen = true;
   }
 
   closeChapterModal(): void {
-    this.isChapterModalOpen.set(false);
+    this.isChapterModalOpen = false;
   }
 
   openCommentModal(): void {
-    this.isCommentModalOpen.set(true);
+    this.isCommentModalOpen = true;
   }
 
   closeCommentModal(): void {
-    this.isCommentModalOpen.set(false);
+    this.isCommentModalOpen = false;
   }
 
   formatUpdateDate(input?: string | null): string {
@@ -287,8 +288,6 @@ export class WatchLessonsComponent implements OnInit {
   }
 
   onSearchTriggered(term: string): void {
-    console.log('Search triggered with term:', term);
-
     this.searchTerm.set(term);
   }
 

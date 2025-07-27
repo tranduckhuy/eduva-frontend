@@ -6,9 +6,7 @@ import { catchError, throwError } from 'rxjs';
 
 import { ConfirmationService } from 'primeng/api';
 
-import { JwtService } from '../auth/services/jwt.service';
 import { AuthService } from '../auth/services/auth.service';
-import { UserService } from '../../shared/services/api/user/user.service';
 import { GlobalModalService } from '../../shared/services/layout/global-modal/global-modal.service';
 
 import { StatusCode } from '../../shared/constants/status-code.constant';
@@ -18,9 +16,7 @@ import { AuthModalComponent } from '../../shared/components/auth-modal/auth-moda
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
-  const jwtService = inject(JwtService);
   const authService = inject(AuthService);
-  const userService = inject(UserService);
   const globalModalService = inject(GlobalModalService);
   const confirmationService = inject(ConfirmationService);
 
@@ -40,8 +36,8 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         // ? Clear user profile cache
         authService.clearSession();
 
-        // ? Close modal
-        globalModalService.close();
+        // ? Open Auth Modal
+        globalModalService.open(AuthModalComponent);
 
         // ? Close Submenus
         window.dispatchEvent(new Event('close-all-submenus'));
@@ -64,9 +60,16 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       rejectVisible: false,
       closable: false,
       accept: () => {
-        jwtService.clearAll();
-        userService.clearCurrentUser();
-        globalModalService.open(AuthModalComponent);
+        // ? Clear user profile cache
+        authService.clearSession();
+
+        // ? Close Modal
+        globalModalService.close();
+
+        // ? Close Submenus
+        window.dispatchEvent(new Event('close-all-submenus'));
+
+        router.navigateByUrl('/home', { replaceUrl: true });
       },
     });
   };
@@ -82,9 +85,16 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       rejectVisible: false,
       closable: false,
       accept: () => {
-        jwtService.clearAll();
-        userService.clearCurrentUser();
-        globalModalService.open(AuthModalComponent);
+        // ? Clear user profile cache
+        authService.clearSession();
+
+        // ? Close Modal
+        globalModalService.close();
+
+        // ? Close Submenus
+        window.dispatchEvent(new Event('close-all-submenus'));
+
+        router.navigateByUrl('/home', { replaceUrl: true });
       },
     });
   };

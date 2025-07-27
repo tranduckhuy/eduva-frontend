@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   OnInit,
   computed,
   effect,
@@ -36,6 +37,7 @@ import { type GetQuestionsRequest } from './model/request/query/get-questions-re
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CommentModalComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
   private readonly questionService = inject(QuestionService);
 
   materialId = input.required<string>();
@@ -44,7 +46,8 @@ export class CommentModalComponent implements OnInit {
 
   questionIdFromNotification = input<string>('');
 
-  closeCommentModal = output<void>();
+  closeCommentDrawer = output<void>();
+  clearQuestionIdNotification = output<void>();
 
   // ? Question list
   lessonQuestions = signal<Question[]>([]);
@@ -113,12 +116,15 @@ export class CommentModalComponent implements OnInit {
       },
       { allowSignalWrites: true }
     );
+
+    this.destroyRef.onDestroy(() => this.hasFetchedOnce.set(false));
   }
 
   ngOnInit(): void {
-    this.fetchAllQuestions();
-
     if (this.questionIdFromNotification()) {
+      this.fetchAllQuestions();
+      this.hasFetchedOnce.set(true);
+
       this.handleViewQuestion(this.questionIdFromNotification());
     }
   }
@@ -136,7 +142,7 @@ export class CommentModalComponent implements OnInit {
   }
 
   closeModal() {
-    this.closeCommentModal.emit();
+    this.closeCommentDrawer.emit();
   }
 
   onChangeLessonPage(page: number | string) {
@@ -206,7 +212,9 @@ export class CommentModalComponent implements OnInit {
       },
       complete: () => {
         this.isLoading.set(false);
-        this.currentState.set('list');
+        if (this.currentState() !== 'content') {
+          this.currentState.set('list');
+        }
       },
     });
   }
@@ -261,6 +269,10 @@ export class CommentModalComponent implements OnInit {
         if (question) {
           this.question.set(question);
           this.currentState.set('content');
+        }
+
+        if (this.questionIdFromNotification()) {
+          this.clearQuestionIdNotification.emit();
         }
       },
       complete: () => this.isLoading.set(false),
