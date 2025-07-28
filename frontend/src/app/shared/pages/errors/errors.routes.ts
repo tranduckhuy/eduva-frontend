@@ -22,4 +22,11 @@ export const errorRoutes: Routes = [
         mod => mod.UnauthorizedErrorComponent
       ),
   },
+  {
+    path: 'coming-soon',
+    loadComponent: () =>
+      import('../coming-soon/coming-soon.component').then(
+        mod => mod.ComingSoonComponent
+      ),
+  },
 ];
