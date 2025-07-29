@@ -19,13 +19,12 @@ import {
 import { Router } from '@angular/router';
 
 import { ClassModel } from '../../../shared/models/entities/class.model';
-import { FolderManagementService } from '../../../shared/services/api/folder/folder-management.service';
 import { LessonProgressService } from '../../../shared/services/api/local-lesson-progress/local-lesson-progress.service';
-import { Folder } from '../../../shared/models/entities/folder.model';
 import { LessonMaterialsService } from '../../../shared/services/api/lesson-materials/lesson-materials.service';
 import { GetLessonMaterialsRequest } from '../../../shared/models/api/request/query/get-lesson-materials-request.model';
 import { LoadingService } from '../../../shared/services/core/loading/loading.service';
 import { ToastHandlingService } from '../../../shared/services/core/toast/toast-handling.service';
+import { GetAllFoldersMaterialsResponse } from '../../../shared/models/api/response/query/get-all-folders-materials-response.model';
 
 @Component({
   selector: 'classroom-watch-lesson-badge',
@@ -40,14 +39,13 @@ export class WatchLessonBadgeComponent {
   readonly totalDuration = input.required<string>();
 
   private readonly libIcon = inject(FaIconLibrary);
-  private readonly folderService = inject(FolderManagementService);
   private readonly loadingService = inject(LoadingService);
   private readonly materialService = inject(LessonMaterialsService);
   private readonly toastService = inject(ToastHandlingService);
   private readonly localLessonProgressService = inject(LessonProgressService);
   private readonly router = inject(Router);
 
-  folders = this.folderService.folderList;
+  folders = this.materialService.foldersLessonMaterials;
   loadingGetMaterials = this.loadingService.is('get-materials');
 
   constructor() {
@@ -80,9 +78,11 @@ export class WatchLessonBadgeComponent {
         });
       } else {
         const folderHasLesson = this.folders().find(
-          (folder: Folder) => folder.countLessonMaterial > 0
+          (folder: GetAllFoldersMaterialsResponse) =>
+            folder.countLessonMaterials > 0
         );
 
+        console.log('folder has lesson:', this.folders(), folderHasLesson);
         if (!folderHasLesson) return;
 
         const getLessonMaterialsRequest: GetLessonMaterialsRequest = {
