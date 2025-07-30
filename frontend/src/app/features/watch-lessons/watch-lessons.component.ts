@@ -110,7 +110,7 @@ export class WatchLessonsComponent implements OnInit {
 
     // Return original list if no folders or no search
     if (!folders || folders.length === 0 || !this.isSearching()) {
-      return folders || [];
+      return folders ?? [];
     }
 
     // Create a new array to avoid mutating the original
@@ -124,7 +124,7 @@ export class WatchLessonsComponent implements OnInit {
           material =>
             material.title?.toLowerCase().includes(searchTerm) ||
             material.description?.toLowerCase().includes(searchTerm)
-        ) || [];
+        ) ?? [];
 
       // Only include folder if it has matching materials
       if (filteredMaterials.length > 0) {
@@ -147,7 +147,7 @@ export class WatchLessonsComponent implements OnInit {
     if (currentFolderIndex === -1) return true;
 
     const currentFolder = folders[currentFolderIndex];
-    const currentMaterials = currentFolder.lessonMaterials || [];
+    const currentMaterials = currentFolder.lessonMaterials ?? [];
     const currentIndex = this.getCurrentMaterialIndex(currentMaterials);
 
     // First material in first folder
@@ -163,7 +163,7 @@ export class WatchLessonsComponent implements OnInit {
     if (currentFolderIndex === -1) return true;
 
     const currentFolder = folders[currentFolderIndex];
-    const currentMaterials = currentFolder.lessonMaterials || [];
+    const currentMaterials = currentFolder.lessonMaterials ?? [];
     const currentIndex = this.getCurrentMaterialIndex(currentMaterials);
 
     // Last material in last folder
@@ -175,28 +175,33 @@ export class WatchLessonsComponent implements OnInit {
 
   constructor() {
     // Watch for material ID and folder ID changes
-    effect(() => {
-      const currentMaterialId = this.materialId();
-      const currentFolderId = this.folderId();
+    effect(
+      () => {
+        const currentMaterialId = this.materialId();
+        const currentFolderId = this.folderId();
 
-      // Skip on initial load
-      if (this.isInitialLoad()) return;
+        // Skip on initial load
+        if (this.isInitialLoad()) return;
 
-      // Check if material ID changed
-      if (
-        currentMaterialId &&
-        currentMaterialId !== this.lastLoadedMaterialId()
-      ) {
-        this.lastLoadedMaterialId.set(currentMaterialId);
-        this.getMaterial();
+        // Check if material ID changed
+        if (
+          currentMaterialId &&
+          currentMaterialId !== this.lastLoadedMaterialId()
+        ) {
+          this.lastLoadedMaterialId.set(currentMaterialId);
+          this.getMaterial();
+        }
+
+        // Check if folder ID changed
+        if (currentFolderId && currentFolderId !== this.lastLoadedFolderId()) {
+          this.lastLoadedFolderId.set(currentFolderId);
+          this.getCurrentFolder();
+        }
+      },
+      {
+        allowSignalWrites: true,
       }
-
-      // Check if folder ID changed
-      if (currentFolderId && currentFolderId !== this.lastLoadedFolderId()) {
-        this.lastLoadedFolderId.set(currentFolderId);
-        this.getCurrentFolder();
-      }
-    });
+    );
   }
 
   ngOnInit(): void {
@@ -293,7 +298,7 @@ export class WatchLessonsComponent implements OnInit {
 
   // Private methods
   private loadData(): void {
-    const currentMaterialId = this.materialIdFromRoute() || this.materialId();
+    const currentMaterialId = this.materialIdFromRoute() ?? this.materialId();
     const currentFolderId = this.folderId();
     const currentClassId = this.classId();
 
@@ -315,7 +320,7 @@ export class WatchLessonsComponent implements OnInit {
   }
 
   private getMaterial(): void {
-    const materialIdToUse = this.materialIdFromRoute() || this.materialId();
+    const materialIdToUse = this.materialIdFromRoute() ?? this.materialId();
 
     if (!materialIdToUse) {
       console.warn('Cannot fetch material: materialId is empty');
@@ -389,7 +394,7 @@ export class WatchLessonsComponent implements OnInit {
   }
 
   private getCurrentMaterialIndex(materials: LessonMaterial[]): number {
-    const materialIdToUse = this.materialIdFromRoute() || this.materialId();
+    const materialIdToUse = this.materialIdFromRoute() ?? this.materialId();
     return materials.findIndex(m => m.id === materialIdToUse);
   }
 
@@ -402,6 +407,19 @@ export class WatchLessonsComponent implements OnInit {
     });
   }
 
+  private findNextNonEmptyFolder(
+    folders: GetAllFoldersMaterialsResponse[],
+    currentIndex: number
+  ): number | null {
+    for (let i = currentIndex + 1; i < folders.length; i++) {
+      const folder = folders[i];
+      if (folder.lessonMaterials && folder.lessonMaterials.length > 0) {
+        return i;
+      }
+    }
+    return null;
+  }
+
   goToNextMaterial() {
     const folders = this.filteredFoldersAndMaterials();
     if (!folders || folders.length === 0) return;
@@ -409,23 +427,45 @@ export class WatchLessonsComponent implements OnInit {
     const currentFolderId = this.folderId();
     const currentFolderIndex = folders.findIndex(f => f.id === currentFolderId);
     const currentFolder = folders.find(f => f.id === currentFolderId);
-    const currentMaterials = currentFolder ? currentFolder.lessonMaterials : [];
+    const currentMaterials = currentFolder
+      ? (currentFolder.lessonMaterials ?? [])
+      : [];
     const currentIndex = this.getCurrentMaterialIndex(currentMaterials);
 
+    // Check if there's a next material in the current folder
     if (currentIndex < currentMaterials.length - 1) {
-      // Next material in current folder
       this.navigateToMaterial(
         currentMaterials[currentIndex + 1],
         currentFolderId
       );
-    } else if (currentFolderIndex < folders.length - 1) {
-      // First material in next folder
-      const nextFolder = folders[currentFolderIndex + 1];
-      const nextMaterials = nextFolder.lessonMaterials || [];
+      return;
+    }
+
+    // Look for the next non-empty folder
+    const nextFolderIndex = this.findNextNonEmptyFolder(
+      folders,
+      currentFolderIndex
+    );
+    if (nextFolderIndex !== null) {
+      const nextFolder = folders[nextFolderIndex];
+      const nextMaterials = nextFolder.lessonMaterials ?? [];
       if (nextMaterials.length > 0) {
         this.navigateToMaterial(nextMaterials[0], nextFolder.id);
       }
     }
+  }
+
+  private findPreviousNonEmptyFolder(
+    folders: GetAllFoldersMaterialsResponse[],
+    currentIndex: number
+  ): number | null {
+    for (let i = currentIndex - 1; i >= 0; i--) {
+      const folder = folders[i];
+      if (folder.lessonMaterials && folder.lessonMaterials.length > 0) {
+        return i;
+      }
+    }
+    return null;
   }
 
   goToPreviousMaterial() {
@@ -435,27 +475,30 @@ export class WatchLessonsComponent implements OnInit {
     const currentFolderId = this.folderId();
     const currentFolderIndex = folders.findIndex(f => f.id === currentFolderId);
     const currentFolder = folders.find(f => f.id === currentFolderId);
-    const currentMaterials = currentFolder ? currentFolder.lessonMaterials : [];
+    const currentMaterials = currentFolder
+      ? (currentFolder.lessonMaterials ?? [])
+      : [];
     const currentIndex = this.getCurrentMaterialIndex(currentMaterials);
     let currentMaterial;
 
+    // Check if there's a previous material in the current folder
     if (currentIndex > 0) {
-      // Previous material in current folder
-      this.navigateToMaterial(
-        currentMaterials[currentIndex - 1],
-        currentFolderId
-      );
       currentMaterial = currentMaterials[currentIndex - 1];
-    } else if (currentFolderIndex > 0) {
-      // Last material in previous folder
-      const prevFolder = folders[currentFolderIndex - 1];
-      const prevMaterials = prevFolder.lessonMaterials || [];
+      this.navigateToMaterial(currentMaterial, currentFolderId);
+      return;
+    }
+
+    // Look for the previous non-empty folder
+    const prevFolderIndex = this.findPreviousNonEmptyFolder(
+      folders,
+      currentFolderIndex
+    );
+    if (prevFolderIndex !== null) {
+      const prevFolder = folders[prevFolderIndex];
+      const prevMaterials = prevFolder.lessonMaterials ?? [];
       if (prevMaterials.length > 0) {
-        this.navigateToMaterial(
-          prevMaterials[prevMaterials.length - 1],
-          prevFolder.id
-        );
         currentMaterial = prevMaterials[prevMaterials.length - 1];
+        this.navigateToMaterial(currentMaterial, prevFolder.id);
       }
     }
 
