@@ -434,9 +434,8 @@ export class VideoPlayerComponent {
             this.hasStarted.set(true);
             this.isPaused.set(false);
           })
-          .catch(error => {
+          .catch(() => {
             // Autoplay was prevented, keep paused state
-            console.log('Autoplay prevented:', error);
             this.isPaused.set(true);
           });
       }
@@ -444,7 +443,6 @@ export class VideoPlayerComponent {
 
     video.onerror = () => {
       this.isLoading.set(false);
-      console.error('Error loading video');
     };
 
     video.load();

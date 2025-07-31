@@ -100,7 +100,11 @@ export function noOnlySpacesValidator(
 ): ValidationErrors | null {
   const value = control.value;
 
-  if (typeof value === 'string' && value.trim().length === 0) {
+  if (
+    typeof value === 'string' &&
+    value.length > 0 &&
+    value.trim().length === 0
+  ) {
     return { onlySpaces: true };
   }
 
