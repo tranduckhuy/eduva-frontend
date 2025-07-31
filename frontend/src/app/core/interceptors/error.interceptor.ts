@@ -10,7 +10,10 @@ import { AuthService } from '../auth/services/auth.service';
 import { GlobalModalService } from '../../shared/services/layout/global-modal/global-modal.service';
 
 import { StatusCode } from '../../shared/constants/status-code.constant';
-import { BYPASS_AUTH_ERROR } from '../../shared/tokens/context/http-context.token';
+import {
+  BYPASS_AUTH_ERROR,
+  BYPASS_NOT_FOUND_ERROR,
+} from '../../shared/tokens/context/http-context.token';
 
 import { AuthModalComponent } from '../../shared/components/auth-modal/auth-modal.component';
 
@@ -21,8 +24,13 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const confirmationService = inject(ConfirmationService);
 
   const isByPass = req.context.get(BYPASS_AUTH_ERROR);
+  const isByPassNotFound = req.context.get(BYPASS_NOT_FOUND_ERROR);
 
   const handleServerError = () => router.navigateByUrl('/500');
+
+  const handleForbidden = () => router.navigateByUrl('/403');
+
+  const handleNotFound = () => router.navigateByUrl('/404');
 
   const handleUnauthorized = () => {
     globalModalService.close();
@@ -46,8 +54,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       },
     });
   };
-
-  const handleForbidden = () => router.navigateByUrl('/403');
 
   const handleMissingSchoolOrSubscription = () => {
     confirmationService.confirm({
@@ -104,6 +110,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       const isUnauthorized = error.status === 401;
       const isPaymentRequired = error.status === 402;
       const isForbidden = error.status === 403;
+      const isNotFound = error.status === 404;
       const isServerError = error.status === 0 || error.status >= 500;
 
       const statusCode = error.error?.statusCode;
@@ -133,6 +140,11 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         } else {
           handleForbidden();
         }
+        return throwError(() => error);
+      }
+
+      if (isNotFound && !isByPassNotFound) {
+        handleNotFound();
         return throwError(() => error);
       }
 

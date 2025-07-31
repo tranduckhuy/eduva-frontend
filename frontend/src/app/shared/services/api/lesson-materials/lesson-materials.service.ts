@@ -172,6 +172,7 @@ export class LessonMaterialsService {
           'Bài giảng đã bị xóa',
           'Bài giảng đã bị giáo viên sở hữu chuyển vào thùng rác hoặc xóa.'
         );
+        window.history.back();
         break;
       case StatusCode.STUDENT_NOT_ENROLLED_IN_CLASS_WITH_MATERIAL:
         this.toastHandlingService.warn(

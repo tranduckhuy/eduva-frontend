@@ -1,10 +1,9 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  HostListener,
   input,
   output,
-  EventEmitter,
-  Output,
 } from '@angular/core';
 
 import { TooltipModule } from 'primeng/tooltip';
@@ -28,13 +27,21 @@ export class LessonFooterComponent {
 
   toggleSidebar = output<void>();
   openCommentModal = output<void>();
-  @Output() nextMaterial = new EventEmitter<void>();
-  @Output() prevMaterial = new EventEmitter<void>();
+  nextMaterial = output<void>();
+  prevMaterial = output<void>();
 
   get iconSrc(): string {
     return this.isSidebarOpen()
       ? './images/icons/arrow-right-bar.svg'
       : './images/icons/three-bars.svg';
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent): void {
+    if (event.ctrlKey && event.key === 'Enter') {
+      event.preventDefault();
+      this.onNextMaterialClick();
+    }
   }
 
   onToggleSidebarClick() {

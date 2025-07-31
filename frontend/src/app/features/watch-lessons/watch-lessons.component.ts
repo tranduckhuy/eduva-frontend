@@ -317,40 +317,27 @@ export class WatchLessonsComponent implements OnInit {
   private getMaterial(): void {
     const materialIdToUse = this.materialIdFromRoute() || this.materialId();
 
-    if (!materialIdToUse) {
-      console.warn('Cannot fetch material: materialId is empty');
-      return;
-    }
+    if (!materialIdToUse) return;
 
-    if (this.isLoadingGetMaterial()) {
-      return;
-    }
+    if (this.isLoadingGetMaterial()) return;
 
     this.lessonMaterialService
       .fetchLessonMaterialById(materialIdToUse)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          // Material state is managed by the service
           // After getting material, ensure folders are loaded
           if (!this.foldersAndLessonMaterials().length) {
             this.getFoldersAndMaterials();
           }
         },
-        error: error => {
-          console.error('Error fetching material:', error);
-        },
       });
   }
   private getFoldersAndMaterials(): void {
-    if (!this.classId()) {
-      return;
-    }
+    if (!this.classId()) return;
 
     // Prevent multiple simultaneous calls
-    if (this.isLoadingGetAllFoldersAndMaterials()) {
-      return;
-    }
+    if (this.isLoadingGetAllFoldersAndMaterials()) return;
 
     this.lessonMaterialService
       .getAllFoldersAndLessonMaterials(this.classId())
