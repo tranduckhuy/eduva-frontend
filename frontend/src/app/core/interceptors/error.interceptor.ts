@@ -13,6 +13,7 @@ import { StatusCode } from '../../shared/constants/status-code.constant';
 import {
   BYPASS_AUTH_ERROR,
   BYPASS_NOT_FOUND_ERROR,
+  BYPASS_PAYMENT_ERROR,
 } from '../../shared/tokens/context/http-context.token';
 
 import { AuthModalComponent } from '../../shared/components/auth-modal/auth-modal.component';
@@ -23,7 +24,8 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const globalModalService = inject(GlobalModalService);
   const confirmationService = inject(ConfirmationService);
 
-  const isByPass = req.context.get(BYPASS_AUTH_ERROR);
+  const isByPassAuth = req.context.get(BYPASS_AUTH_ERROR);
+  const isByPassPayment = req.context.get(BYPASS_PAYMENT_ERROR);
   const isByPassNotFound = req.context.get(BYPASS_NOT_FOUND_ERROR);
 
   const handleServerError = () => router.navigateByUrl('/500');
@@ -113,29 +115,31 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       const isNotFound = error.status === 404;
       const isServerError = error.status === 0 || error.status >= 500;
 
-      const statusCode = error.error?.statusCode;
+      const errorStatusCode = error.error?.statusCode;
 
       if (isServerError) {
         handleServerError();
         return throwError(() => error);
       }
 
-      if (isUnauthorized && !isByPass) {
+      if (isUnauthorized && !isByPassAuth) {
         handleUnauthorized();
         return throwError(() => error);
       }
 
-      if (isPaymentRequired) {
+      if (!errorStatusCode) return throwError(() => error);
+
+      if (
+        isPaymentRequired &&
+        !isByPassPayment &&
+        errorStatusCode === StatusCode.SUBSCRIPTION_EXPIRED_WITH_DATA_LOSS_RISK
+      ) {
         handleSubscriptionExpired();
         return throwError(() => error);
       }
 
-      if (isForbidden && !isByPass) {
-        if (
-          statusCode &&
-          (statusCode === StatusCode.SCHOOL_AND_SUBSCRIPTION_REQUIRED ||
-            statusCode === StatusCode.SCHOOL_SUBSCRIPTION_NOT_FOUND)
-        ) {
+      if (isForbidden && !isByPassAuth) {
+        if (errorStatusCode === StatusCode.SCHOOL_AND_SUBSCRIPTION_REQUIRED) {
           handleMissingSchoolOrSubscription();
         } else {
           handleForbidden();
@@ -144,7 +148,11 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       }
 
       if (isNotFound && !isByPassNotFound) {
-        handleNotFound();
+        if (errorStatusCode === StatusCode.SCHOOL_SUBSCRIPTION_NOT_FOUND) {
+          handleMissingSchoolOrSubscription();
+        } else {
+          handleNotFound();
+        }
         return throwError(() => error);
       }
 
