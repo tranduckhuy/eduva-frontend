@@ -1,6 +1,6 @@
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationBehaviorOptions } from '@angular/router';
 
 import { catchError, throwError } from 'rxjs';
 
@@ -18,6 +18,27 @@ import {
 
 import { AuthModalComponent } from '../../shared/components/auth-modal/auth-modal.component';
 
+const showConfirmation = (
+  confirmationService: ConfirmationService,
+  options: {
+    header: string;
+    message: string;
+    acceptLabel: string;
+    onAccept: () => void;
+    closable?: boolean;
+    rejectVisible?: boolean;
+  }
+) => {
+  confirmationService.confirm({
+    header: options.header,
+    message: options.message,
+    closable: options.closable ?? false,
+    rejectVisible: options.rejectVisible ?? false,
+    acceptButtonProps: { label: options.acceptLabel },
+    accept: options.onAccept,
+  });
+};
+
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const authService = inject(AuthService);
@@ -28,130 +49,96 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const isByPassPayment = req.context.get(BYPASS_PAYMENT_ERROR);
   const isByPassNotFound = req.context.get(BYPASS_NOT_FOUND_ERROR);
 
-  const handleServerError = () => router.navigateByUrl('/500');
-
-  const handleForbidden = () => router.navigateByUrl('/403');
-
-  const handleNotFound = () => router.navigateByUrl('/404');
+  const navigate = (url: string, extras?: NavigationBehaviorOptions) =>
+    router.navigateByUrl(url, extras);
 
   const handleUnauthorized = () => {
     globalModalService.close();
-    confirmationService.confirm({
+    showConfirmation(confirmationService, {
       header: 'Phiên đã hết hạn',
       message: 'Vui lòng đăng nhập lại.',
-      closable: false,
-      rejectVisible: false,
-      acceptButtonProps: { label: 'Đồng ý' },
-      accept: () => {
-        // ? Clear user profile cache
+      acceptLabel: 'Đồng ý',
+      onAccept: () => {
         authService.clearSession();
-
-        // ? Open Auth Modal
         globalModalService.open(AuthModalComponent);
-
-        // ? Close Submenus
         window.dispatchEvent(new Event('close-all-submenus'));
-
-        router.navigateByUrl('/home', { replaceUrl: true });
+        navigate('/home', { replaceUrl: true } as any);
       },
-    });
-  };
-
-  const handleMissingSchoolOrSubscription = () => {
-    confirmationService.confirm({
-      header: 'Trường chưa có gói sử dụng',
-      message: `
-        <p>Trường của bạn hiện chưa có gói sử dụng.</p>
-        <p>Vui lòng liên hệ<strong>giáo viên</strong> hoặc <strong>quản trị viên</strong> để được cấp quyền truy cập.</p>
-      `,
-      acceptButtonProps: { label: 'Đăng xuất' },
-      rejectVisible: false,
       closable: false,
-      accept: () => {
-        // ? Clear user profile cache
-        authService.clearSession();
-
-        // ? Close Modal
-        globalModalService.close();
-
-        // ? Close Submenus
-        window.dispatchEvent(new Event('close-all-submenus'));
-
-        router.navigateByUrl('/home', { replaceUrl: true });
-      },
+      rejectVisible: false,
     });
   };
 
-  const handleSubscriptionExpired = () => {
-    confirmationService.confirm({
-      header: 'Gói sử dụng đã hết hạn',
-      message: `
+  const handleMissingOrExpiredSubscription = (expired: boolean) => {
+    const header = expired
+      ? 'Gói sử dụng đã hết hạn'
+      : 'Trường chưa có gói sử dụng';
+    const message = expired
+      ? `
         <p>Gói sử dụng của trường bạn đã hết hạn.</p>
         <p>Hãy liên hệ <strong>giáo viên</strong> hoặc <strong>quản trị viên</strong> để gia hạn và tiếp tục sử dụng hệ thống.</p>
-      `,
-      acceptButtonProps: { label: 'Đăng xuất' },
-      rejectVisible: false,
-      closable: false,
-      accept: () => {
-        // ? Clear user profile cache
+      `
+      : `
+        <p>Trường của bạn hiện chưa có gói sử dụng.</p>
+        <p>Vui lòng liên hệ <strong>giáo viên</strong> hoặc <strong>quản trị viên</strong> để được cấp quyền truy cập.</p>
+      `;
+    showConfirmation(confirmationService, {
+      header,
+      message,
+      acceptLabel: 'Đăng xuất',
+      onAccept: () => {
         authService.clearSession();
-
-        // ? Close Modal
         globalModalService.close();
-
-        // ? Close Submenus
         window.dispatchEvent(new Event('close-all-submenus'));
-
-        router.navigateByUrl('/home', { replaceUrl: true });
+        navigate('/home', { replaceUrl: true } as any);
       },
+      closable: false,
+      rejectVisible: false,
     });
   };
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      const isUnauthorized = error.status === 401;
-      const isPaymentRequired = error.status === 402;
-      const isForbidden = error.status === 403;
-      const isNotFound = error.status === 404;
-      const isServerError = error.status === 0 || error.status >= 500;
-
+      const status = error.status;
       const errorStatusCode = error.error?.statusCode;
 
-      if (isServerError) {
-        handleServerError();
+      if (status === 0 || status >= 500) {
+        navigate('/500');
         return throwError(() => error);
       }
 
-      if (isUnauthorized && !isByPassAuth) {
+      if (status === 401 && !isByPassAuth) {
         handleUnauthorized();
         return throwError(() => error);
       }
 
-      if (!errorStatusCode) return throwError(() => error);
-
-      if (
-        isPaymentRequired &&
-        !isByPassPayment &&
-        errorStatusCode === StatusCode.SUBSCRIPTION_EXPIRED_WITH_DATA_LOSS_RISK
-      ) {
-        handleSubscriptionExpired();
+      if (!errorStatusCode) {
         return throwError(() => error);
       }
 
-      if (isForbidden && !isByPassAuth) {
+      if (
+        status === 402 &&
+        !isByPassPayment &&
+        errorStatusCode === StatusCode.SUBSCRIPTION_EXPIRED_WITH_DATA_LOSS_RISK
+      ) {
+        handleMissingOrExpiredSubscription(true);
+        return throwError(() => error);
+      }
+
+      if (status === 403 && !isByPassAuth) {
         if (errorStatusCode === StatusCode.SCHOOL_AND_SUBSCRIPTION_REQUIRED) {
-          handleMissingSchoolOrSubscription();
+          handleMissingOrExpiredSubscription(false);
         } else {
-          handleForbidden();
+          navigate('/403');
         }
         return throwError(() => error);
       }
 
-      if (isNotFound && !isByPassNotFound) {
+      if (status === 404 && !isByPassNotFound) {
         if (errorStatusCode === StatusCode.SCHOOL_SUBSCRIPTION_NOT_FOUND) {
-          handleMissingSchoolOrSubscription();
+          handleMissingOrExpiredSubscription(false);
         } else {
-          handleNotFound();
+          navigate('/404');
         }
         return throwError(() => error);
       }
