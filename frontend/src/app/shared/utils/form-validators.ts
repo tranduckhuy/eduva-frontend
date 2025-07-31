@@ -81,3 +81,57 @@ export function customEmailValidator(
   if (!value) return null;
   return EMAIL_REGEX.test(value) ? null : { email: true };
 }
+
+/**
+ * Validates that the control value is not only spaces.
+ *
+ * This validator checks if a string contains only whitespace characters
+ * (spaces, tabs, newlines) and returns an error if so. It's useful for
+ * preventing users from submitting forms with only spaces.
+ *
+ * Note: This validator does NOT check for empty strings - use Validators.required
+ * for that purpose.
+ *
+ * @param control - The form control containing the string to validate
+ * @returns ValidationErrors object with 'onlySpaces' key if value is only spaces, or null if valid
+ */
+export function noOnlySpacesValidator(
+  control: AbstractControl
+): ValidationErrors | null {
+  const value = control.value;
+
+  if (
+    typeof value === 'string' &&
+    value.length > 0 &&
+    value.trim().length === 0
+  ) {
+    return { onlySpaces: true };
+  }
+
+  return null;
+}
+
+/**
+ * Validator function that checks if a form control value contains only letters, spaces, and Vietnamese diacritics.
+ *
+ * This validator is specifically designed for name fields (firstName, lastName) to ensure they only contain
+ * valid characters and no special characters or numbers.
+ *
+ * @param control - The form control to validate
+ * @returns ValidationErrors | null - Returns an error object if validation fails, null if validation passes
+ */
+export function noSpecialCharactersOrNumbersValidator(
+  control: AbstractControl
+): ValidationErrors | null {
+  const value = control.value;
+
+  if (typeof value === 'string' && value.length > 0) {
+    const validNameRegex = /^[a-zA-ZÀ-ỹ\s]+$/;
+
+    if (!validNameRegex.test(value)) {
+      return { noSpecialCharactersOrNumbers: true };
+    }
+  }
+
+  return null;
+}

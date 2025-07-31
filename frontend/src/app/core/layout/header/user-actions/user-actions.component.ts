@@ -1,11 +1,20 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  computed,
+  effect,
+} from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 
+import { HeaderSubmenuService } from '../services/header-submenu.service';
 import { AuthService } from '../../../auth/services/auth.service';
 import { UserService } from '../../../../shared/services/api/user/user.service';
-import { HeaderSubmenuService } from '../services/header-submenu.service';
+import { NotificationService } from '../../../../shared/services/api/notification/notification.service';
+import { NotificationSocketService } from '../../../../shared/services/api/notification/notification-socket.service';
 
 import { ClassroomsComponent } from './classrooms/classrooms.component';
 import { InformationComponent } from './information/information.component';
@@ -29,13 +38,38 @@ import { EnrollClassModalComponent } from './enroll-class-modal/enroll-class-mod
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserActionsComponent {
-  private readonly authService = inject(AuthService);
-  private readonly userService = inject(UserService);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly headerSubmenuService = inject(HeaderSubmenuService);
   private readonly globalModalService = inject(GlobalModalService);
+  private readonly authService = inject(AuthService);
+  private readonly userService = inject(UserService);
+  private readonly notificationService = inject(NotificationService);
+  private readonly notificationSocketService = inject(
+    NotificationSocketService
+  );
 
   isLoggedIn = this.authService.isLoggedIn;
   user = this.userService.currentUser;
+  unreadCount = this.notificationService.unreadCount;
+
+  readonly hasUnreadNotification = computed(() => this.unreadCount() > 0);
+
+  constructor() {
+    effect(() => {
+      if (this.isLoggedIn()) {
+        this.notificationSocketService.connect();
+        setTimeout(() => {
+          this.notificationService.getNotificationSummary().subscribe();
+        }, 100);
+      } else {
+        this.notificationSocketService.disconnect();
+      }
+    });
+
+    this.destroyRef.onDestroy(() => {
+      this.notificationSocketService.disconnect();
+    });
+  }
 
   get activeSubmenu() {
     return this.headerSubmenuService.getActiveSubmenuMenu();

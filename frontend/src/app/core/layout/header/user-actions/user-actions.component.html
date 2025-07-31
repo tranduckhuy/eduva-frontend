@@ -19,7 +19,7 @@
         <header-classrooms (clickOutside)="closeSubMenu()" />
       }
     </div>
-    <div class="relative">
+    <div class="relative sm:hidden">
       <p-button
         icon="fas fa-plus"
         pTooltip="Tham gia lớp học"
@@ -29,12 +29,18 @@
         (click)="openEnrollModal()" />
     </div>
     <div class="flex items-center gap-3">
-      <div class="relative sm:hidden">
+      <div class="relative">
         <p-button
           icon="fas fa-bell"
           class="notify__btn"
           [rounded]="true"
           (click)="toggleSubMenu('notifications')" />
+        @if (hasUnreadNotification()) {
+          <span
+            class="absolute -top-[2px] left-4 z-[1] flex size-5 items-center justify-center rounded-full bg-[#fa3e3e] text-[13px] font-medium text-white">
+            {{ unreadCount() }}
+          </span>
+        }
         @if (activeSubmenu === 'notifications') {
           <header-notifications (clickOutside)="closeSubMenu()" />
         }

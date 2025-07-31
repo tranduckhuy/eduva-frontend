@@ -80,10 +80,12 @@
   <div
     class="lesson-sidebar bg-white transition-colors duration-[0.25s] ease-in dark:bg-dark-400">
     <lesson-sidebar
-      [materialId]="materialId()"
-      (openChapterModal)="openChapterModal()"
+      [materialId]="materialIdFromRoute() || materialId()"
+      [filteredFoldersAndMaterials]="filteredFoldersAndMaterials()"
       [isOpen]="isSidebarOpen()"
-      [folderId]="folderId()" />
+      [folderId]="folderId()"
+      (search)="onSearchTriggered($event)"
+      (openChapterModal)="openChapterModal()" />
   </div>
 </div>
 
@@ -92,22 +94,29 @@
     [currentFolderName]="currentFolder()?.name ?? ''"
     [currentFolderIndex]="currentFolderIndex()"
     [isSidebarOpen]="isSidebarOpen()"
+    [isFirstMaterial]="isFirstMaterial()"
+    [isLastMaterial]="isLastMaterial()"
     (openCommentModal)="openCommentModal()"
     (toggleSidebar)="isSidebarOpen.set(!isSidebarOpen())"
     (nextMaterial)="onNextMaterial()"
-    (prevMaterial)="onPrevMaterial()"
-    [isFirstMaterial]="isFirstMaterial()"
-    [isLastMaterial]="isLastMaterial()" />
+    (prevMaterial)="onPrevMaterial()" />
 </div>
 
-<chapter-modal
-  [isOpen]="isChapterModalOpen()"
-  (closeChapterModal)="closeChapterModal()" />
-
 @if (material()) {
-  <comment-modal
-    [materialId]="materialId()"
-    [materialTitle]="material()!.title"
-    [isOpen]="isCommentModalOpen()"
-    (closeCommentModal)="closeCommentModal()" />
+  <p-drawer
+    position="left"
+    baseZIndex="900"
+    styleClass="!w-[50vw] md:!w-[70vw] sm:!w-full"
+    [closeOnEscape]="true"
+    [(visible)]="isCommentModalOpen">
+    <ng-template #headless>
+      <comment-modal
+        [isOpen]="isCommentModalOpen"
+        [materialTitle]="material()!.title"
+        [materialId]="materialIdFromRoute() || materialId()"
+        [questionIdFromNotification]="questionIdFromNotification()"
+        (closeCommentDrawer)="isCommentModalOpen = false"
+        (clearQuestionIdNotification)="questionIdFromNotification.set('')" />
+    </ng-template>
+  </p-drawer>
 }

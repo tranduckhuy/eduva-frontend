@@ -87,7 +87,6 @@ export class AuthService {
     return this.requestService
       .post<AuthTokenResponse>(this.REFRESH_TOKEN_API_URL, request, {
         bypassAuth: true,
-        bypassAuthError: true,
         showLoading: false,
       })
       .pipe(
@@ -132,6 +131,12 @@ export class AuthService {
   handleLoginSuccess(data: AuthTokenResponse): void {
     this.handleTokenStorage(data);
     this.handleAfterLogin();
+  }
+
+  clearSession(): void {
+    this.jwtService.clearAll();
+    this.userService.clearCurrentUser();
+    this.isLoggedInSignal.set(false);
   }
 
   // ---------------------------
@@ -221,11 +226,5 @@ export class AuthService {
         description: 'Vui lòng kiểm tra email của bạn để hoàn tất xác minh.',
       })
       .subscribe();
-  }
-
-  private clearSession(): void {
-    this.jwtService.clearAll();
-    this.userService.clearCurrentUser();
-    this.isLoggedInSignal.set(false);
   }
 }

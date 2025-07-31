@@ -1,1 +1,19 @@
-<p>{{ description() }}</p>
+<div class="lesson-content">
+  @for (block of contentBlocks(); track $index) {
+    @if (block.type === 'html') {
+      <div [innerHTML]="block.html | safeHtml"></div>
+    }
+
+    @if (block.type === 'image') {
+      <p>
+        <p-image
+          [src]="block.src"
+          [alt]="block.alt"
+          [style]="{ width: block.width }"
+          preview="true"
+          loading="lazy"
+          appendTo="body"></p-image>
+      </p>
+    }
+  }
+</div>

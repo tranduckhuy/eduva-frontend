@@ -167,7 +167,8 @@ describe('PasswordService', () => {
           next: () => {
             expect(requestService.post).toHaveBeenCalledWith(
               expect.stringContaining('/auth/reset-password'),
-              mockResetPasswordRequest
+              mockResetPasswordRequest,
+              { bypassAuthError: true }
             );
             expect(toastHandlingService.success).toHaveBeenCalledWith(
               'Thành công',

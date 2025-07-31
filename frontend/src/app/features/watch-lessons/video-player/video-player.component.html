@@ -12,25 +12,17 @@
       [preload]="preload()"
       crossorigin>
       <source [src]="materialSourceUrl()" type="video/mp4" />
-      <!-- <source [src]="videoSources()[selectedQuality()]" type="video/mp4" /> -->
-      <!-- <source src="./videoplayback.webm" type="video/webm" /> -->
-      <!-- <track kind="subtitles" label="Tiếng Việt" srclang="vi" src="..." default />
-           <track kind="subtitles" label="English" srclang="en" src="..." /> -->
     </video>
   </vg-player>
 
   <div class="overlay" (click)="togglePlayPause(); onMobileTap()"></div>
 
-  @if (!hasStarted()) {
-    <!-- <div class="poster">
-      <picture class="poster">
-        <img
-          src="https://files.fullstack.edu.vn/f8-prod/streamable-videos/766/4/6560267cb57a8.jpg"
-          alt=""
-          class="h-full w-full object-contain" />
-      </picture>
-    </div> -->
-  }
+  <div
+    class="background-bar"
+    [class.opacity-100]="showMobileControls()"
+    [class.visible]="showMobileControls()"
+    [class.opacity-0]="!showMobileControls()"
+    [class.invisible]="!showMobileControls()"></div>
 
   @if (showUiControls()) {
     <!-- ? Progress Bar -->

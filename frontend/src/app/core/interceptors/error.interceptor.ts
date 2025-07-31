@@ -1,123 +1,144 @@
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationBehaviorOptions } from '@angular/router';
+
 import { catchError, throwError } from 'rxjs';
 
 import { ConfirmationService } from 'primeng/api';
 
-import { JwtService } from '../auth/services/jwt.service';
-import { UserService } from '../../shared/services/api/user/user.service';
+import { AuthService } from '../auth/services/auth.service';
 import { GlobalModalService } from '../../shared/services/layout/global-modal/global-modal.service';
 
 import { StatusCode } from '../../shared/constants/status-code.constant';
-import { BYPASS_AUTH_ERROR } from '../../shared/tokens/context/http-context.token';
+import {
+  BYPASS_AUTH_ERROR,
+  BYPASS_NOT_FOUND_ERROR,
+  BYPASS_PAYMENT_ERROR,
+} from '../../shared/tokens/context/http-context.token';
 
 import { AuthModalComponent } from '../../shared/components/auth-modal/auth-modal.component';
 
-let hasShownUnauthorizedDialog = false;
+const showConfirmation = (
+  confirmationService: ConfirmationService,
+  options: {
+    header: string;
+    message: string;
+    acceptLabel: string;
+    onAccept: () => void;
+    closable?: boolean;
+    rejectVisible?: boolean;
+  }
+) => {
+  confirmationService.confirm({
+    header: options.header,
+    message: options.message,
+    closable: options.closable ?? false,
+    rejectVisible: options.rejectVisible ?? false,
+    acceptButtonProps: { label: options.acceptLabel },
+    accept: options.onAccept,
+  });
+};
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
-  const jwtService = inject(JwtService);
-  const userService = inject(UserService);
+  const authService = inject(AuthService);
   const globalModalService = inject(GlobalModalService);
   const confirmationService = inject(ConfirmationService);
 
-  const isByPass = req.context.get(BYPASS_AUTH_ERROR);
+  const isByPassAuth = req.context.get(BYPASS_AUTH_ERROR);
+  const isByPassPayment = req.context.get(BYPASS_PAYMENT_ERROR);
+  const isByPassNotFound = req.context.get(BYPASS_NOT_FOUND_ERROR);
 
-  const handleServerError = () => router.navigateByUrl('/500');
+  const navigate = (url: string, extras?: NavigationBehaviorOptions) =>
+    router.navigateByUrl(url, extras);
 
   const handleUnauthorized = () => {
-    if (hasShownUnauthorizedDialog) return;
-
-    hasShownUnauthorizedDialog = true;
-
     globalModalService.close();
-    confirmationService.confirm({
-      message: 'Vui lòng đăng nhập lại.',
+    showConfirmation(confirmationService, {
       header: 'Phiên đã hết hạn',
+      message: 'Vui lòng đăng nhập lại.',
+      acceptLabel: 'Đồng ý',
+      onAccept: () => {
+        authService.clearSession();
+        globalModalService.open(AuthModalComponent);
+        window.dispatchEvent(new Event('close-all-submenus'));
+        navigate('/home', { replaceUrl: true } as any);
+      },
       closable: false,
       rejectVisible: false,
-      acceptButtonProps: { label: 'Đồng ý' },
-      accept: () => {
-        jwtService.clearAll();
-        userService.clearCurrentUser();
-        globalModalService.open(AuthModalComponent);
-      },
     });
   };
 
-  const handleForbidden = () => router.navigateByUrl('/403');
-
-  const handleMissingSchoolOrSubscription = () => {
-    confirmationService.confirm({
-      header: 'Trường chưa có gói sử dụng',
-      message: `
-        <p>Trường của bạn hiện chưa có gói sử dụng.</p>
-        <p>Vui lòng liên hệ<strong>giáo viên</strong> hoặc <strong>quản trị viên</strong> để được cấp quyền truy cập.</p>
-      `,
-      acceptButtonProps: { label: 'Đăng xuất' },
-      rejectVisible: false,
-      closable: false,
-      accept: () => {
-        jwtService.clearAll();
-        userService.clearCurrentUser();
-        globalModalService.open(AuthModalComponent);
-      },
-    });
-  };
-
-  const handleSubscriptionExpired = () => {
-    confirmationService.confirm({
-      header: 'Gói sử dụng đã hết hạn',
-      message: `
+  const handleMissingOrExpiredSubscription = (expired: boolean) => {
+    const header = expired
+      ? 'Gói sử dụng đã hết hạn'
+      : 'Trường chưa có gói sử dụng';
+    const message = expired
+      ? `
         <p>Gói sử dụng của trường bạn đã hết hạn.</p>
         <p>Hãy liên hệ <strong>giáo viên</strong> hoặc <strong>quản trị viên</strong> để gia hạn và tiếp tục sử dụng hệ thống.</p>
-      `,
-      acceptButtonProps: { label: 'Đăng xuất' },
-      rejectVisible: false,
-      closable: false,
-      accept: () => {
-        jwtService.clearAll();
-        userService.clearCurrentUser();
-        globalModalService.open(AuthModalComponent);
+      `
+      : `
+        <p>Trường của bạn hiện chưa có gói sử dụng.</p>
+        <p>Vui lòng liên hệ <strong>giáo viên</strong> hoặc <strong>quản trị viên</strong> để được cấp quyền truy cập.</p>
+      `;
+    showConfirmation(confirmationService, {
+      header,
+      message,
+      acceptLabel: 'Đăng xuất',
+      onAccept: () => {
+        authService.clearSession();
+        globalModalService.close();
+        window.dispatchEvent(new Event('close-all-submenus'));
+        navigate('/home', { replaceUrl: true } as any);
       },
+      closable: false,
+      rejectVisible: false,
     });
   };
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      const isUnauthorized = error.status === 401;
-      const isPaymentRequired = error.status === 402;
-      const isForbidden = error.status === 403;
-      const isServerError = error.status === 0 || error.status >= 500;
+      const status = error.status;
+      const errorStatusCode = error.error?.statusCode;
 
-      const statusCode = (error.error as any)?.statusCode;
-
-      if (isServerError) {
-        handleServerError();
+      if (status === 0 || status >= 500) {
+        navigate('/500');
         return throwError(() => error);
       }
 
-      if (isUnauthorized && !isByPass) {
+      if (status === 401 && !isByPassAuth) {
         handleUnauthorized();
         return throwError(() => error);
       }
 
-      if (isPaymentRequired) {
-        handleSubscriptionExpired();
+      if (!errorStatusCode) {
         return throwError(() => error);
       }
 
-      if (isForbidden && !isByPass) {
-        if (
-          statusCode &&
-          (statusCode === StatusCode.SCHOOL_AND_SUBSCRIPTION_REQUIRED ||
-            statusCode === StatusCode.SCHOOL_SUBSCRIPTION_NOT_FOUND)
-        ) {
-          handleMissingSchoolOrSubscription();
+      if (
+        status === 402 &&
+        !isByPassPayment &&
+        errorStatusCode === StatusCode.SUBSCRIPTION_EXPIRED_WITH_DATA_LOSS_RISK
+      ) {
+        handleMissingOrExpiredSubscription(true);
+        return throwError(() => error);
+      }
+
+      if (status === 403 && !isByPassAuth) {
+        if (errorStatusCode === StatusCode.SCHOOL_AND_SUBSCRIPTION_REQUIRED) {
+          handleMissingOrExpiredSubscription(false);
         } else {
-          handleForbidden();
+          navigate('/403');
+        }
+        return throwError(() => error);
+      }
+
+      if (status === 404 && !isByPassNotFound) {
+        if (errorStatusCode === StatusCode.SCHOOL_SUBSCRIPTION_NOT_FOUND) {
+          handleMissingOrExpiredSubscription(false);
+        } else {
+          navigate('/404');
         }
         return throwError(() => error);
       }

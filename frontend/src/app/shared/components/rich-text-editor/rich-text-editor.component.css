@@ -45,6 +45,7 @@
 
 :host ckeditor ::ng-deep blockquote {
   border-left: 2px solid #0093fc !important;
+  margin: 12px 0 !important;
 }
 
 :host ckeditor ::ng-deep blockquote p {

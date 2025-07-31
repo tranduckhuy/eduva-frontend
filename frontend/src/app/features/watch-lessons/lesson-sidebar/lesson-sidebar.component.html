@@ -3,27 +3,33 @@
     <!-- ? Search Input -->
     <div
       class="flex flex-1 items-center rounded-lg bg-[#eef4fc] px-4 dark:bg-dark-300">
-      <span
-        class="pi pi-search relative top-[2px] text-[#808b9a] dark:text-[#fffc]"
-        style="font-size: 14px"></span>
+      <button (click)="search.emit(searchTerm())">
+        <span
+          class="pi pi-search relative top-[2px] text-[#808b9a] dark:text-[#fffc]"
+          style="font-size: 14px"></span>
+      </button>
       <input
         type="text"
         class="h-10 w-full select-none border-none bg-transparent pl-[10px] text-sm font-normal text-[#808b9a] outline-none placeholder:text-[#8a8d91]"
-        placeholder="Tìm theo tên bài học" />
+        placeholder="Tìm theo tên bài học"
+        [ngModel]="searchTerm()"
+        (ngModelChange)="searchTerm.set($event)"
+        (keydown.enter)="search.emit(searchTerm())" />
     </div>
-    <!-- ? Chapter List -->
-    <!-- <div
-      class="ml-4 flex cursor-pointer select-none flex-col items-center justify-center text-[10px]"
-      (click)="onOpenChapterModalClick()">
-      <img src="./images/icons/book.svg" alt="Danh sách chương" />
-      <span class="mt-[6px] text-[#0093fc]">Danh sách chương</span>
-    </div> -->
   </div>
 
   <!-- ? Lesson Tracker -->
   <div class="lesson-tracker flex-1 overflow-y-auto overscroll-contain">
-    <sidebar-tracks
-      [materialId]="materialId()"
-      [currentFolderId]="folderId()" />
+    @if (filteredFoldersAndMaterials().length === 0) {
+      <div class="flex h-full items-center justify-center">
+        <p class="text-base text-[#808b9a]">Không có kết quả phù hợp</p>
+      </div>
+    } @else {
+      <!-- ? Sidebar Tracks -->
+      <sidebar-tracks
+        [materialId]="materialId()"
+        [currentFolderId]="folderId()"
+        [filteredFoldersAndMaterials]="filteredFoldersAndMaterials()" />
+    }
   </div>
 </div>

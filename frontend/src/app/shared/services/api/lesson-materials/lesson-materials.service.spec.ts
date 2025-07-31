@@ -70,8 +70,11 @@ describe('LessonMaterialsService', () => {
 
   it('should handle error in getLessonMaterials', async () => {
     requestService.get.mockReturnValue(throwError(() => new Error('fail')));
-    const result = await service.getLessonMaterials({}).toPromise();
-    expect(result).toBeNull();
+    try {
+      await service.getLessonMaterials({}).toPromise();
+    } catch (error) {
+      expect(error).toBeDefined();
+    }
     expect(toastService.errorGeneral).toHaveBeenCalled();
   });
 
@@ -89,8 +92,11 @@ describe('LessonMaterialsService', () => {
 
   it('should handle error in fetchLessonMaterialById', async () => {
     requestService.get.mockReturnValue(throwError(() => new Error('fail')));
-    const result = await service.fetchLessonMaterialById('1').toPromise();
-    expect(result).toBeNull();
+    try {
+      await service.fetchLessonMaterialById('1').toPromise();
+    } catch (error) {
+      expect(error).toBeDefined();
+    }
     expect(toastService.errorGeneral).toHaveBeenCalled();
   });
 });

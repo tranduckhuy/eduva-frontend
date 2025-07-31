@@ -20,9 +20,12 @@ import { UserService } from '../../../services/api/user/user.service';
 import { LoadingService } from '../../../services/core/loading/loading.service';
 import { CommentService } from '../../../../features/watch-lessons/comment-modal/services/comment.service';
 
+import { noOnlySpacesValidator } from '../../../utils/form-validators';
+
 import { RichTextEditorComponent } from '../../rich-text-editor/rich-text-editor.component';
-import { CreateCommentRequest } from '../../../../features/watch-lessons/comment-modal/model/request/command/create-comment-request.model';
-import { UpdateCommentRequest } from '../../../../features/watch-lessons/comment-modal/model/request/command/update-comment-request.model';
+
+import { type CreateCommentRequest } from '../../../../features/watch-lessons/comment-modal/model/request/command/create-comment-request.model';
+import { type UpdateCommentRequest } from '../../../../features/watch-lessons/comment-modal/model/request/command/update-comment-request.model';
 
 @Component({
   selector: 'app-user-comment-textbox',
@@ -61,7 +64,7 @@ export class UserCommentTextboxComponent implements OnInit {
 
   constructor() {
     this.form = this.fb.group({
-      content: ['', Validators.required],
+      content: ['', [Validators.required, noOnlySpacesValidator]],
     });
   }
 
@@ -87,7 +90,7 @@ export class UserCommentTextboxComponent implements OnInit {
   onSubmit() {
     this.form.markAllAsTouched();
 
-    const content = this.content?.value;
+    const content = this.content?.value.trim();
 
     if (this.form.invalid || !content) {
       this.invalid.set(true);

@@ -7,14 +7,8 @@ import {
 } from '@angular/core';
 
 import { LessonItemComponent } from './lesson-item/lesson-item.component';
-import { Folder } from '../../../shared/models/entities/folder.model';
-import { GetLessonMaterialsRequest } from '../../../shared/models/api/request/query/get-lesson-materials-request.model';
 import { UserService } from '../../../shared/services/api/user/user.service';
-import { LessonMaterialsService } from '../../../shared/services/api/lesson-materials/lesson-materials.service';
-import { LoadingService } from '../../../shared/services/core/loading/loading.service';
-import { LessonMaterial } from '../../../shared/models/entities/lesson-material.model';
-import { ToastHandlingService } from '../../../shared/services/core/toast/toast-handling.service';
-import { LessonMaterialStatus } from '../../../shared/models/enum/lesson-material.enum';
+import { GetAllFoldersMaterialsResponse } from '../../../shared/models/api/response/query/get-all-folders-materials-response.model';
 
 @Component({
   selector: 'app-folder',
@@ -26,16 +20,11 @@ import { LessonMaterialStatus } from '../../../shared/models/enum/lesson-materia
 })
 export class FolderComponent {
   private readonly userService = inject(UserService);
-  private readonly materialService = inject(LessonMaterialsService);
-  private readonly loadingService = inject(LoadingService);
-  private readonly toastHandlingService = inject(ToastHandlingService);
 
   currentUser = this.userService.currentUser;
-  materials = signal<LessonMaterial[]>([]);
-  isLoadingGetMaterials = this.loadingService.is('get-materials');
 
   readonly classId = input.required<string>();
-  readonly folder = input.required<Folder>();
+  readonly folder = input.required<GetAllFoldersMaterialsResponse>();
   readonly index = input.required<number>();
 
   isCollapsed = signal<boolean>(true);
@@ -43,30 +32,8 @@ export class FolderComponent {
   toggleCollapse() {
     if (this.isCollapsed()) {
       this.isCollapsed.set(false);
-      this.getMaterials();
     } else {
       this.isCollapsed.set(true);
     }
-  }
-
-  private getMaterials() {
-    const getLessonMaterialsRequest: GetLessonMaterialsRequest = {
-      classId: this.classId(),
-      folderId: this.folder().id,
-      lessonStatus: LessonMaterialStatus.Approved,
-      sortBy: 'lastmodifiedat',
-      sortDirection: 'asc',
-    };
-
-    this.materialService
-      .getLessonMaterialsInFolder(getLessonMaterialsRequest)
-      .subscribe({
-        next: res => {
-          this.materials.set(res || []);
-        },
-        error: _ => {
-          this.toastHandlingService.errorGeneral();
-        },
-      });
   }
 }

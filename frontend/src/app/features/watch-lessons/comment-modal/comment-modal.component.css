@@ -1,3 +1,8 @@
+:host {
+  flex-grow: 1;
+  height: 100%;
+}
+
 .loader {
   width: 25px;
   height: 25px;
@@ -23,11 +28,6 @@
 }
 
 @media (max-width: 739.98px) {
-  .comment-modal {
-    width: 780px;
-    min-width: 0;
-  }
-
   .comment-modal-content {
     padding: 18px;
   }

@@ -8,7 +8,7 @@
       <!-- ? User -->
       <div class="user">
         <!-- ? User Information -->
-        <a routerLink="/profile" class="flex items-center gap-5">
+        <a routerLink="/coming-soon" class="flex items-center gap-5">
           <div
             class="avatar-wrapper relative my-[10px] h-[50px] w-[50px] shrink-0 rounded-full p-1">
             <img
@@ -22,36 +22,22 @@
           </div>
           <div class="user__info">
             <h5 class="text-base font-semibold">{{ user()?.fullName }}</h5>
-            <!-- <span class="mt-2 text-[#757575] dark:text-[#ffffff99]">
-              &#64;15795
-            </span> -->
           </div>
         </a>
         <!-- ? List -->
         <div class="separator bg-[#0000000d] dark:bg-[#323c4a]"></div>
         <ul>
           <li>
-            <a routerLink="/profile" class="link">
+            <a routerLink="/coming-soon" class="link">
               <span class="pi pi-user"></span>
               Trang Cá Nhân
             </a>
           </li>
           <li class="hidden sm:block">
-            <a href="#!" class="link">
-              <span class="pi pi-bell"></span>
-              Thông báo
-            </a>
-          </li>
-        </ul>
-
-        <div class="separator bg-[#0000000d] dark:bg-[#323c4a]"></div>
-
-        <ul class="hidden md:block">
-          <li>
-            <a href="#!" class="link">
-              <span class="pi pi-users"></span>
-              Lớp học của tôi
-            </a>
+            <button class="link" (click)="openEnrollModal()">
+              <span class="pi pi-plus"></span>
+              Tham gia lớp học
+            </button>
           </li>
         </ul>
 
