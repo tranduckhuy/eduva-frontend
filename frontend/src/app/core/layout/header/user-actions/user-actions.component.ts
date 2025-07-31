@@ -1,10 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  OnInit,
   DestroyRef,
   inject,
   computed,
+  effect,
 } from '@angular/core';
 
 import { ButtonModule } from 'primeng/button';
@@ -37,7 +37,7 @@ import { EnrollClassModalComponent } from './enroll-class-modal/enroll-class-mod
   styleUrl: './user-actions.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UserActionsComponent implements OnInit {
+export class UserActionsComponent {
   private readonly destroyRef = inject(DestroyRef);
   private readonly headerSubmenuService = inject(HeaderSubmenuService);
   private readonly globalModalService = inject(GlobalModalService);
@@ -55,14 +55,20 @@ export class UserActionsComponent implements OnInit {
   readonly hasUnreadNotification = computed(() => this.unreadCount() > 0);
 
   constructor() {
+    effect(() => {
+      if (this.isLoggedIn()) {
+        this.notificationSocketService.connect();
+        setTimeout(() => {
+          this.notificationService.getNotificationSummary().subscribe();
+        }, 100);
+      } else {
+        this.notificationSocketService.disconnect();
+      }
+    });
+
     this.destroyRef.onDestroy(() => {
       this.notificationSocketService.disconnect();
     });
-  }
-
-  ngOnInit(): void {
-    this.notificationSocketService.connect();
-    this.notificationService.getNotificationSummary().subscribe();
   }
 
   get activeSubmenu() {

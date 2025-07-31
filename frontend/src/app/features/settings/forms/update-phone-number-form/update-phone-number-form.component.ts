@@ -54,8 +54,6 @@ export class UpdatePhoneNumberFormComponent {
     this.submitted.set(true);
     this.form.markAllAsTouched();
 
-    console.log(this.form.errors, this.form.get('phoneNumber')?.errors);
-
     if (this.form.invalid) return;
 
     const payload: UpdateProfileRequest = {
