@@ -67,6 +67,7 @@ export class UserActionsComponent {
     });
 
     this.destroyRef.onDestroy(() => {
+      this.notificationService.clearSignal();
       this.notificationSocketService.disconnect();
     });
   }

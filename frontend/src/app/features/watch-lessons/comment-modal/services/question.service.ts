@@ -142,10 +142,31 @@ export class QuestionService {
 
   private handleError(err: HttpErrorResponse) {
     switch (err.error?.statusCode) {
-      case StatusCode.STUDENT_NOT_ENROLLED_IN_CLASS_WITH_MATERIAL:
+      case StatusCode.LESSON_MATERIAL_NOT_ACTIVE:
+        // ? Redirect to home page
         setTimeout(() => {
           this.router.navigate(['/']);
         }, 2000);
+
+        // ? Close Submenus
+        window.dispatchEvent(new Event('close-all-submenus'));
+
+        // ? Show toast
+        this.toastHandlingService.warn(
+          'Bài giảng đã bị xóa',
+          'Bài giảng đã bị giáo viên sở hữu chuyển vào thùng rác hoặc xóa.'
+        );
+        break;
+      case StatusCode.STUDENT_NOT_ENROLLED_IN_CLASS_WITH_MATERIAL:
+        // ? Redirect to home page
+        setTimeout(() => {
+          this.router.navigate(['/']);
+        }, 2000);
+
+        // ? Close Submenus
+        window.dispatchEvent(new Event('close-all-submenus'));
+
+        // ? Show toast
         this.toastHandlingService.warn(
           'Không thể truy cập bài giảng',
           'Bạn chưa tham gia lớp học có chứa tài liệu này hoặc bài giảng đã bị xóa khỏi lớp học.'
