@@ -143,6 +143,25 @@ export class NotificationsComponent {
     });
   }
 
+  private formatRelativeDate(dateString: string): string {
+    const now = new Date();
+    const target = new Date(dateString);
+    const diffMs = now.getTime() - target.getTime();
+
+    const minutes = Math.floor(diffMs / (1000 * 60));
+    const hours = Math.floor(diffMs / (1000 * 60 * 60));
+    const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    const months = Math.floor(days / 30);
+    const years = Math.floor(days / 365);
+
+    if (minutes < 1) return 'Vừa xong';
+    if (minutes < 60) return `${minutes} phút trước`;
+    if (hours < 24) return `${hours} giờ trước`;
+    if (days < 30) return `${days} ngày trước`;
+    if (months < 12) return `${months} tháng trước`;
+    return `${years} năm trước`;
+  }
+
   private getNotificationAvatarAndAlt(
     notification: NotificationWithTypedPayload
   ): {
@@ -170,29 +189,11 @@ export class NotificationsComponent {
         alt: performedByName,
       };
     }
+
     return {
       avatar: createdByAvatar,
       alt: createdByName,
     };
-  }
-
-  private formatRelativeDate(dateString: string): string {
-    const now = new Date();
-    const target = new Date(dateString);
-    const diffMs = now.getTime() - target.getTime();
-
-    const minutes = Math.floor(diffMs / (1000 * 60));
-    const hours = Math.floor(diffMs / (1000 * 60 * 60));
-    const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-    const months = Math.floor(days / 30);
-    const years = Math.floor(days / 365);
-
-    if (minutes < 1) return 'Vừa xong';
-    if (minutes < 60) return `${minutes} phút trước`;
-    if (hours < 24) return `${hours} giờ trước`;
-    if (days < 30) return `${days} ngày trước`;
-    if (months < 12) return `${months} tháng trước`;
-    return `${years} năm trước`;
   }
 
   private formatNotification(

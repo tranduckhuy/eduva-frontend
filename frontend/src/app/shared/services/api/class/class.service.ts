@@ -63,7 +63,9 @@ export class ClassService {
 
   enrollClass(classCode: string): Observable<ClassModel | null> {
     return this.requestService
-      .post<ClassModel>(this.ENROLL_CLASS_API_URL, classCode)
+      .post<ClassModel>(this.ENROLL_CLASS_API_URL, classCode, {
+        bypassNotFoundError: true,
+      })
       .pipe(
         tap(res => this.handleEnrollClassSideEffect(res)),
         map(res => this.extractClassFromResponse(res)),
