@@ -23,6 +23,13 @@ export const errorRoutes: Routes = [
       ),
   },
   {
+    path: '429',
+    loadComponent: () =>
+      import('./too-many-request-error/too-many-request-error.component').then(
+        mod => mod.TooManyRequestErrorComponent
+      ),
+  },
+  {
     path: 'coming-soon',
     loadComponent: () =>
       import('../coming-soon/coming-soon.component').then(
