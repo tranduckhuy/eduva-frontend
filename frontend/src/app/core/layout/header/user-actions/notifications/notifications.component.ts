@@ -61,6 +61,7 @@ export class NotificationsComponent {
   isLoading = this.loadingService.is('get-notifications');
   notifications = this.notificationService.notifications;
   totalNotification = this.notificationService.totalNotification;
+  hasLoaded = this.notificationService.hasLoaded;
 
   currentPage = signal<number>(0);
   pageSize = signal<number>(20);
@@ -88,7 +89,7 @@ export class NotificationsComponent {
   });
 
   ngOnInit(): void {
-    if (this.notifications().length === 0) {
+    if (!this.hasLoaded()) {
       this.loadMore();
     }
   }
@@ -185,14 +186,14 @@ export class NotificationsComponent {
       createdByUserId !== performedByUserId
     ) {
       return {
-        avatar: performedByAvatar,
-        alt: performedByName,
+        avatar: performedByAvatar ?? '',
+        alt: performedByName ?? '',
       };
     }
 
     return {
-      avatar: createdByAvatar,
-      alt: createdByName,
+      avatar: createdByAvatar ?? '',
+      alt: createdByName ?? '',
     };
   }
 
@@ -309,7 +310,6 @@ export class NotificationsComponent {
         break;
 
       default:
-        this.router.navigate(['/learn', payload.lessonMaterialId]);
         break;
     }
   }
