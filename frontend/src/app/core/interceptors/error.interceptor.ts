@@ -47,6 +47,8 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 
   const handleNotFound = () => router.navigateByUrl('/404');
 
+  const handleTooManyRequest = () => router.navigateByUrl('/429');
+
   const handleUnauthorized = () => {
     globalModalService.close();
     confirmationService.confirm({
@@ -146,6 +148,12 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       } else {
         handleNotFound();
       }
+      return;
+    }
+
+    // Too many request
+    if (status === 429) {
+      handleTooManyRequest();
     }
   };
 
