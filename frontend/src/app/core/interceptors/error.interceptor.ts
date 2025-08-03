@@ -146,7 +146,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       } else {
         handleNotFound();
       }
-      return;
     }
   };
 
