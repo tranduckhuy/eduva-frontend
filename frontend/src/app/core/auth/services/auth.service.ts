@@ -6,12 +6,14 @@ import { Observable, catchError, map, of, tap } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 
-import { JwtService } from './jwt.service';
-import { UserService } from '../../../shared/services/api/user/user.service';
-import { EmailVerificationService } from './email-verification.service';
 import { RequestService } from '../../../shared/services/core/request/request.service';
 import { ToastHandlingService } from '../../../shared/services/core/toast/toast-handling.service';
 import { GlobalModalService } from '../../../shared/services/layout/global-modal/global-modal.service';
+import { JwtService } from './jwt.service';
+import { UserService } from '../../../shared/services/api/user/user.service';
+import { EmailVerificationService } from './email-verification.service';
+import { NotificationService } from '../../../shared/services/api/notification/notification.service';
+import { NotificationSocketService } from '../../../shared/services/api/notification/notification-socket.service';
 
 import { StatusCode } from '../../../shared/constants/status-code.constant';
 import { UserRoles } from '../../../shared/constants/user-roles.constant';
@@ -20,20 +22,24 @@ import { AuthModalComponent } from '../../../shared/components/auth-modal/auth-m
 
 import { type LoginRequest } from '../models/request/login-request.model';
 import { type RefreshTokenRequest } from '../models/request/refresh-token-request.model';
-import { type AuthTokenResponse } from '../models/response/auth-response.model';
 import { type EmailLinkRequest } from '../models/request/email-link-request.model';
+import { type AuthTokenResponse } from '../models/response/auth-response.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private readonly router = inject(Router);
-  private readonly jwtService = inject(JwtService);
-  private readonly userService = inject(UserService);
-  private readonly emailVerificationService = inject(EmailVerificationService);
   private readonly requestService = inject(RequestService);
   private readonly toastHandlingService = inject(ToastHandlingService);
   private readonly globalModalService = inject(GlobalModalService);
+  private readonly jwtService = inject(JwtService);
+  private readonly userService = inject(UserService);
+  private readonly emailVerificationService = inject(EmailVerificationService);
+  private readonly notificationService = inject(NotificationService);
+  private readonly notificationSocketService = inject(
+    NotificationSocketService
+  );
 
   private readonly BASE_API_URL = environment.baseApiUrl;
   private readonly LOGIN_API_URL = `${this.BASE_API_URL}/auth/login`;
@@ -115,11 +121,8 @@ export class AuthService {
           // ? Clear user profile cache
           this.clearSession();
 
-          // ? Close modal
-          this.globalModalService.close();
-
-          // ? Close Submenus
-          window.dispatchEvent(new Event('close-all-submenus'));
+          // ? Clear notification data
+          this.clearSessionData();
 
           this.router.navigateByUrl('/home', { replaceUrl: true });
         }),
@@ -137,6 +140,18 @@ export class AuthService {
     this.jwtService.clearAll();
     this.userService.clearCurrentUser();
     this.isLoggedInSignal.set(false);
+  }
+
+  clearSessionData() {
+    // ? Clear notification data
+    this.notificationService.clearSignal();
+    this.notificationSocketService.disconnect();
+
+    // ? Close modal
+    this.globalModalService.close();
+
+    // ? Close Submenus
+    window.dispatchEvent(new Event('close-all-submenus'));
   }
 
   // ---------------------------
