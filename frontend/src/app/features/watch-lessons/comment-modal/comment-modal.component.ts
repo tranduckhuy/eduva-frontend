@@ -69,7 +69,8 @@ export class CommentModalComponent implements OnInit {
   isLoading = signal<boolean>(false);
 
   // ? State management
-  hasFetchedOnce = signal(false);
+  hasFetchedOnce = signal<boolean>(false);
+  hasFetchedSuccess = signal<boolean>(false);
   currentState = signal<'list' | 'content' | 'question'>('list');
 
   paginationLessonPages = computed(() =>
@@ -125,7 +126,9 @@ export class CommentModalComponent implements OnInit {
       this.fetchAllQuestions();
       this.hasFetchedOnce.set(true);
 
-      this.handleViewQuestion(this.questionIdFromNotification());
+      if (this.hasFetchedSuccess()) {
+        this.handleViewQuestion(this.questionIdFromNotification());
+      }
     }
   }
 
@@ -212,6 +215,7 @@ export class CommentModalComponent implements OnInit {
       },
       complete: () => {
         this.isLoading.set(false);
+        this.hasFetchedSuccess.set(true);
         if (this.currentState() !== 'content') {
           this.currentState.set('list');
         }
