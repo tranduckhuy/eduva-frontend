@@ -7,18 +7,6 @@
       [rounded]="true"
       (click)="openSignInModal()" />
   } @else {
-    <div class="relative md:hidden">
-      <p-button
-        label="Lớp học của tôi"
-        variant="text"
-        size="small"
-        styleClass="dark:hover:!bg-transparent dark:!text-[#fffc] dark:hover:!text-[#fffc]"
-        [rounded]="true"
-        (click)="toggleSubMenu('classrooms')" />
-      @if (activeSubmenu === 'classrooms') {
-        <header-classrooms (clickOutside)="closeSubMenu()" />
-      }
-    </div>
     <div class="relative sm:hidden">
       <p-button
         icon="fas fa-plus"
