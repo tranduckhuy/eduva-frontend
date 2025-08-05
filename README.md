@@ -181,7 +181,7 @@ frontend/
 
 ## 🔐 Environment Variables
 
-The project uses environment variables for configuration. The environment files are located in `src/environments/`.
+The project uses `.env` files for environment configuration. The `.env` file is gitignored for security.
 
 ### Required Variables
 
@@ -196,11 +196,11 @@ SUPABASE_URL=your_supabase_project_url
 SUPABASE_KEY=your_supabase_anon_key
 ```
 
-### Environment Files
+### Setup Instructions
 
--   `environment.ts` - Production configuration
--   `environment.development.ts` - Development configuration
--   `environment.staging.ts` - Staging configuration
+1. Create `.env` file
+2. Copy `.env.example` to `.env`
+3. Fill in your actual values
 
 ## 🤝 Contributing
 
