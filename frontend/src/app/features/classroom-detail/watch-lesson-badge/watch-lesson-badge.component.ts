@@ -70,6 +70,25 @@ export class WatchLessonBadgeComponent {
       );
 
       if (lastLesson) {
+        const findFolder = this.folders().find(
+          folder => folder.id === lastLesson.folder
+        );
+        if (findFolder) {
+          const findLesson = findFolder.lessonMaterials.find(
+            lesson => lesson.id === lastLesson.material
+          );
+          if (findLesson) {
+            this.localLessonProgressService.setLastLesson(
+              this.classDetail().id,
+              findFolder.id,
+              findLesson.id
+            );
+          } else {
+            return this.redirectToTheFirstLesson();
+          }
+        } else {
+          return this.redirectToTheFirstLesson();
+        }
         this.router.navigate(['/learn', lastLesson.material], {
           queryParams: {
             classId: this.classDetail().id,
@@ -77,31 +96,34 @@ export class WatchLessonBadgeComponent {
           },
         });
       } else {
-        const folderHasLesson = this.folders().find(
-          (folder: GetAllFoldersMaterialsResponse) =>
-            folder.countLessonMaterials > 0
-        );
-
-        console.log('folder has lesson:', this.folders(), folderHasLesson);
-        if (!folderHasLesson) return;
-
-        const getLessonMaterialsRequest: GetLessonMaterialsRequest = {
-          classId: this.classDetail().id,
-          folderId: folderHasLesson?.id,
-        };
-        this.materialService
-          .getLessonMaterials(getLessonMaterialsRequest)
-          .subscribe({
-            next: res => {
-              this.router.navigate(['/learn', res![0].id], {
-                queryParams: {
-                  classId: this.classDetail().id,
-                  folderId: folderHasLesson?.id,
-                },
-              });
-            },
-          });
+        return this.redirectToTheFirstLesson();
       }
     }
+  }
+
+  private redirectToTheFirstLesson() {
+    const folderHasLesson = this.folders().find(
+      (folder: GetAllFoldersMaterialsResponse) =>
+        folder.countLessonMaterials > 0
+    );
+
+    if (!folderHasLesson) return;
+
+    const getLessonMaterialsRequest: GetLessonMaterialsRequest = {
+      classId: this.classDetail().id,
+      folderId: folderHasLesson?.id,
+    };
+    this.materialService
+      .getLessonMaterials(getLessonMaterialsRequest)
+      .subscribe({
+        next: res => {
+          this.router.navigate(['/learn', res![0].id], {
+            queryParams: {
+              classId: this.classDetail().id,
+              folderId: folderHasLesson?.id,
+            },
+          });
+        },
+      });
   }
 }
