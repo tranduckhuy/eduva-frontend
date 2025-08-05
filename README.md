@@ -43,7 +43,6 @@ EDUVA is a modern, comprehensive educational management platform designed to str
 -   **[PrimeNG](https://primeng.org/)** - Rich UI component library
 -   **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS framework
 -   **[FontAwesome](https://fontawesome.com/)** - Icon library
--   **[ApexCharts](https://apexcharts.com/)** - Interactive charts and graphs
 
 ### Media & Content
 
@@ -82,7 +81,7 @@ EDUVA is a modern, comprehensive educational management platform designed to str
 1. **Clone the repository**
 
     ```bash
-    git clone https://github.com/tranduckhuy/eduva-frontend.git
+    git clone https://github.com/qcode95/eduva-landing.git
     cd eduva-frontend
     ```
 
