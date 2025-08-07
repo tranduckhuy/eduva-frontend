@@ -64,6 +64,7 @@ export class QuestionService {
   getQuestionById(questionId: string): Observable<Question | null> {
     return this.requestService
       .get<Question>(`${this.BASE_QUESTION_API_URL}/${questionId}`, undefined, {
+        bypassAuthError: true,
         bypassNotFoundError: true,
       })
       .pipe(
