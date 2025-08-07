@@ -98,7 +98,13 @@ export class UserCommentTextboxComponent implements OnInit {
 
   getErrorMessage(controlName: string): string {
     const control = this.form.get(controlName);
-    if (control?.hasError('required')) return 'Trường này không được để trống';
+
+    if (control?.hasError('required')) {
+      if (controlName === 'content')
+        return 'Nội dung không được để trống hoặc chỉ chứa khoảng trắng';
+      return 'Trường này không được để trống';
+    }
+
     return '';
   }
 
