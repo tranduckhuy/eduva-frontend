@@ -211,6 +211,10 @@ export class QuestionService {
         message:
           'Bạn chưa tham gia lớp học có chứa tài liệu này hoặc bài giảng đã bị xóa khỏi lớp học.',
       },
+      [StatusCode.STUDENT_NOT_ENROLLED_IN_ANY_CLASS_FOR_QUESTIONS]: {
+        title: 'Không thể truy cập câu hỏi',
+        message: 'Bạn không còn là học sinh của lớp này để xem câu hỏi',
+      },
       [StatusCode.QUESTION_NOT_ACCESSIBLE]: {
         title: 'Bài giảng đã bị xóa',
         message: 'Bài giảng đã bị giáo viên xóa khỏi lớp học.',
