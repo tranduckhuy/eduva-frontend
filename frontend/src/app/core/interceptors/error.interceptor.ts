@@ -41,13 +41,20 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     globalModalService.open(AuthModalComponent);
   };
 
-  const handleServerError = () => router.navigateByUrl('/500');
+  const handleServerError = () => {
+    globalModalService.close();
+    router.navigateByUrl('/500');
+  };
 
-  const handleForbidden = () => router.navigateByUrl('/403');
+  const handleForbidden = () => {
+    globalModalService.close();
+    router.navigateByUrl('/403');
+  };
 
-  const handleNotFound = () => router.navigateByUrl('/404');
-
-  const handleTooManyRequest = () => router.navigateByUrl('/429');
+  const handleNotFound = () => {
+    globalModalService.close();
+    router.navigateByUrl('/404');
+  };
 
   const handleUnauthorized = () => {
     globalModalService.close();
@@ -62,6 +69,28 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
         router.navigateByUrl('/home', { replaceUrl: true });
       },
     });
+  };
+
+  const handleTooManyRequest = (error: HttpErrorResponse) => {
+    globalModalService.close();
+
+    let waitTimeMinutes = 1;
+
+    const requestUrl = error.url || '';
+
+    if (requestUrl.includes('/auth')) {
+      waitTimeMinutes = 10;
+    } else if (requestUrl.includes('/ai-jobs')) {
+      waitTimeMinutes = 1;
+    }
+
+    if (waitTimeMinutes <= 0) {
+      waitTimeMinutes = 1;
+    } else if (waitTimeMinutes > 1440) {
+      waitTimeMinutes = 60;
+    }
+
+    router.navigateByUrl(`/errors/429?waitTime=${waitTimeMinutes}`);
   };
 
   const createSubscriptionConfirmation = (header: string, message: string) => {
@@ -107,13 +136,11 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
     // Server errors
     if (status === 0 || status >= 500) {
       handleServerError();
-      return;
     }
 
     // Unauthorized
     if (status === 401 && !isByPassAuth) {
       handleUnauthorized();
-      return;
     }
 
     // No status code to process
@@ -128,7 +155,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       errorStatusCode === StatusCode.SUBSCRIPTION_EXPIRED_WITH_DATA_LOSS_RISK
     ) {
       handleSubscriptionExpired();
-      return;
     }
 
     // Forbidden
@@ -138,7 +164,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       } else {
         handleForbidden();
       }
-      return;
     }
 
     // Not found
@@ -148,12 +173,11 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       } else {
         handleNotFound();
       }
-      return;
     }
 
     // Too many request
     if (status === 429) {
-      handleTooManyRequest();
+      handleTooManyRequest(error);
     }
   };
 
