@@ -2,6 +2,11 @@ import { Routes } from '@angular/router';
 
 export const errorRoutes: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: '404',
+  },
+  {
     path: '500',
     loadComponent: () =>
       import('./internal-error/internal-error.component').then(
@@ -32,7 +37,7 @@ export const errorRoutes: Routes = [
   {
     path: 'coming-soon',
     loadComponent: () =>
-      import('../coming-soon/coming-soon.component').then(
+      import('./coming-soon/coming-soon.component').then(
         mod => mod.ComingSoonComponent
       ),
   },
