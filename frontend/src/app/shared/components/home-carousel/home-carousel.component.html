@@ -10,10 +10,10 @@
         [style.transform]="transformStyle()">
         @for (item of items(); track $index) {
           <div
-            class="flex h-full shrink-0 grow basis-full items-center justify-between rounded-2xl"
+            class="flex h-full shrink-0 grow basis-full items-center rounded-2xl px-9 sm:px-5"
             [style]="item.style"
             [attr.data-index]="$index">
-            <div class="w-full max-w-[640px] px-9 sm:px-5">
+            <div class="w-full max-w-[640px]">
               <h2 class="text-[32px] font-bold text-white sm:text-2xl">
                 {{ item.title }}
                 @if (item.isRecommend) {
@@ -31,11 +31,11 @@
                 {{ item.buttonContent }}
               </a>
             </div>
-            <div class="md:hidden">
+            <div class="ml-auto md:hidden">
               <img
                 [src]="item.imageUrl"
                 [alt]="item.title"
-                class="h-full object-cover" />
+                class="h-[320px] w-[500px] object-contain" />
             </div>
           </div>
         }
