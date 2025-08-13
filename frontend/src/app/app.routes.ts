@@ -30,6 +30,7 @@ export const routes: Routes = [
         path: 'classes/:classId',
         canActivate: [authGuard, roleGuard, subscriptionActiveGuard],
         data: {
+          title: 'Chi tiết lớp học',
           roles: [UserRoles.STUDENT],
         },
         loadComponent: () =>
@@ -41,6 +42,7 @@ export const routes: Routes = [
         path: 'classes',
         canActivate: [authGuard, roleGuard, subscriptionActiveGuard],
         data: {
+          title: 'Danh sách lớp học',
           roles: [UserRoles.STUDENT],
         },
         loadComponent: () =>
@@ -61,6 +63,7 @@ export const routes: Routes = [
         path: 'learn/:materialId',
         canActivate: [authGuard, roleGuard, subscriptionActiveGuard],
         data: {
+          title: 'Bài học',
           roles: [UserRoles.STUDENT],
         },
         loadComponent: () =>
@@ -72,6 +75,7 @@ export const routes: Routes = [
         path: 'settings',
         canActivate: [authGuard, roleGuard, subscriptionActiveGuard],
         data: {
+          title: 'Cài đặt',
           roles: [UserRoles.STUDENT],
         },
         loadComponent: () =>
@@ -88,6 +92,7 @@ export const routes: Routes = [
         path: 'profile',
         canActivate: [authGuard, roleGuard, subscriptionActiveGuard],
         data: {
+          title: 'Thông tin cá nhân',
           roles: [UserRoles.STUDENT],
         },
         loadComponent: () =>
