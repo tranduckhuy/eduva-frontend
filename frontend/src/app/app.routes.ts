@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 
 import { authGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
-import { subscriptionActiveGuard } from './core/guards/subscription-active.guard';
 
 import { UserRoles } from './shared/constants/user-roles.constant';
 
@@ -28,7 +27,7 @@ export const routes: Routes = [
       },
       {
         path: 'classes/:classId',
-        canActivate: [authGuard, roleGuard, subscriptionActiveGuard],
+        canActivate: [authGuard, roleGuard],
         data: {
           title: 'Chi tiết lớp học',
           roles: [UserRoles.STUDENT],
@@ -40,7 +39,7 @@ export const routes: Routes = [
       },
       {
         path: 'classes',
-        canActivate: [authGuard, roleGuard, subscriptionActiveGuard],
+        canActivate: [authGuard, roleGuard],
         data: {
           title: 'Danh sách lớp học',
           roles: [UserRoles.STUDENT],
@@ -61,7 +60,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'learn/:materialId',
-        canActivate: [authGuard, roleGuard, subscriptionActiveGuard],
+        canActivate: [authGuard, roleGuard],
         data: {
           title: 'Bài học',
           roles: [UserRoles.STUDENT],
@@ -73,7 +72,7 @@ export const routes: Routes = [
       },
       {
         path: 'settings',
-        canActivate: [authGuard, roleGuard, subscriptionActiveGuard],
+        canActivate: [authGuard, roleGuard],
         data: {
           title: 'Cài đặt',
           roles: [UserRoles.STUDENT],
@@ -90,7 +89,7 @@ export const routes: Routes = [
 
       {
         path: 'profile',
-        canActivate: [authGuard, roleGuard, subscriptionActiveGuard],
+        canActivate: [authGuard, roleGuard],
         data: {
           title: 'Thông tin cá nhân',
           roles: [UserRoles.STUDENT],
