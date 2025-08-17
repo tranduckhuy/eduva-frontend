@@ -80,6 +80,9 @@ describe('PasswordService', () => {
               {
                 ...mockEmailLinkRequest,
                 clientUrl: 'http://localhost/auth/reset-password',
+              },
+              {
+                bypassNotFoundError: true,
               }
             );
             expect(toastHandlingService.success).toHaveBeenCalledWith(
