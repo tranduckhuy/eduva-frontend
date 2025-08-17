@@ -122,6 +122,11 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       handleUnauthorized();
     }
 
+    // Too many request
+    if (status === 429) {
+      handleTooManyRequest();
+    }
+
     // No status code to process
     if (!errorStatusCode) {
       return;
@@ -152,11 +157,6 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       } else {
         handleNotFound();
       }
-    }
-
-    // Too many request
-    if (status === 429) {
-      handleTooManyRequest();
     }
   };
 
