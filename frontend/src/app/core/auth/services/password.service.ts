@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { Observable, catchError, map, of, tap, throwError } from 'rxjs';
+import { Observable, catchError, map, tap, throwError } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
 
@@ -30,11 +30,15 @@ export class PasswordService {
 
   forgotPassword(request: EmailLinkRequest): Observable<void> {
     const payload = { ...request, clientUrl: this.CLIENT_URL };
-    return this.requestService.post(this.FORGOT_PASSWORD_API_URL, payload).pipe(
-      tap(res => this.handleForgotPasswordResponse(res)),
-      map(() => void 0),
-      catchError(err => this.handleError(err))
-    );
+    return this.requestService
+      .post(this.FORGOT_PASSWORD_API_URL, payload, {
+        bypassNotFoundError: true,
+      })
+      .pipe(
+        tap(res => this.handleForgotPasswordResponse(res)),
+        map(() => void 0),
+        catchError(err => this.handleError(err))
+      );
   }
 
   resetPassword(request: ResetPasswordRequest): Observable<void> {
