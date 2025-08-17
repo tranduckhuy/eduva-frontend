@@ -35,15 +35,15 @@ import { GetAllFoldersMaterialsResponse } from '../../../shared/models/api/respo
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WatchLessonBadgeComponent {
-  readonly classDetail = input.required<ClassModel>();
-  readonly totalDuration = input.required<string>();
-
   private readonly libIcon = inject(FaIconLibrary);
   private readonly loadingService = inject(LoadingService);
   private readonly materialService = inject(LessonMaterialsService);
   private readonly toastService = inject(ToastHandlingService);
   private readonly localLessonProgressService = inject(LessonProgressService);
   private readonly router = inject(Router);
+
+  readonly classDetail = input.required<ClassModel>();
+  readonly totalDuration = input.required<string>();
 
   folders = this.materialService.foldersLessonMaterials;
   loadingGetMaterials = this.loadingService.is('get-materials');

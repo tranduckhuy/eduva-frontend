@@ -121,17 +121,18 @@ describe('PasswordService', () => {
       });
       requestService.post.mockReturnValue(throwError(() => errorResponse));
 
-      await new Promise<void>(resolve => {
+      await new Promise<void>((resolve, reject) => {
         service.forgotPassword(mockEmailLinkRequest).subscribe({
           next: () => {
+            reject(new Error('should not succeed'));
+          },
+          error: err => {
             expect(toastHandlingService.warn).toHaveBeenCalledWith(
               'Email không tồn tại',
               'Vui lòng kiểm tra lại địa chỉ email.'
             );
+            expect(err).toBe(errorResponse);
             resolve();
-          },
-          error: err => {
-            throw err;
           },
         });
       });
@@ -143,14 +144,15 @@ describe('PasswordService', () => {
       });
       requestService.post.mockReturnValue(throwError(() => errorResponse));
 
-      await new Promise<void>(resolve => {
+      await new Promise<void>((resolve, reject) => {
         service.forgotPassword(mockEmailLinkRequest).subscribe({
           next: () => {
-            expect(toastHandlingService.errorGeneral).toHaveBeenCalled();
-            resolve();
+            reject(new Error('should not succeed'));
           },
           error: err => {
-            throw err;
+            expect(toastHandlingService.errorGeneral).toHaveBeenCalled();
+            expect(err).toBe(errorResponse);
+            resolve();
           },
         });
       });
@@ -183,23 +185,23 @@ describe('PasswordService', () => {
       });
     });
 
-    it('should handle reset password error with INVALID_TOKEN status', async () => {
+    it('should handle reset password error with UNAUTHORIZED status', async () => {
       const errorResponse = new HttpErrorResponse({
-        error: { statusCode: StatusCode.INVALID_TOKEN },
+        error: { statusCode: StatusCode.UNAUTHORIZED },
       });
       requestService.post.mockReturnValue(throwError(() => errorResponse));
 
-      await new Promise<void>(resolve => {
+      await new Promise<void>((resolve, reject) => {
         service.resetPassword(mockResetPasswordRequest).subscribe({
           next: () => {
-            fail('should not succeed');
-            resolve();
+            reject(new Error('should not succeed'));
           },
           error: err => {
             expect(toastHandlingService.error).toHaveBeenCalledWith(
               'Liên kết hết hạn',
               'Vui lòng gửi lại yêu cầu đặt lại mật khẩu mới.'
             );
+            expect(err).toBe(errorResponse);
             resolve();
           },
         });
@@ -212,17 +214,17 @@ describe('PasswordService', () => {
       });
       requestService.post.mockReturnValue(throwError(() => errorResponse));
 
-      await new Promise<void>(resolve => {
+      await new Promise<void>((resolve, reject) => {
         service.resetPassword(mockResetPasswordRequest).subscribe({
           next: () => {
-            fail('should not succeed');
-            resolve();
+            reject(new Error('should not succeed'));
           },
           error: err => {
             expect(toastHandlingService.warn).toHaveBeenCalledWith(
-              'Cảnh báo',
+              'Cảnh báo xác thực',
               'Mật khẩu mới không được trùng với mật khẩu hiện tại.'
             );
+            expect(err).toBe(errorResponse);
             resolve();
           },
         });
@@ -235,14 +237,14 @@ describe('PasswordService', () => {
       });
       requestService.post.mockReturnValue(throwError(() => errorResponse));
 
-      await new Promise<void>(resolve => {
+      await new Promise<void>((resolve, reject) => {
         service.resetPassword(mockResetPasswordRequest).subscribe({
           next: () => {
-            fail('should not succeed');
-            resolve();
+            reject(new Error('should not succeed'));
           },
           error: err => {
             expect(toastHandlingService.errorGeneral).toHaveBeenCalled();
+            expect(err).toBe(errorResponse);
             resolve();
           },
         });

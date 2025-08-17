@@ -134,30 +134,33 @@ export class ClassService {
 
     switch (statusCode) {
       case StatusCode.CLASS_NOT_FOUND:
-        this.toastHandlingService.error(
-          'Tham gia lớp học thất bại',
-          'Mã lớp không tồn tại!'
+        this.toastHandlingService.warn(
+          'Không tìm thấy lớp học',
+          'Mã lớp bạn nhập không tồn tại. Vui lòng kiểm tra lại mã lớp được giáo viên cung cấp.'
         );
         break;
       case StatusCode.CLASS_CODE_DUPLICATE:
-        this.toastHandlingService.error(
-          'Tham gia lớp học thất bại',
-          'Mã lớp đã tồn tại!'
+        this.toastHandlingService.warn(
+          'Mã lớp đã tồn tại',
+          'Mã lớp này đã tồn tại. Vui lòng liên hệ giáo viên hoặc nhập một mã khác để tham gia.'
         );
         break;
       case StatusCode.STUDENT_CANNOT_ENROLL_DIFFERENT_SCHOOL:
         this.toastHandlingService.error(
-          'Tham gia lớp học thất bại',
-          'Bạn không thể tham gia một lớp học ngoài phạm vi trường của bạn!'
+          'Không thể tham gia lớp học',
+          'Bạn chỉ được phép tham gia lớp học thuộc trường của mình. Vui lòng kiểm tra lại thông tin lớp trước khi tham gia.'
         );
         break;
       case StatusCode.STUDENT_ALREADY_ENROLLED:
-        this.toastHandlingService.warn('Chú ý', 'Bạn đã tham gia lớp học');
+        this.toastHandlingService.info(
+          'Thông tin lớp học',
+          'Bạn đã tham gia lớp học này trước đó. Hãy mở danh sách lớp của bạn để truy cập nội dung.'
+        );
         break;
       case StatusCode.CLASS_NOT_ACTIVE:
         this.toastHandlingService.error(
-          'Tham gia lớp học thất bại',
-          'Lớp học hiện chưa được kích hoạt'
+          'Lớp học chưa được kích hoạt',
+          'Lớp học hiện tại vẫn chưa mở. Vui lòng quay lại sau khi giáo viên kích hoạt để tham gia.'
         );
         break;
 
