@@ -5,7 +5,10 @@ import { Router, CanActivateFn } from '@angular/router';
 import { UserService } from '../../shared/services/api/user/user.service';
 import { GlobalModalService } from '../../shared/services/layout/global-modal/global-modal.service';
 
-import { UserRole } from '../../shared/constants/user-roles.constant';
+import {
+  UserRole,
+  UserRoles,
+} from '../../shared/constants/user-roles.constant';
 
 import { AuthModalComponent } from '../../shared/components/auth-modal/auth-modal.component';
 
@@ -34,8 +37,13 @@ export const roleGuard: CanActivateFn = activatedRoute => {
   if (hasExpectedRole) return true;
 
   // ? If the user does NOT have the required role(s),
-  // ? redirect them to their unauthorized page
-  router.navigate(['/403']);
+  // ? Check if they are Student then redirect to home page
+  // ? else redirect them to their unauthorized page
+  if (user.roles.includes(UserRoles.STUDENT)) {
+    router.navigateByUrl('/home');
+  } else {
+    router.navigateByUrl('/403');
+  }
 
   return false;
 };
